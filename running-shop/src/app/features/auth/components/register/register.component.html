@@ -1,0 +1,31 @@
+<div class="register-container">
+  <h2>Đăng Ký</h2>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="username">Tên người dùng</label>
+      <input id="username" formControlName="username" type="text" placeholder="Nhập tên người dùng">
+      <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched" class="error">
+        Tên người dùng là bắt buộc.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" formControlName="email" type="email" placeholder="Nhập email">
+      <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error">
+        Email không hợp lệ.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Mật khẩu</label>
+      <input id="password" formControlName="password" type="password" placeholder="Nhập mật khẩu">
+      <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error">
+        Mật khẩu phải có ít nhất 6 ký tự.
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="registerForm.invalid">Đăng Ký</button>
+  </form>
+  <p>Đã có tài khoản? <a routerLink="/auth/login">Đăng nhập</a></p>
+</div>

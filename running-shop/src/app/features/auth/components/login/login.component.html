@@ -1,0 +1,23 @@
+<div class="login-container">
+  <h2>Đăng Nhập</h2>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="username">Tên người dùng</label>
+      <input id="username" formControlName="username" type="text" placeholder="Nhập tên người dùng">
+      <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="error">
+        Tên người dùng là bắt buộc.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Mật khẩu</label>
+      <input id="password" formControlName="password" type="password" placeholder="Nhập mật khẩu">
+      <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">
+        Mật khẩu là bắt buộc.
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="loginForm.invalid">Đăng Nhập</button>
+  </form>
+  <p>Chưa có tài khoản? <a routerLink="/auth/register">Đăng ký</a></p>
+</div>
