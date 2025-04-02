@@ -1,0 +1,420 @@
+//.sidebar {
+//  position: fixed;
+//  top: 60px;
+//  left: 0;
+//  height: calc(100vh - 60px);
+//  width: 250px;
+//  background-color: #1f2a44;
+//  color: #a3bffa;
+//  transition: width 0.3s ease;
+//}
+//
+//.sidebar.collapsed {
+//  width: 60px;
+//}
+//
+//.content {
+//  padding-top: 20px;
+//}
+//
+//.toggle-btn {
+//  position: absolute;
+//  top: 20px;
+//  right: -15px;
+//  background-color: #4c5a95 !important; /* Màu xanh đậm giống hình */
+//  border: none !important;
+//  border-radius: 50%;
+//  width: 30px;
+//  height: 30px;
+//  display: flex;
+//  align-items: center;
+//  justify-content: center;
+//  transition: background-color 0.3s ease;
+//  z-index: 1001;
+//}
+//
+//.toggle-btn:hover {
+//  background-color: #3b4a7a !important; /* Màu khi hover */
+//}
+//
+///* Tùy chỉnh PanelMenu */
+//:host ::ng-deep .p-panelmenu {
+//  .p-panelmenu-header > a {
+//    background-color: transparent !important;
+//    color: #a3bffa !important;
+//    padding: 12px 15px !important; /* Giảm padding để giống hình */
+//    border: none !important;
+//    transition: background-color 0.3s ease;
+//  }
+//
+//  .p-panelmenu-header > a:hover {
+//    background-color: #2a3555 !important; /* Màu khi hover */
+//  }
+//
+//  .p-menuitem-link {
+//    background-color: transparent !important;
+//    color: #a3bffa !important;
+//    padding: 8px 15px 8px 35px !important; /* Điều chỉnh padding cho submenu */
+//    transition: background-color 0.3s ease;
+//  }
+//
+//  .p-menuitem-link:hover {
+//    background-color: #2a3555 !important;
+//  }
+//
+//  /* Trạng thái active */
+//  .p-menuitem-link[ng-reflect-router-link-active="true"] {
+//    background-color: #4c5a95 !important; /* Màu xanh đậm khi active */
+//    color: #ffffff !important;
+//  }
+//
+//  .p-menuitem-icon {
+//    margin-right: 8px !important;
+//    font-size: 1.1rem !important;
+//  }
+//
+//  .p-panelmenu-icon {
+//    color: #a3bffa !important;
+//  }
+//}
+//
+///* Ẩn label khi thu nhỏ */
+//:host ::ng-deep .collapsed-menu {
+//  .p-menuitem-text {
+//    display: none !important;
+//  }
+//
+//  .p-panelmenu-header > a,
+//  .p-menuitem-link {
+//    padding-left: 15px !important;
+//  }
+//
+//  .p-panelmenu-icon {
+//    margin-right: 0 !important;
+//  }
+//}
+//
+
+
+
+// Admin Sidebar Variables
+$sidebar-width: 260px;
+$sidebar-collapsed-width: 64px;
+$header-height: 70px;
+$sidebar-bg: #2A0E36;
+$sidebar-active: #FC3A52;
+$sidebar-hover: #451A5C;
+$sidebar-text: #F0E6FF;
+$sidebar-icon: #D4BBFF;
+$sidebar-transition: all 0.3s cubic-bezier(0.35, 0, 0.25, 1);
+
+.admin-sidebar {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  height: calc(100vh - 70px);
+  width: $sidebar-width;
+  background-color: $sidebar-bg;
+  color: $sidebar-text;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  transition: $sidebar-transition;
+  z-index: 999;
+  overflow: hidden;
+
+  &.collapsed {
+    width: $sidebar-collapsed-width;
+  }
+}
+
+.sidebar-header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    i {
+      font-size: 1.5rem;
+      color: $sidebar-active;
+    }
+
+    .logo-text {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: $sidebar-text;
+    }
+  }
+
+  .collapsed-icon {
+    font-size: 1.5rem;
+    color: $sidebar-active;
+    margin: 0 auto;
+  }
+
+  .toggle-btn {
+    width: 28px;
+    height: 28px;
+    background-color: rgba(252, 58, 82, 0.2);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: $sidebar-transition;
+    color: $sidebar-text;
+    position: absolute;
+    right: 16px;
+
+    &:hover {
+      background-color: rgba(252, 58, 82, 0.4);
+    }
+
+    i {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 0;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(252, 58, 82, 0.3);
+    border-radius: 4px;
+  }
+}
+
+.sidebar-footer {
+  height: 60px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    i {
+      font-size: 1.2rem;
+      color: $sidebar-icon;
+    }
+
+    .admin-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+  }
+
+  .logout-btn {
+    width: 32px;
+    height: 32px;
+    background-color: transparent;
+    border: none;
+    border-radius: 4px;
+    color: $sidebar-icon;
+
+    &:hover {
+      background-color: rgba(252, 58, 82, 0.2);
+      color: $sidebar-active;
+    }
+  }
+}
+
+/* PanelMenu Custom Styling */
+:host ::ng-deep .p-panelmenu {
+  background: transparent;
+  border: none;
+
+  .p-component {
+    font-family: inherit;
+  }
+
+  .p-panelmenu-header > a {
+    background: transparent !important;
+    color: $sidebar-text !important;
+    border: none !important;
+    padding: 12px 16px !important;
+    font-weight: 500;
+    transition: $sidebar-transition;
+
+    &:focus {
+      box-shadow: none !important;
+    }
+
+    &:hover {
+      background-color: $sidebar-hover !important;
+    }
+  }
+
+  .p-panelmenu-header-link {
+    border-radius: 0 !important;
+  }
+
+  .p-panelmenu-icon {
+    color: $sidebar-icon !important;
+  }
+
+  .p-panelmenu-content {
+    background: transparent !important;
+    border: none !important;
+  }
+
+  .p-menuitem {
+    &-link {
+      padding: 10px 16px 10px 32px !important;
+      color: $sidebar-text !important;
+      background: transparent !important;
+      transition: $sidebar-transition;
+      border: none !important;
+
+      &:focus {
+        box-shadow: none !important;
+      }
+
+      &:hover {
+        background-color: $sidebar-hover !important;
+      }
+
+      &.active-link {
+        background-color: $sidebar-active !important;
+        color: white !important;
+
+        .menu-icon {
+          color: white !important;
+        }
+      }
+    }
+
+    &-icon {
+      color: $sidebar-icon !important;
+      margin-right: 12px !important;
+      font-size: 1rem !important;
+    }
+
+    &-text {
+      font-size: 0.9rem !important;
+    }
+  }
+}
+
+/* Menu Item Styling */
+.menu-item {
+  .menu-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    text-decoration: none;
+    color: $sidebar-text;
+    transition: $sidebar-transition;
+    border-radius: 4px;
+    margin: 2px 8px;
+
+    &:hover {
+      background-color: $sidebar-hover;
+    }
+
+    &.active-link {
+      background-color: $sidebar-active;
+      color: white;
+
+      .menu-icon {
+        color: white;
+      }
+    }
+  }
+
+  .menu-icon {
+    font-size: 1.1rem;
+    color: $sidebar-icon;
+    width: 24px;
+    text-align: center;
+    margin-right: 12px;
+  }
+
+  .menu-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+}
+
+/* Collapsed Menu Styling */
+.collapsed-menu {
+  width: $sidebar-collapsed-width - 16px !important;
+
+  :host ::ng-deep .p-panelmenu-header > a {
+    justify-content: center !important;
+    padding: 12px 0 !important;
+  }
+
+  :host ::ng-deep .p-menuitem-icon {
+    margin-right: 0 !important;
+  }
+
+  :host ::ng-deep .p-panelmenu-icon,
+  :host ::ng-deep .p-menuitem-text {
+    display: none !important;
+  }
+
+  .menu-link {
+    justify-content: center;
+    padding: 10px 0 !important;
+  }
+
+  .menu-icon {
+    margin-right: 0 !important;
+  }
+
+  .menu-text {
+    display: none !important;
+  }
+}
+
+/* Tooltip Styling */
+:host ::ng-deep .p-tooltip {
+  .p-tooltip-text {
+    background-color: $sidebar-active;
+    color: white;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    border-radius: 4px;
+  }
+
+  .p-tooltip-arrow {
+    border-right-color: $sidebar-active;
+  }
+}
+
+/* Ẩn label khi thu nhỏ */
+:host ::ng-deep .collapsed-menu {
+  .p-menuitem-text {
+    display: none !important;
+  }
+
+  .p-panelmenu-header > a,
+  .p-menuitem-link {
+    padding-left: 15px !important;
+  }
+
+  .p-panelmenu-icon {
+    margin-right: 0 !important;
+  }
+}
