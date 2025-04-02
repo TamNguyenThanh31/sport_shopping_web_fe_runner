@@ -8,6 +8,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { FooterComponent } from './footer/footer.component';
 import {AvatarModule} from "primeng/avatar";
 import { PanelMenuModule } from 'primeng/panelmenu';
+import { ProfileComponent } from './profile/profile.component';
+import {CardModule} from "primeng/card";
 
 
 
@@ -15,7 +17,8 @@ import { PanelMenuModule } from 'primeng/panelmenu';
   declarations: [
     NavbarComponent,
     SidebarComponent,
-    FooterComponent
+    FooterComponent,
+    ProfileComponent
   ],
   exports: [
     NavbarComponent,
@@ -28,7 +31,8 @@ import { PanelMenuModule } from 'primeng/panelmenu';
     MenuModule,
     ButtonModule,
     AvatarModule,
-    PanelMenuModule
+    PanelMenuModule,
+    CardModule
   ],
 })
 export class SharedModule { }

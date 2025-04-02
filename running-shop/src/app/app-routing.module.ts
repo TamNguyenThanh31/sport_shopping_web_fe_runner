@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {AuthGuard} from "./core/guards/auth/auth.guard";
 import {RoleGuard} from "./core/guards/role/role.guard";
+import {ProfileComponent} from "./shared/profile/profile.component";
 
 const routes: Routes = [
   {
@@ -30,7 +31,8 @@ const routes: Routes = [
     path: '',
     redirectTo: '/auth/login',
     pathMatch: 'full'
-  }
+  },
+  { path: 'profile', component: ProfileComponent },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
