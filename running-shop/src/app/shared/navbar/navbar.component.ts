@@ -12,7 +12,7 @@ export class NavbarComponent implements OnInit {
   items: MenuItem[] = [];
   userMenuItems: MenuItem[] = [];
   currentUser: any;
-  cartItems: number = 0; // Để hiển thị số lượng sản phẩm trong giỏ, bạn có thể thay bằng logic thực tế sau
+  cartItems: number = 0;
 
   constructor(
     private authService: AuthService,

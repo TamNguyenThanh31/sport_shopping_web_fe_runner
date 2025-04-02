@@ -4,7 +4,7 @@
       <i class="pi pi-shield"></i>
       <span class="logo-text">Admin Panel</span>
     </div>
-    <i *ngIf="isCollapsed" class="pi pi-shield collapsed-icon"></i>
+    <i *ngIf="isCollapsed"></i>
     <button type="button" class="toggle-btn" (click)="toggleSidebar()">
       <i class="pi" [ngClass]="isCollapsed ? 'pi-angle-right' : 'pi-angle-left'"></i>
     </button>

@@ -1,9 +1,12 @@
 <p-menubar [model]="items" class="navbar">
   <!-- Logo -->
   <ng-template pTemplate="start">
-    <div class="logo-container" (click)="navigateToHome()">
-      <img src="assets/running-shoe-logo.png" alt="RunElite" class="logo-img" />
-      <span class="logo-text">RunElite</span>
+    <div class="brand-container" (click)="navigateToHome()">
+      <div class="brand-logo">
+        <img src="assets/running-shoe-logo.png" alt="RunElite" />
+      </div>
+      <div class="brand-divider"></div>
+      <div class="brand-name">RUNELITE</div>
     </div>
   </ng-template>
 
