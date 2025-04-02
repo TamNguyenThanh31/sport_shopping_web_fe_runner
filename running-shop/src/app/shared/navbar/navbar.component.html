@@ -1,0 +1,28 @@
+<p-menubar [model]="items" class="navbar">
+  <!-- Logo -->
+  <ng-template pTemplate="start">
+    <div class="logo-container" (click)="navigateToHome()">
+      <img src="assets/running-shoe-logo.png" alt="RunElite" class="logo-img" />
+      <span class="logo-text">RunElite</span>
+    </div>
+  </ng-template>
+
+  <!-- User Menu -->
+  <ng-template pTemplate="end">
+    <div class="user-section">
+      <button pButton type="button" icon="pi pi-search" class="search-btn"
+              (click)="toggleSearch()"></button>
+
+      <button pButton type="button" icon="pi pi-shopping-cart" class="cart-btn"
+              [routerLink]="['/cart']" *ngIf="currentUser?.role === 'CUSTOMER'">
+        <span class="cart-count" *ngIf="cartItems > 0">{{ cartItems }}</span>
+      </button>
+
+      <div class="user-menu">
+        <p-avatar [label]="getUserInitials()" size="large" shape="circle"
+                  class="user-avatar" (click)="menu.toggle($event)"></p-avatar>
+        <p-menu #menu [model]="userMenuItems" [popup]="true" appendTo="body"></p-menu>
+      </div>
+    </div>
+  </ng-template>
+</p-menubar>
