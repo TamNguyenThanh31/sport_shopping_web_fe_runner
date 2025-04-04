@@ -1,23 +1,86 @@
-<div class="login-container">
-  <h2>Đăng Nhập</h2>
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="username">Tên người dùng</label>
-      <input id="username" formControlName="username" type="text" placeholder="Nhập tên người dùng">
-      <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="error">
-        Tên người dùng là bắt buộc.
-      </div>
+<!--<div class="login-container">-->
+<!--  <h2>Đăng Nhập</h2>-->
+<!--  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">-->
+<!--    <div class="form-group">-->
+<!--      <label for="identifier">Tên người dùng/ Số điện thoại</label>-->
+<!--      <input id="identifier" formControlName="identifier" type="text" placeholder="Nhập tên người dùng/ số điện thoại">-->
+<!--      <div *ngIf="loginForm.get('identifier')?.invalid && loginForm.get('identifier')?.touched" class="error">-->
+<!--        Tên người dùng/số điện thoại là bắt buộc.-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <div class="form-group">-->
+<!--      <label for="password">Mật khẩu</label>-->
+<!--      <input id="password" formControlName="password" type="password" placeholder="Nhập mật khẩu">-->
+<!--      <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">-->
+<!--        Mật khẩu là bắt buộc.-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <button type="submit" [disabled]="loginForm.invalid">Đăng Nhập</button>-->
+<!--  </form>-->
+<!--  <p>Chưa có tài khoản? <a routerLink="/auth/register">Đăng ký</a></p>-->
+<!--  <p-toast position="bottom-right"></p-toast>-->
+<!--</div>-->
+<div class="login-container p-fluid">
+  <div class="login-card p-card p-shadow-8">
+    <div class="p-card-header">
+      <img src="assets/images/running-logo.png" alt="RunShop Logo" class="logo">
+      <h2>ĐĂNG NHẬP TÀI KHOẢN</h2>
+      <p class="subtitle">Chào mừng trở lại Runner!</p>
     </div>
 
-    <div class="form-group">
-      <label for="password">Mật khẩu</label>
-      <input id="password" formControlName="password" type="password" placeholder="Nhập mật khẩu">
-      <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error">
-        Mật khẩu là bắt buộc.
-      </div>
+    <div class="p-card-body">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="p-fluid">
+        <div class="p-field">
+          <label for="identifier" class="p-input-label">Tên người dùng/Số điện thoại</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-user"></i>
+            <input id="identifier" pInputText formControlName="identifier"
+                   type="text" placeholder="Nhập tên người dùng hoặc số điện thoại">
+          </span>
+          <small *ngIf="loginForm.get('identifier')?.invalid && loginForm.get('identifier')?.touched"
+                 class="p-error p-d-block">
+            Tên người dùng/số điện thoại là bắt buộc
+          </small>
+        </div>
+
+        <div class="p-field">
+          <label for="password" class="p-input-label">Mật khẩu</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-lock"></i>
+            <input id="password" pInputText formControlName="password"
+                   type="password" placeholder="Nhập mật khẩu">
+          </span>
+          <small *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+                 class="p-error p-d-block">
+            Mật khẩu là bắt buộc
+          </small>
+        </div>
+
+        <div class="remember-forgot">
+          <p-checkbox [binary]="true" label="Ghi nhớ đăng nhập"></p-checkbox>
+          <a class="forgot-password" routerLink="/auth/forgot-password">Quên mật khẩu?</a>
+        </div>
+
+        <button pButton type="submit" label="ĐĂNG NHẬP"
+                [disabled]="loginForm.invalid" class="p-button-raised p-button-rounded"></button>
+
+        <div class="social-login">
+          <p>Hoặc đăng nhập bằng</p>
+          <div class="social-buttons">
+            <button pButton type="button" icon="pi pi-facebook" class="p-button-rounded p-button-outlined facebook"></button>
+            <button pButton type="button" icon="pi pi-google" class="p-button-rounded p-button-outlined google"></button>
+            <button pButton type="button" icon="pi pi-twitter" class="p-button-rounded p-button-outlined twitter"></button>
+          </div>
+        </div>
+      </form>
     </div>
 
-    <button type="submit" [disabled]="loginForm.invalid">Đăng Nhập</button>
-  </form>
-  <p>Chưa có tài khoản? <a routerLink="/auth/register">Đăng ký</a></p>
+    <div class="p-card-footer">
+      <p>Chưa có tài khoản? <a routerLink="/auth/register" class="register-link">Đăng ký ngay</a></p>
+    </div>
+  </div>
+
+  <p-toast position="top-center"></p-toast>
 </div>

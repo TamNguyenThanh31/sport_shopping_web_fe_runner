@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
 import { TooltipModule } from 'primeng/tooltip';
 import { PanelMenuModule } from 'primeng/panelmenu';
+import {MessageService} from "primeng/api";
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,7 +23,7 @@ import { PanelMenuModule } from 'primeng/panelmenu';
     SharedModule,
     PanelMenuModule
   ],
-  providers: [],
+  providers: [MessageService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

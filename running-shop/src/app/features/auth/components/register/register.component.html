@@ -1,31 +1,79 @@
-<div class="register-container">
-  <h2>Đăng Ký</h2>
-  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="username">Tên người dùng</label>
-      <input id="username" formControlName="username" type="text" placeholder="Nhập tên người dùng">
-      <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched" class="error">
-        Tên người dùng là bắt buộc.
-      </div>
+<div class="register-container p-fluid">
+  <div class="register-card p-card p-shadow-10">
+    <div class="p-card-header">
+      <img src="assets/images/running-logo.png" alt="RunShop Logo" class="logo">
+      <h2>ĐĂNG KÝ TÀI KHOẢN MỚI</h2>
+      <p class="subtitle">Bắt đầu hành trình chạy bộ của bạn</p>
     </div>
 
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input id="email" formControlName="email" type="email" placeholder="Nhập email">
-      <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error">
-        Email không hợp lệ.
-      </div>
+    <div class="p-card-body">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="p-fluid">
+        <div class="p-field">
+          <label for="username" class="p-input-label">Tên người dùng *</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-user"></i>
+            <input id="username" pInputText formControlName="username"
+                   type="text" placeholder="Nhập tên người dùng của bạn">
+          </span>
+          <small *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
+                 class="p-error p-d-block">
+            Tên người dùng là bắt buộc
+          </small>
+        </div>
+
+        <div class="p-field">
+          <label for="email" class="p-input-label">Email *</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-envelope"></i>
+            <input id="email" pInputText formControlName="email"
+                   type="email" placeholder="Nhập địa chỉ email">
+          </span>
+          <small *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+                 class="p-error p-d-block">
+            Vui lòng nhập email hợp lệ
+          </small>
+        </div>
+
+        <div class="p-field">
+          <label for="phoneNumber" class="p-input-label">Số điện thoại *</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-phone"></i>
+            <input id="phoneNumber" pInputText formControlName="phoneNumber"
+                   type="text" placeholder="Nhập số điện thoại">
+          </span>
+          <small *ngIf="registerForm.get('phoneNumber')?.invalid && registerForm.get('phoneNumber')?.touched"
+                 class="p-error p-d-block">
+            Số điện thoại không hợp lệ
+          </small>
+        </div>
+
+        <div class="p-field">
+          <label for="password" class="p-input-label">Mật khẩu *</label>
+          <span class="p-input-icon-left">
+            <i class="pi pi-lock"></i>
+            <input id="password" pInputText formControlName="password"
+                   type="password" placeholder="Tạo mật khẩu (tối thiểu 6 ký tự)">
+          </span>
+          <small *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+                 class="p-error p-d-block">
+            Mật khẩu phải có ít nhất 6 ký tự
+          </small>
+        </div>
+
+        <div class="terms-agreement">
+          <p-checkbox [binary]="true" formControlName="agreeTerms"></p-checkbox>
+          <span>Tôi đồng ý với <a href="#" class="terms-link">Điều khoản dịch vụ</a> và <a href="#" class="terms-link">Chính sách bảo mật</a></span>
+        </div>
+
+        <button pButton type="submit" label="ĐĂNG KÝ"
+                [disabled]="registerForm.invalid" class="p-button-raised p-button-rounded"></button>
+      </form>
     </div>
 
-    <div class="form-group">
-      <label for="password">Mật khẩu</label>
-      <input id="password" formControlName="password" type="password" placeholder="Nhập mật khẩu">
-      <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error">
-        Mật khẩu phải có ít nhất 6 ký tự.
-      </div>
+    <div class="p-card-footer">
+      <p>Đã có tài khoản? <a routerLink="/auth/login" class="login-link">Đăng nhập ngay</a></p>
     </div>
+  </div>
 
-    <button type="submit" [disabled]="registerForm.invalid">Đăng Ký</button>
-  </form>
-  <p>Đã có tài khoản? <a routerLink="/auth/login">Đăng nhập</a></p>
+  <p-toast position="top-center"></p-toast>
 </div>
