@@ -1,36 +1,3 @@
-<!--<div *ngIf="isAdmin" class="admin-sidebar" [ngClass]="{'collapsed': isCollapsed}">-->
-<!--  <div class="sidebar-header">-->
-<!--    <div class="logo-container" *ngIf="!isCollapsed">-->
-<!--      <i class="pi pi-shield"></i>-->
-<!--      <span class="logo-text">Admin Panel</span>-->
-<!--    </div>-->
-<!--    <i *ngIf="isCollapsed"></i>-->
-<!--    <button type="button" class="toggle-btn" (click)="toggleSidebar()">-->
-<!--      <i class="pi" [ngClass]="isCollapsed ? 'pi-angle-right' : 'pi-angle-left'"></i>-->
-<!--    </button>-->
-<!--  </div>-->
-
-<!--  <div class="sidebar-content">-->
-<!--    <p-panelMenu [model]="items" [multiple]="false" [ngClass]="{'collapsed-menu': isCollapsed}">-->
-<!--      <ng-template pTemplate="item" let-item>-->
-<!--        <div class="menu-item" pTooltip="{{item.label}}" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">-->
-<!--          <a [routerLink]="item.routerLink" class="menu-link" routerLinkActive="active-link">-->
-<!--            <i class="menu-icon" [ngClass]="item.icon"></i>-->
-<!--            <span class="menu-text" *ngIf="!isCollapsed">{{ item.label }}</span>-->
-<!--          </a>-->
-<!--        </div>-->
-<!--      </ng-template>-->
-<!--    </p-panelMenu>-->
-<!--  </div>-->
-
-<!--  <div class="sidebar-footer" *ngIf="!isCollapsed">-->
-<!--    <div class="user-info">-->
-<!--      <i class="pi pi-user"></i>-->
-<!--      <span class="admin-name">Admin User</span>-->
-<!--    </div>-->
-<!--    <button pButton type="button" icon="pi pi-sign-out" class="logout-btn"></button>-->
-<!--  </div>-->
-<!--</div>-->
 <div *ngIf="isAdmin" class="admin-sidebar" [ngClass]="{'collapsed': isCollapsed}">
   <div class="sidebar-header">
     <div class="logo-container" *ngIf="!isCollapsed">
@@ -91,7 +58,7 @@
   <div class="sidebar-footer">
     <div class="user-profile" *ngIf="!isCollapsed">
       <div class="avatar">
-        <img src="assets/images/runner-avatar.jpg" alt="Admin Avatar">
+        <img src="assets/images/runner-logo.png" alt="Admin Avatar">
       </div>
       <div class="user-info">
         <div class="name">Marathon Admin</div>

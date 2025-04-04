@@ -10,6 +10,10 @@ import {AvatarModule} from "primeng/avatar";
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { ProfileComponent } from './profile/profile.component';
 import {CardModule} from "primeng/card";
+import {RippleModule} from "primeng/ripple";
+import {DividerModule} from "primeng/divider";
+import {ProgressBarModule} from "primeng/progressbar";
+import {TimelineModule} from "primeng/timeline";
 
 
 
@@ -32,7 +36,11 @@ import {CardModule} from "primeng/card";
     ButtonModule,
     AvatarModule,
     PanelMenuModule,
-    CardModule
+    CardModule,
+    RippleModule,
+    DividerModule,
+    ProgressBarModule,
+    TimelineModule
   ],
 })
 export class SharedModule { }

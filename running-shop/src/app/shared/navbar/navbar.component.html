@@ -1,29 +1,32 @@
 <p-menubar [model]="items" class="navbar">
-  <!-- Logo -->
+  <!-- Logo Section -->
   <ng-template pTemplate="start">
     <div class="brand-container" (click)="navigateToHome()">
       <div class="brand-logo">
         <img src="assets/running-shoe-logo.png" alt="RunElite" />
       </div>
-      <div class="brand-divider"></div>
-      <div class="brand-name">RUNELITE</div>
+      <div class="brand-name-container">
+        <div class="brand-name">RUNELITE</div>
+        <div class="brand-tagline">Performance Running Gear</div>
+      </div>
     </div>
   </ng-template>
 
-  <!-- User Menu -->
+  <!-- User Section -->
   <ng-template pTemplate="end">
     <div class="user-section">
-      <button pButton type="button" icon="pi pi-search" class="search-btn"
+      <button pButton type="button" icon="pi pi-search" class="p-button-rounded p-button-text search-btn"
               (click)="toggleSearch()"></button>
 
-      <button pButton type="button" icon="pi pi-shopping-cart" class="cart-btn"
+      <button pButton type="button" icon="pi pi-shopping-cart" class="p-button-rounded p-button-text cart-btn"
               [routerLink]="['/cart']" *ngIf="currentUser?.role === 'CUSTOMER'">
-        <span class="cart-count" *ngIf="cartItems > 0">{{ cartItems }}</span>
+        <span class="cart-badge" *ngIf="cartItems > 0">{{ cartItems }}</span>
       </button>
 
       <div class="user-menu">
-        <p-avatar [label]="getUserInitials()" size="large" shape="circle"
-                  class="user-avatar" (click)="menu.toggle($event)"></p-avatar>
+        <p-avatar [label]="getUserInitials()" size="normal" shape="circle"
+                  class="user-avatar" (click)="menu.toggle($event)"
+                  style="background-color: var(--primary-color);"></p-avatar>
         <p-menu #menu [model]="userMenuItems" [popup]="true" appendTo="body"></p-menu>
       </div>
     </div>
