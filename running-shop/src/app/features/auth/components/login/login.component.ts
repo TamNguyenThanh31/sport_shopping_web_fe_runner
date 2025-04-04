@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {AuthService} from "../../../../core/services/auth.service";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-login',
@@ -11,17 +12,19 @@ import {AuthService} from "../../../../core/services/auth.service";
 export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
-  errorMessage: string | null = null;
+  messages: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private messageService: MessageService
+  ) {
+  }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
-      username: ['', Validators.required],
+      identifier: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
@@ -29,7 +32,8 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
-        next: (user) => {
+        next: (response) => {
+          const user = response.user;
           // Điều hướng dựa trên vai trò
           switch (user.role) {
             case 'ADMIN':
@@ -46,10 +50,15 @@ export class LoginComponent implements OnInit {
           }
         },
         error: (err) => {
-          this.errorMessage = err.error.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
+          const errorMessage = err?.error?.message || 'Tài khoản hoặc mật khẩu không đúng.';
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Lỗi đăng nhập',
+            detail: errorMessage,
+            life: 3000
+          });
         }
-      });
+      })
     }
   }
-
 }

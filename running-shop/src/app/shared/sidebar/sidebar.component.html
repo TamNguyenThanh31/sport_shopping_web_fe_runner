@@ -1,33 +1,106 @@
+<!--<div *ngIf="isAdmin" class="admin-sidebar" [ngClass]="{'collapsed': isCollapsed}">-->
+<!--  <div class="sidebar-header">-->
+<!--    <div class="logo-container" *ngIf="!isCollapsed">-->
+<!--      <i class="pi pi-shield"></i>-->
+<!--      <span class="logo-text">Admin Panel</span>-->
+<!--    </div>-->
+<!--    <i *ngIf="isCollapsed"></i>-->
+<!--    <button type="button" class="toggle-btn" (click)="toggleSidebar()">-->
+<!--      <i class="pi" [ngClass]="isCollapsed ? 'pi-angle-right' : 'pi-angle-left'"></i>-->
+<!--    </button>-->
+<!--  </div>-->
+
+<!--  <div class="sidebar-content">-->
+<!--    <p-panelMenu [model]="items" [multiple]="false" [ngClass]="{'collapsed-menu': isCollapsed}">-->
+<!--      <ng-template pTemplate="item" let-item>-->
+<!--        <div class="menu-item" pTooltip="{{item.label}}" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">-->
+<!--          <a [routerLink]="item.routerLink" class="menu-link" routerLinkActive="active-link">-->
+<!--            <i class="menu-icon" [ngClass]="item.icon"></i>-->
+<!--            <span class="menu-text" *ngIf="!isCollapsed">{{ item.label }}</span>-->
+<!--          </a>-->
+<!--        </div>-->
+<!--      </ng-template>-->
+<!--    </p-panelMenu>-->
+<!--  </div>-->
+
+<!--  <div class="sidebar-footer" *ngIf="!isCollapsed">-->
+<!--    <div class="user-info">-->
+<!--      <i class="pi pi-user"></i>-->
+<!--      <span class="admin-name">Admin User</span>-->
+<!--    </div>-->
+<!--    <button pButton type="button" icon="pi pi-sign-out" class="logout-btn"></button>-->
+<!--  </div>-->
+<!--</div>-->
 <div *ngIf="isAdmin" class="admin-sidebar" [ngClass]="{'collapsed': isCollapsed}">
   <div class="sidebar-header">
     <div class="logo-container" *ngIf="!isCollapsed">
-      <i class="pi pi-shield"></i>
-      <span class="logo-text">Admin Panel</span>
+      <div class="logo-icon">
+        <i class="pi pi-shield"></i>
+      </div>
+      <span class="logo-text">Run<span class="text-primary">Admin</span></span>
     </div>
-    <i *ngIf="isCollapsed"></i>
-    <button type="button" class="toggle-btn" (click)="toggleSidebar()">
-      <i class="pi" [ngClass]="isCollapsed ? 'pi-angle-right' : 'pi-angle-left'"></i>
+    <button type="button" class="toggle-btn" (click)="toggleSidebar()" pRipple>
+      <i class="pi" [ngClass]="isCollapsed ? 'pi-chevron-right' : 'pi-chevron-left'"></i>
     </button>
   </div>
 
   <div class="sidebar-content">
-    <p-panelMenu [model]="items" [multiple]="false" [ngClass]="{'collapsed-menu': isCollapsed}">
-      <ng-template pTemplate="item" let-item>
-        <div class="menu-item" pTooltip="{{item.label}}" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
-          <a [routerLink]="item.routerLink" class="menu-link" routerLinkActive="active-link">
-            <i class="menu-icon" [ngClass]="item.icon"></i>
-            <span class="menu-text" *ngIf="!isCollapsed">{{ item.label }}</span>
-          </a>
-        </div>
-      </ng-template>
-    </p-panelMenu>
+    <div class="menu-section">
+      <div class="section-label" *ngIf="!isCollapsed">DASHBOARD</div>
+      <a class="menu-item" routerLink="/admin/dashboard" routerLinkActive="active"
+         pTooltip="Dashboard" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
+        <i class="pi pi-home menu-icon"></i>
+        <span class="menu-text" *ngIf="!isCollapsed">Dashboard</span>
+      </a>
+    </div>
+
+    <div class="menu-section">
+      <div class="section-label" *ngIf="!isCollapsed">MANAGEMENT</div>
+      <a class="menu-item" routerLink="/admin/products" routerLinkActive="active"
+         pTooltip="Products" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
+        <i class="pi pi-shopping-bag menu-icon"></i>
+        <span class="menu-text" *ngIf="!isCollapsed">Running Products</span>
+      </a>
+      <a class="menu-item" routerLink="/admin/orders" routerLinkActive="active"
+         pTooltip="Orders" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
+        <i class="pi pi-shopping-cart menu-icon"></i>
+        <span class="menu-text" *ngIf="!isCollapsed">Orders</span>
+      </a>
+      <a class="menu-item" routerLink="/admin/users" routerLinkActive="active"
+         pTooltip="Users" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
+        <i class="pi pi-users menu-icon"></i>
+        <span class="menu-text" *ngIf="!isCollapsed">Runners</span>
+      </a>
+    </div>
+
+    <div class="menu-section">
+      <div class="section-label" *ngIf="!isCollapsed">ANALYTICS</div>
+      <a class="menu-item" routerLink="/admin/stats" routerLinkActive="active"
+         pTooltip="Statistics" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
+        <i class="pi pi-chart-line menu-icon"></i>
+        <span class="menu-text" *ngIf="!isCollapsed">Running Stats</span>
+      </a>
+      <a class="menu-item" routerLink="/admin/events" routerLinkActive="active"
+         pTooltip="Events" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
+        <i class="pi pi-calendar menu-icon"></i>
+        <span class="menu-text" *ngIf="!isCollapsed">Race Events</span>
+      </a>
+    </div>
   </div>
 
-  <div class="sidebar-footer" *ngIf="!isCollapsed">
-    <div class="user-info">
-      <i class="pi pi-user"></i>
-      <span class="admin-name">Admin User</span>
+  <div class="sidebar-footer">
+    <div class="user-profile" *ngIf="!isCollapsed">
+      <div class="avatar">
+        <img src="assets/images/runner-avatar.jpg" alt="Admin Avatar">
+      </div>
+      <div class="user-info">
+        <div class="name">Marathon Admin</div>
+        <div class="role">Race Director</div>
+      </div>
     </div>
-    <button pButton type="button" icon="pi pi-sign-out" class="logout-btn"></button>
+    <button class="logout-btn" pButton pRipple
+            icon="pi pi-sign-out"
+            [label]="!isCollapsed ? 'Logout' : ''"
+            pTooltip="Logout" [tooltipDisabled]="!isCollapsed"></button>
   </div>
 </div>
