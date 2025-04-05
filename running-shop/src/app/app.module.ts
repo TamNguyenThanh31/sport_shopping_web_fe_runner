@@ -4,12 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
 import { TooltipModule } from 'primeng/tooltip';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import {MessageService} from "primeng/api";
+import {AuthInterceptor} from "./core/interceptors/auth.interceptor";
 
 @NgModule({
   declarations: [AppComponent],
@@ -23,7 +24,12 @@ import {MessageService} from "primeng/api";
     SharedModule,
     PanelMenuModule
   ],
-  providers: [MessageService],
+  providers: [MessageService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,0 +1,67 @@
+<div *ngIf="!displayDetail">
+  <p-table [value]="users" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Password</th>
+        <th>Phone Number</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.password }}</td>
+        <td>{{ user.phoneNumber }}</td>
+        <td>
+          <p-button label="Edit" (click)="showDialog(user)" styleClass="p-button-warning"></p-button>
+          <p-button label="Delete" (click)="deleteUser(user.id)" styleClass="p-button-danger"></p-button>
+          <p-button label="Detail" (click)="showDetail(user.id)" styleClass="p-button-info"></p-button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-button label="Add New" (click)="showDialog()"></p-button>
+</div>
+
+<p-dialog header="User Form" [(visible)]="displayDialog" [modal]="true" [style]="{ width: '30vw' }">
+  <form (ngSubmit)="saveUser()" *ngIf="selectedUser">
+    <div class="p-field">
+      <label>Username</label>
+      <p-inputText [(ngModel)]="selectedUser.username" name="username" required></p-inputText>
+    </div>
+    <div class="p-field">
+      <label>Email</label>
+      <p-inputText [(ngModel)]="selectedUser.email" name="email" required></p-inputText>
+    </div>
+    <div class="p-field">
+      <label>Phone Number</label>
+      <p-inputText [(ngModel)]="selectedUser.phoneNumber" name="phoneNumber" required></p-inputText>
+    </div>
+    <div class="p-field">
+      <label>Password</label>
+      <p-inputText [(ngModel)]="selectedUser.password" name="password" type="password"></p-inputText>
+    </div>
+    <p-button label="Save" type="submit"></p-button>
+  </form>
+</p-dialog>
+
+<p-dialog header="User Detail" [(visible)]="displayDetail" [modal]="true" [style]="{ width: '30vw' }">
+  <div *ngIf="userDetail">
+    <p>ID: {{ userDetail.id }}</p>
+    <p>Username: {{ userDetail.username }}</p>
+    <p>Email: {{ userDetail.email }}</p>
+    <p>Phone Number: {{ userDetail.phoneNumber }}</p>
+    <p>Role: {{ userDetail.role }}</p>
+    <p>Created At: {{ userDetail.createdAt }}</p>
+    <p>Updated At: {{ userDetail.updatedAt }}</p>
+    <p-button label="Close" (click)="closeDetail()"></p-button>
+  </div>
+</p-dialog>
+
+<p-toast></p-toast>
