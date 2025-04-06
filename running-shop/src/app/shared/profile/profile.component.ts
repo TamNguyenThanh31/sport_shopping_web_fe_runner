@@ -18,4 +18,30 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  activities = [
+    {
+      date: new Date('2023-05-15'),
+      title: '10K Personal Best',
+      description: 'Achieved new personal record on 10K run',
+      icon: 'pi-trophy'
+    },
+    {
+      date: new Date('2023-05-08'),
+      title: 'Joined Marathon Challenge',
+      description: 'Registered for upcoming city marathon',
+      icon: 'pi-flag'
+    },
+    {
+      date: new Date('2023-04-28'),
+      title: 'New Running Shoes',
+      description: 'Purchased latest model of running shoes',
+      icon: 'pi-shopping-bag'
+    },
+    {
+      date: new Date('2023-04-15'),
+      title: 'Monthly Milestone',
+      description: 'Completed 100km this month',
+      icon: 'pi-star'
+    }
+  ];
 }

@@ -1,0 +1,22 @@
+<h2>Edit Profile</h2>
+<form (ngSubmit)="save()">
+  <div class="p-field">
+    <label>Username</label>
+    <p-inputText [(ngModel)]="user.username" name="username" required></p-inputText>
+  </div>
+  <div class="p-field">
+    <label>Email</label>
+    <p-inputText [(ngModel)]="user.email" name="email" required></p-inputText>
+  </div>
+  <div class="p-field">
+    <label>Phone Number</label>
+    <p-inputText [(ngModel)]="user.phoneNumber" name="phoneNumber" required></p-inputText>
+  </div>
+  <div class="p-field">
+    <label>Password</label>
+    <p-inputText [(ngModel)]="user.password" name="password" type="password"></p-inputText>
+  </div>
+  <p-button label="Save" type="submit"></p-button>
+</form>
+
+<p-toast></p-toast>

@@ -1,42 +1,104 @@
-<div class="profile-wrapper">
-  <p-card *ngIf="currentUser$ | async as user; else notLoggedIn" header="Your Runner Profile" [style]="{'width': '600px', 'margin': '20px auto'}">
-    <!-- Header với hình nền chạy bộ -->
-    <ng-template pTemplate="header">
-      <div class="profile-header">
-        <h2>Your Runner Profile</h2>
+<div class="profile-page" *ngIf="currentUser$ | async as user; else notLoggedIn">
+  <!-- Header Section -->
+  <div class="profile-header">
+    <div class="header-background"></div>
+    <div class="header-content">
+      <div class="avatar-container">
+        <p-avatar [label]="user.username[0].toUpperCase()"
+                  size="xlarge"
+                  shape="circle"
+                  [style]="{'background-color': '#4361ee', 'color': '#fff', 'font-size': '2rem', 'font-weight': '600'}">
+        </p-avatar>
       </div>
-    </ng-template>
+      <h1>{{ user.username }}'s Runner Profile</h1>
+      <p class="runner-tagline">Tracking your running journey since {{ user.createdAt | date:'yyyy' }}</p>
+    </div>
+  </div>
 
-    <!-- Nội dung profile -->
-    <div class="profile-content">
-      <div class="profile-avatar">
-        <i class="pi pi-user runner-icon"></i>
-      </div>
-      <div class="profile-details">
-        <p><strong>Username:</strong> {{ user.username }}</p>
-        <p><strong>Email:</strong> {{ user.email }}</p>
-        <p><strong>Role:</strong> {{ user.role }}</p>
-        <p><strong>Joined:</strong> {{ user.createdAt | date:'medium' }}</p>
-        <p><strong>Last Updated:</strong> {{ user.updatedAt | date:'medium' }}</p>
+  <!-- Main Content -->
+  <div class="profile-main">
+    <div class="profile-section personal-info">
+      <h2><i class="pi pi-user"></i> Personal Information</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Username</label>
+          <p>{{ user.username }}</p>
+        </div>
+        <div class="info-item">
+          <label>Email</label>
+          <p>{{ user.email }}</p>
+        </div>
+        <div class="info-item">
+          <label>Account Type</label>
+          <p>{{ user.role | titlecase }}</p>
+        </div>
+        <div class="info-item">
+          <label>Member Since</label>
+          <p>{{ user.createdAt | date:'fullDate' }}</p>
+        </div>
       </div>
     </div>
 
-    <!-- Footer với nút hành động -->
-    <ng-template pTemplate="footer">
-      <div class="profile-footer">
-        <p-button label="Edit Profile" icon="pi pi-pencil" styleClass="p-button-raised p-button-warning"></p-button>
-        <p-button label="Logout" icon="pi pi-sign-out" styleClass="p-button-raised p-button-danger" (click)="authService.logout()"></p-button>
+    <div class="profile-section stats-section">
+      <h2><i class="pi pi-chart-line"></i> Running Statistics</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value">42</div>
+          <div class="stat-label">Total Runs</div>
+          <i class="pi pi-map-marker stat-icon"></i>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">156km</div>
+          <div class="stat-label">Distance Covered</div>
+          <i class="pi pi-globe stat-icon"></i>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">5:42/km</div>
+          <div class="stat-label">Avg. Pace</div>
+          <i class="pi pi-stopwatch stat-icon"></i>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">Level 3</div>
+          <div class="stat-label">Runner Level</div>
+          <i class="pi pi-star stat-icon"></i>
+        </div>
       </div>
-    </ng-template>
-  </p-card>
-
-  <!-- Template khi chưa đăng nhập -->
-  <ng-template #notLoggedIn>
-    <div class="not-logged-in">
-      <p-card header="Access Denied" [style]="{'width': '600px', 'margin': '20px auto'}">
-        <p>Please log in to view your runner profile.</p>
-        <p-button label="Go to Login" icon="pi pi-sign-in" styleClass="p-button-raised p-button-info" [routerLink]="['/auth/login']"></p-button>
-      </p-card>
     </div>
-  </ng-template>
+
+    <div class="profile-section recent-activity">
+      <h2><i class="pi pi-history"></i> Recent Activity</h2>
+      <p-timeline [value]="activities" align="alternate">
+        <ng-template pTemplate="content" let-activity>
+          <div class="activity-card">
+            <div class="activity-date">{{ activity.date | date:'shortDate' }}</div>
+            <div class="activity-title">{{ activity.title }}</div>
+            <div class="activity-desc">{{ activity.description }}</div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="opposite" let-activity>
+          <i class="pi" [ngClass]="activity.icon" style="font-size: 1.5rem"></i>
+        </ng-template>
+      </p-timeline>
+    </div>
+  </div>
+
+  <!-- Footer Actions -->
+  <div class="profile-actions">
+    <p-button label="Edit Profile" icon="pi pi-user-edit" styleClass="p-button-rounded p-button-outlined"></p-button>
+    <p-button label="View Full Stats" icon="pi pi-chart-bar" styleClass="p-button-rounded"></p-button>
+    <p-button label="Logout" icon="pi pi-sign-out" styleClass="p-button-rounded p-button-danger"
+              (click)="authService.logout()"></p-button>
+  </div>
 </div>
+
+<ng-template #notLoggedIn>
+  <div class="login-prompt">
+    <div class="prompt-content">
+      <i class="pi pi-lock" style="font-size: 4rem; color: #4361ee"></i>
+      <h2>Access Your Runner Profile</h2>
+      <p>Sign in to view your complete running statistics, achievements, and activity history.</p>
+      <p-button label="Sign In Now" icon="pi pi-sign-in" styleClass="p-button-raised p-button-lg"
+                [routerLink]="['/auth/login']"></p-button>
+    </div>
+  </div>
+</ng-template>

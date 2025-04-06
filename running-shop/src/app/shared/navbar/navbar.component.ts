@@ -1,7 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {MenuItem} from 'primeng/api';
-import {AuthService} from '../../core/services/auth.service';
-import {Router} from '@angular/router';
+import { Component, OnInit, HostListener } from '@angular/core';
+import { MenuItem } from 'primeng/api';
+import { AuthService } from '../../core/services/auth.service';
+import { Router } from '@angular/router';
+// import { CartService } from '../../core/services/cart.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -13,44 +15,106 @@ export class NavbarComponent implements OnInit {
   userMenuItems: MenuItem[] = [];
   currentUser: any;
   cartItems: number = 0;
+  isScrolled = false;
+  // private cartSubscription: Subscription;
 
   constructor(
     private authService: AuthService,
-    private router: Router
-  ) {
-  }
+    private router: Router,
+    // private cartService: CartService
+  ) {}
 
   ngOnInit() {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
       this.updateMenu();
     });
+
+    // this.cartSubscription = this.cartService.cart$.subscribe(cart => {
+    //   this.cartItems = cart?.items?.reduce((total, item) => total + item.quantity, 0) || 0;
+    // });
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  onWindowScroll() {
+    this.isScrolled = window.scrollY > 10;
   }
 
   updateMenu() {
     this.items = [
-      {label: 'Shop', icon: 'pi pi-shopping-bag', routerLink: ['/products']},
-      {label: 'Running Gear', icon: 'pi pi-bolt', routerLink: ['/gear']},
-      {label: 'Training', icon: 'pi pi-heart', routerLink: ['/training']},
-      {label: 'Community', icon: 'pi pi-users', routerLink: ['/community']}
+      {
+        label: 'Shop',
+        icon: 'pi pi-shopping-bag',
+        routerLink: ['/products'],
+        styleClass: 'menu-item'
+      },
+      {
+        label: 'Running Gear',
+        icon: 'pi pi-bolt',
+        routerLink: ['/gear'],
+        styleClass: 'menu-item'
+      },
+      {
+        label: 'Training Plans',
+        icon: 'pi pi-map',
+        routerLink: ['/training'],
+        styleClass: 'menu-item'
+      },
+      {
+        label: 'Community',
+        icon: 'pi pi-users',
+        routerLink: ['/community'],
+        styleClass: 'menu-item'
+      }
     ];
 
     this.userMenuItems = this.currentUser
       ? [
-        {label: 'My Profile', icon: 'pi pi-user', routerLink: ['/profile']},
-        {label: 'Orders', icon: 'pi pi-box', routerLink: ['/orders']},
-        {label: 'Wishlist', icon: 'pi pi-heart', routerLink: ['/wishlist']},
-        {label: 'Logout', icon: 'pi pi-sign-out', command: () => this.logout()}
+        {
+          label: 'My Profile',
+          icon: 'pi pi-user',
+          routerLink: ['/profile'],
+          styleClass: 'user-menu-item'
+        },
+        {
+          label: 'My Orders',
+          icon: 'pi pi-box',
+          routerLink: ['/orders'],
+          styleClass: 'user-menu-item'
+        },
+        {
+          label: 'Wishlist',
+          icon: 'pi pi-heart',
+          routerLink: ['/wishlist'],
+          styleClass: 'user-menu-item'
+        },
+        { separator: true },
+        {
+          label: 'Logout',
+          icon: 'pi pi-sign-out',
+          command: () => this.logout(),
+          styleClass: 'user-menu-item'
+        }
       ]
       : [
-        {label: 'Login', icon: 'pi pi-sign-in', routerLink: ['/login']},
-        {label: 'Register', icon: 'pi pi-user-plus', routerLink: ['/register']}
+        {
+          label: 'Login',
+          icon: 'pi pi-sign-in',
+          routerLink: ['/login'],
+          styleClass: 'user-menu-item'
+        },
+        {
+          label: 'Register',
+          icon: 'pi pi-user-plus',
+          routerLink: ['/register'],
+          styleClass: 'user-menu-item'
+        }
       ];
   }
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/auth/login']);
+    this.router.navigate(['/']);
   }
 
   navigateToHome() {
@@ -58,7 +122,7 @@ export class NavbarComponent implements OnInit {
   }
 
   toggleSearch() {
-    // Implement search functionality later
+    // Implement search functionality
   }
 
   getUserInitials(): string {
@@ -66,4 +130,10 @@ export class NavbarComponent implements OnInit {
     const names: string[] = this.currentUser.username.split(' ');
     return names.map((n: string) => n.charAt(0)).join('').toUpperCase().slice(0, 2);
   }
+
+  // ngOnDestroy() {
+  //   if (this.cartSubscription) {
+  //     this.cartSubscription.unsubscribe();
+  //   }
+  // }
 }
