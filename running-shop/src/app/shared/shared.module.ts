@@ -14,6 +14,7 @@ import {RippleModule} from "primeng/ripple";
 import {DividerModule} from "primeng/divider";
 import {ProgressBarModule} from "primeng/progressbar";
 import {TimelineModule} from "primeng/timeline";
+import { PhonePipe } from './pipes/phone.pipe';
 
 
 
@@ -22,12 +23,14 @@ import {TimelineModule} from "primeng/timeline";
     NavbarComponent,
     SidebarComponent,
     FooterComponent,
-    ProfileComponent
+    ProfileComponent,
+    PhonePipe
   ],
   exports: [
     NavbarComponent,
     SidebarComponent,
-    FooterComponent
+    FooterComponent,
+    PhonePipe
   ],
   imports: [
     CommonModule,
