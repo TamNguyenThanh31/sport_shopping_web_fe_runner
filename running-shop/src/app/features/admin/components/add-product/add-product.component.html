@@ -1,0 +1,168 @@
+<div class="container-fluid mt-4">
+  <p-toast></p-toast>
+  <p-card header="Thêm sản phẩm mới" styleClass="shadow-2">
+    <form (ngSubmit)="createProduct()">
+      <div class="grid">
+        <div class="col-12 md:col-6">
+          <label class="block mb-2">Tên sản phẩm</label>
+          <p-inputText
+            id="name"
+            [(ngModel)]="product.name"
+            name="name"
+            styleClass="w-full">
+          </p-inputText>
+        </div>
+        <div class="col-12 md:col-6">
+          <label class="block mb-2">Thương hiệu</label>
+          <p-inputText
+            id="brand"
+            [(ngModel)]="product.brand"
+            name="brand"
+            styleClass="w-full">
+          </p-inputText>
+        </div>
+        <div class="col-12">
+          <label class="block mb-2">Mô tả</label>
+          <textarea
+            pInputTextarea
+            id="description"
+            [(ngModel)]="product.description"
+            name="description"
+            rows="3"
+            styleClass="w-full">
+          </textarea>
+        </div>
+        <div class="col-12 md:col-6">
+          <label class="block mb-2">Danh mục</label>
+          <p-dropdown
+            id="categoryId"
+            [options]="categories"
+            [(ngModel)]="product.categoryId"
+            optionLabel="name"
+            optionValue="id"
+            styleClass="w-full">
+          </p-dropdown>
+        </div>
+        <div class="col-12 md:col-6">
+          <label class="block mb-2">Trạng thái</label>
+          <p-dropdown
+            id="isActive"
+            [options]="isActiveOptions"
+            [(ngModel)]="product.isActive"
+            optionLabel="label"
+            optionValue="value"
+            styleClass="w-full">
+          </p-dropdown>
+        </div>
+      </div>
+
+      <h4 class="mt-4">Biến thể</h4>
+      <div *ngFor="let variant of product.variants; let i = index" class="p-3 mb-3 surface-100 border-round">
+        <div class="grid">
+          <div class="col-12 md:col-2">
+            <label class="block mb-2">Kích thước</label>
+            <p-inputText
+              [(ngModel)]="variant.size"
+              [name]="'size-' + i"
+              styleClass="w-full">
+            </p-inputText>
+          </div>
+          <div class="col-12 md:col-2">
+            <label class="block mb-2">Màu sắc</label>
+            <p-inputText
+              [(ngModel)]="variant.color"
+              [name]="'color-' + i"
+              styleClass="w-full">
+            </p-inputText>
+          </div>
+          <div class="col-12 md:col-2">
+            <label class="block mb-2">Số lượng</label>
+            <p-inputNumber
+              [(ngModel)]="variant.stock"
+              [name]="'stock-' + i"
+              styleClass="w-full">
+            </p-inputNumber>
+          </div>
+          <div class="col-12 md:col-2">
+            <label class="block mb-2">Giá</label>
+            <p-inputNumber
+              [(ngModel)]="variant.price"
+              [name]="'price-' + i"
+              styleClass="w-full"
+              mode="decimal"
+              [minFractionDigits]="2">
+            </p-inputNumber>
+          </div>
+          <div class="col-12 md:col-2">
+            <label class="block mb-2">SKU</label>
+            <p-inputText
+              [(ngModel)]="variant.sku"
+              [name]="'sku-' + i"
+              styleClass="w-full">
+            </p-inputText>
+          </div>
+          <div class="col-12 md:col-2 flex align-items-end">
+            <p-button
+              icon="pi pi-trash"
+              styleClass="p-button-danger p-button-sm"
+              (click)="removeVariant(i)"
+              [disabled]="product.variants.length === 1">
+            </p-button>
+          </div>
+        </div>
+      </div>
+      <p-button
+        label="Thêm biến thể"
+        icon="pi pi-plus"
+        styleClass="p-button-secondary mb-3"
+        (click)="addVariant()">
+      </p-button>
+
+      <h4 class="mt-4">Hình ảnh</h4>
+      <div *ngFor="let image of product.images; let i = index" class="p-3 mb-3 surface-100 border-round">
+        <div class="grid">
+          <div class="col-12 md:col-6">
+            <label class="block mb-2">URL hình ảnh</label>
+            <p-inputText
+              [(ngModel)]="image.imageUrl"
+              [name]="'imageUrl-' + i"
+              styleClass="w-full">
+            </p-inputText>
+          </div>
+          <div class="col-12 md:col-3">
+            <label class="block mb-2">Hình chính</label>
+            <p-checkbox
+              [(ngModel)]="image.isPrimary"
+              [name]="'isPrimary-' + i"
+              [binary]="true"
+              label="Có">
+            </p-checkbox>
+          </div>
+          <div class="col-12 md:col-3 flex align-items-end">
+            <p-button
+              icon="pi pi-trash"
+              styleClass="p-button-danger p-button-sm"
+              (click)="removeImage(i)"
+              [disabled]="product.images.length === 1">
+            </p-button>
+          </div>
+        </div>
+      </div>
+      <p-button
+        label="Thêm hình ảnh"
+        icon="pi pi-plus"
+        styleClass="p-button-secondary mb-3"
+        (click)="addImage()">
+      </p-button>
+
+      <div class="mt-4">
+        <p-button
+          type="submit"
+          label="Thêm sản phẩm"
+          icon="pi pi-check"
+          styleClass="p-button-success w-full">
+        </p-button>
+      </div>
+    </form>
+  </p-card>
+</div>

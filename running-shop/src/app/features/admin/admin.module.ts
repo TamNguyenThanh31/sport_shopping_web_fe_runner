@@ -9,19 +9,29 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {CardModule} from "primeng/card";
 import {TooltipModule} from "primeng/tooltip";
 import {RippleModule} from "primeng/ripple";
 import {PasswordModule} from "primeng/password";
 import {SharedModule} from "../../shared/shared.module";
+import { ProductManagementComponent } from './components/product-management/product-management.component';
+import {ListboxModule} from "primeng/listbox";
+import {BadgeModule} from "primeng/badge";
+import {DataViewModule} from "primeng/dataview";
+import {DropdownModule} from "primeng/dropdown";
+import { AddProductComponent } from './components/add-product/add-product.component';
+import {InputNumberModule} from "primeng/inputnumber";
+import {CheckboxModule} from "primeng/checkbox";
 
 @NgModule({
   declarations: [
     AdminComponent,
     AdminDashboardComponent,
-    CustomerStaffManagementComponent
+    CustomerStaffManagementComponent,
+    ProductManagementComponent,
+    AddProductComponent
   ],
   imports: [
     CommonModule,
@@ -38,6 +48,13 @@ import {SharedModule} from "../../shared/shared.module";
     RippleModule,
     PasswordModule,
     SharedModule,
+    ListboxModule,
+    FormsModule,
+    BadgeModule,
+    DataViewModule,
+    DropdownModule,
+    InputNumberModule,
+    CheckboxModule,
   ]
 })
 export class AdminModule { }

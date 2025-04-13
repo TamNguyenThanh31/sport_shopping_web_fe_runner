@@ -10,6 +10,14 @@ import { TooltipModule } from 'primeng/tooltip';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import {MessageService} from "primeng/api";
 import {AuthInterceptor} from "./core/interceptors/auth.interceptor";
+import {ToastModule} from "primeng/toast";
+import {DataViewModule} from "primeng/dataview";
+import {CardModule} from "primeng/card";
+import {ButtonModule} from "primeng/button";
+import {ListboxModule} from "primeng/listbox";
+import {InputTextModule} from "primeng/inputtext";
+import {DropdownModule} from "primeng/dropdown";
+import {CheckboxModule} from "primeng/checkbox";
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,7 +29,18 @@ import {AuthInterceptor} from "./core/interceptors/auth.interceptor";
     BrowserAnimationsModule,
     TooltipModule,
     SharedModule,
-    PanelMenuModule
+    PanelMenuModule,
+
+    // PrimeNG
+    PanelMenuModule,
+    DataViewModule,
+    CardModule,
+    ButtonModule,
+    ListboxModule,
+    InputTextModule,
+    DropdownModule,
+    CheckboxModule,
+    ToastModule
   ],
   providers: [MessageService,
     {
