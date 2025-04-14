@@ -6,11 +6,12 @@ import { MessageService } from 'primeng/api';
 import { forkJoin } from 'rxjs';
 
 @Component({
-  selector: 'app-customer-product',
-  templateUrl: './customer-product.component.html',
-  styleUrls: ['./customer-product.component.scss'],
-  providers: [MessageService],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-customer-product',
+    templateUrl: './customer-product.component.html',
+    styleUrls: ['./customer-product.component.scss'],
+    providers: [MessageService],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CustomerProductComponent implements OnInit {
   products: Product[] = [];

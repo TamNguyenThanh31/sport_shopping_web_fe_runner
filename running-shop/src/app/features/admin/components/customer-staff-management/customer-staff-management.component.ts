@@ -6,10 +6,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Component({
-  selector: 'app-customer-staff-management',
-  templateUrl: './customer-staff-management.component.html',
-  styleUrls: ['./customer-staff-management.component.scss'],
-  providers: [ConfirmationService]
+    selector: 'app-customer-staff-management',
+    templateUrl: './customer-staff-management.component.html',
+    styleUrls: ['./customer-staff-management.component.scss'],
+    providers: [ConfirmationService],
+    standalone: false
 })
 export class CustomerStaffManagementComponent implements OnInit {
   users: UserDTO[] = [];

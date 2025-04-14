@@ -3,9 +3,10 @@ import {Router} from "@angular/router";
 import {AuthService} from "../../../../core/services/auth.service";
 
 @Component({
-  selector: 'app-staff-dashboard',
-  templateUrl: './staff-dashboard.component.html',
-  styleUrls: ['./staff-dashboard.component.scss']
+    selector: 'app-staff-dashboard',
+    templateUrl: './staff-dashboard.component.html',
+    styleUrls: ['./staff-dashboard.component.scss'],
+    standalone: false
 })
 export class StaffDashboardComponent implements OnInit {
 

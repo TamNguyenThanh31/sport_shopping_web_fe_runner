@@ -5,9 +5,10 @@ import {ApiService} from "../../../../core/services/api.service";
 import {MessageService} from "primeng/api";
 
 @Component({
-  selector: 'app-product-management',
-  templateUrl: './product-management.component.html',
-  styleUrls: ['./product-management.component.scss']
+    selector: 'app-product-management',
+    templateUrl: './product-management.component.html',
+    styleUrls: ['./product-management.component.scss'],
+    standalone: false
 })
 export class ProductManagementComponent implements OnInit {
 
