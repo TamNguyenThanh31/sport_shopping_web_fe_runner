@@ -12,9 +12,12 @@ import { CustomerEditComponent } from './components/customer-edit/customer-edit.
 import { CustomerProductComponent } from './components/customer-product/customer-product.component';
 import {ListboxModule} from "primeng/listbox";
 import {BadgeModule} from "primeng/badge";
-import {DataView, DataViewModule} from "primeng/dataview";
 import {DropdownModule} from "primeng/dropdown";
 import {CardModule} from "primeng/card";
+import {MessageService, PrimeIcons} from "primeng/api";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {DataViewModule} from "primeng/dataview";
+import {Paginator} from "primeng/paginator";
 
 
 @NgModule({
@@ -35,6 +38,11 @@ import {CardModule} from "primeng/card";
     CardModule,
     BadgeModule,
     DropdownModule,
-  ]
+    ProgressSpinnerModule,
+    Paginator
+  ],
+  providers: [
+    MessageService
+  ],
 })
 export class CustomerModule { }
