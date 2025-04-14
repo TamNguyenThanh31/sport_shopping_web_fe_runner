@@ -43,6 +43,11 @@ export class AuthService {
     return this.currentUser$;
   }
 
+  // Thêm phương thức này để lấy giá trị trực tiếp
+  getCurrentUserValue(): User | null {
+    return this.currentUserSubject.value;
+  }
+
   logout(): void {
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);

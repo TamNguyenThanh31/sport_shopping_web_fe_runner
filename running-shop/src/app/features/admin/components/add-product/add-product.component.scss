@@ -1,0 +1,11 @@
+:host ::ng-deep {
+  .p-inputtext, .p-dropdown, .p-checkbox {
+    width: 100%;
+  }
+
+  .p-card {
+    .p-card-body {
+      padding: 1.5rem;
+    }
+  }
+}
