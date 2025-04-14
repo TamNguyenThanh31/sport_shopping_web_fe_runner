@@ -1,4 +1,4 @@
-<div class="container-fluid mt-4">
+<div class="container-fluid mt-4" style="margin-top: 60px">
   <div class="grid">
     <!-- Sidebar: Danh mục -->
     <div class="col-12 md:col-3">
@@ -25,8 +25,8 @@
     <!-- Danh sách sản phẩm -->
     <div class="col-12 md:col-9">
       <p-toast></p-toast>
-      <p-dataView [value]="filteredProducts" layout="grid">
-        <ng-template pTemplate="header">
+      <p-dataView [value]="filteredProducts" [layout]="layout">
+      <ng-template pTemplate="header">
           <div class="flex justify-content-between align-items-center">
             <h2>Danh sách sản phẩm</h2>
             <p-dropdown
@@ -51,7 +51,7 @@
                     label="Xem chi tiết"
                     icon="pi pi-eye"
                     styleClass="p-button-outlined p-button-sm"
-                    [routerLink]="['/customer/edit', product.id]">
+                    [routerLink]="['/customer/detail-product', product.id]">
                   </p-button>
                   <p-button
                     label="Thêm vào giỏ"
@@ -83,7 +83,7 @@
                     label="Xem chi tiết"
                     icon="pi pi-eye"
                     styleClass="p-button-outlined p-button-sm"
-                    [routerLink]="['/customer/edit', product.id]">
+                    [routerLink]="['/customer/detail-product', product.id]">
                   </p-button>
                   <p-button
                     label="Thêm vào giỏ"
