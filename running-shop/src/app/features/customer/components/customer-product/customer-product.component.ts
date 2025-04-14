@@ -15,7 +15,7 @@ export class CustomerProductComponent implements OnInit {
   filteredProducts: Product[] = [];
   categories: Category[] = [];
   selectedCategory: Category | null = null;
-  layout: string = 'grid'; // PrimeNG 14.x không hỗ trợ kiểu 'list' | 'grid', dùng string
+  layout: 'grid' | 'list' = 'grid';
 
   // Thêm mảng để lưu số lượng sản phẩm theo danh mục
   categoryProductCounts: { [key: number]: string } = {};
