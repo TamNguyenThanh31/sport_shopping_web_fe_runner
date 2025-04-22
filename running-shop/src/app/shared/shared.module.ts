@@ -15,6 +15,8 @@ import {DividerModule} from "primeng/divider";
 import {ProgressBarModule} from "primeng/progressbar";
 import {TimelineModule} from "primeng/timeline";
 import { PhonePipe } from './pipes/phone.pipe';
+import {Tooltip} from "primeng/tooltip";
+import {RouterLink} from "@angular/router";
 
 
 
@@ -43,7 +45,9 @@ import { PhonePipe } from './pipes/phone.pipe';
     RippleModule,
     DividerModule,
     ProgressBarModule,
-    TimelineModule
+    TimelineModule,
+    Tooltip,
+    RouterLink
   ],
 })
 export class SharedModule { }

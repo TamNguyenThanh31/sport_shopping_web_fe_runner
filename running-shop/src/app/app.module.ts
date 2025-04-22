@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedModule } from './shared/shared.module';
-import { TooltipModule } from 'primeng/tooltip';
-import { PanelMenuModule } from 'primeng/panelmenu';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {FormsModule} from '@angular/forms';
+import {HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {SharedModule} from './shared/shared.module';
+import {TooltipModule} from 'primeng/tooltip';
+import {PanelMenuModule} from 'primeng/panelmenu';
 import {MessageService} from "primeng/api";
 import {AuthInterceptor} from "./core/interceptors/auth.interceptor";
 import {ToastModule} from "primeng/toast";
@@ -19,18 +19,21 @@ import {InputTextModule} from "primeng/inputtext";
 import {DropdownModule} from "primeng/dropdown";
 import {CheckboxModule} from "primeng/checkbox";
 
+import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
+import {providePrimeNG} from 'primeng/config';
+import Aura from '@primeng/themes/aura';
+import "primeicons/primeicons.css";
+
+
 @NgModule({
   declarations: [AppComponent],
-  imports: [
-    BrowserModule,
+  bootstrap: [AppComponent], imports: [BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule,
     BrowserAnimationsModule,
     TooltipModule,
     SharedModule,
     PanelMenuModule,
-
     // PrimeNG
     PanelMenuModule,
     DataViewModule,
@@ -40,14 +43,22 @@ import {CheckboxModule} from "primeng/checkbox";
     InputTextModule,
     DropdownModule,
     CheckboxModule,
-    ToastModule
-  ],
-  providers: [MessageService,
+    ToastModule],
+  providers: [
+    MessageService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
-    },],
-  bootstrap: [AppComponent],
+    },
+    provideHttpClient(withInterceptorsFromDi()),
+    provideAnimationsAsync(),
+    providePrimeNG({
+      theme: {
+        preset: Aura
+      }
+    })
+  ]
 })
-export class AppModule {}
+export class AppModule {
+}

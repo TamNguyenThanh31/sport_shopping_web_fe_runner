@@ -26,7 +26,7 @@
       <div class="user-menu">
         <p-avatar [label]="getUserInitials()" size="normal" shape="circle"
                   class="user-avatar" (click)="menu.toggle($event)"
-                  style="background-color: var(--primary-color);"></p-avatar>
+                  [ngStyle]="{'background-color': 'var(--primary-color)'}"></p-avatar>
         <p-menu #menu [model]="userMenuItems" [popup]="true" appendTo="body"></p-menu>
       </div>
     </div>

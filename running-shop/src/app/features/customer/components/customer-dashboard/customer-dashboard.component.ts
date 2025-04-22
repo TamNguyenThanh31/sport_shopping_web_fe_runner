@@ -3,9 +3,10 @@ import {Router} from "@angular/router";
 import {AuthService} from "../../../../core/services/auth.service";
 
 @Component({
-  selector: 'app-customer-dashboard',
-  templateUrl: './customer-dashboard.component.html',
-  styleUrls: ['./customer-dashboard.component.scss']
+    selector: 'app-customer-dashboard',
+    templateUrl: './customer-dashboard.component.html',
+    styleUrls: ['./customer-dashboard.component.scss'],
+    standalone: false
 })
 export class CustomerDashboardComponent implements OnInit {
 

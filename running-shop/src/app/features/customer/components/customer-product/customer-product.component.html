@@ -1,107 +1,174 @@
-<div class="container-fluid mt-4" style="margin-top: 60px">
-  <div class="grid">
-    <!-- Sidebar: Danh mục -->
-    <div class="col-12 md:col-3">
-      <p-listbox
-        [options]="categories"
-        [(ngModel)]="selectedCategory"
-        optionLabel="name"
-        (onChange)="filterByCategory()"
-        styleClass="w-full"
-        [listStyle]="{ 'max-height': '300px' }">
-        <ng-template pTemplate="item" let-category>
-          <div class="flex justify-content-between align-items-center">
-            <span>{{ category.name }}</span>
-            <p-badge
-              [value]="categoryProductCounts[category.id] || '0'"
-              styleClass="ml-2"
-              severity="info">
-            </p-badge>
-          </div>
-        </ng-template>
-      </p-listbox>
+<div class="running-shop-container">
+  <!-- Loading overlay -->
+  @if (isLoading) {
+    <div class="loading-overlay">
+      <div class="loading-content">
+        <p-progressSpinner strokeWidth="3" animationDuration=".5s" styleClass="custom-spinner"></p-progressSpinner>
+        <p class="loading-text">Đang tải sản phẩm...</p>
+      </div>
     </div>
+  }
 
-    <!-- Danh sách sản phẩm -->
-    <div class="col-12 md:col-9">
-      <p-toast></p-toast>
-      <p-dataView [value]="filteredProducts" [layout]="layout">
-      <ng-template pTemplate="header">
-          <div class="flex justify-content-between align-items-center">
-            <h2>Danh sách sản phẩm</h2>
-            <p-dropdown
-              [options]="[{ label: 'Grid', value: 'grid' }, { label: 'List', value: 'list' }]"
-              [(ngModel)]="layout"
-              styleClass="w-10rem">
-            </p-dropdown>
+  <!-- Main content -->
+  @if (!isLoading) {
+    <div class="product-main-content">
+      <!-- Sidebar filter -->
+      <div class="product-sidebar-wrapper">
+        <p-card styleClass="custom-sidebar-card">
+          <ng-template pTemplate="header">
+            <div class="sidebar-header">
+              <h3 class="sidebar-title">Bộ lọc</h3>
+            </div>
+          </ng-template>
+
+          <!-- Search -->
+          <div class="sidebar-section">
+            <span class="p-input-icon-left w-full">
+              <i class="pi pi-search"></i>
+              <input pInputText [(ngModel)]="searchQuery"
+                     (ngModelChange)="filterBySearch()"
+                     placeholder="Tìm kiếm sản phẩm..."
+                     class="w-full custom-input">
+            </span>
           </div>
-        </ng-template>
-        <ng-template let-product pTemplate="gridItem">
-          <div class="col-12 sm:col-6 md:col-4 p-2">
-            <p-card [header]="product.name" [subheader]="product.brand" styleClass="shadow-2">
-              <img [src]="product.images[0]?.imageUrl || 'https://via.placeholder.com/300'"
-                   [alt]="product.name"
-                   class="w-full"
-                   style="height: 200px; object-fit: cover;">
-              <p class="mt-2">{{ product.description?.substring(0, 50) || 'Không có mô tả' }}...</p>
-              <p class="mt-2 font-bold text-red-600">{{ product.variants[0]?.price || 'N/A' }} USD</p>
-              <ng-template pTemplate="footer">
-                <div class="flex gap-2">
-                  <p-button
-                    label="Xem chi tiết"
-                    icon="pi pi-eye"
-                    styleClass="p-button-outlined p-button-sm"
-                    [routerLink]="['/customer/detail-product', product.id]">
-                  </p-button>
-                  <p-button
-                    label="Thêm vào giỏ"
-                    icon="pi pi-cart-plus"
-                    styleClass="p-button-sm"
-                    (click)="addToCart(product)">
-                  </p-button>
-                </div>
-              </ng-template>
-            </p-card>
+
+          <!-- Categories -->
+          <div class="sidebar-section">
+            <h4 class="filter-subtitle">Danh mục</h4>
+            <div class="category-list-container">
+              <p-listbox [options]="categories" [(ngModel)]="selectedCategory"
+                         optionLabel="name" (onChange)="filterByCategory()"
+                         [listStyle]="{ 'max-height': '300px' }"
+                         styleClass="w-full custom-category-listbox">
+                <ng-template pTemplate="item" let-category>
+                  <div class="category-item">
+                    <span class="category-name">{{ category.name }}</span>
+                    @if (category.id !== undefined) {
+                      <span class="category-count">
+                        {{ categoryProductCounts[category.id] || 0 }}
+                      </span>
+                    }
+                  </div>
+                </ng-template>
+              </p-listbox>
+            </div>
           </div>
-        </ng-template>
-        <ng-template let-product pTemplate="listItem">
-          <div class="col-12 p-2">
-            <p-card styleClass="shadow-2">
-              <div class="flex align-items-center">
-                <img [src]="product.images[0]?.imageUrl || 'https://via.placeholder.com/150'"
-                     [alt]="product.name"
-                     class="mr-3"
-                     style="width: 100px; height: 100px; object-fit: cover;">
-                <div class="flex-1">
-                  <h3>{{ product.name }}</h3>
-                  <p class="text-600">{{ product.brand }}</p>
-                  <p>{{ product.description?.substring(0, 100) || 'Không có mô tả' }}...</p>
-                  <p class="font-bold text-red-600">{{ product.variants[0]?.price || 'N/A' }} USD</p>
+
+          <!-- Sort -->
+          <div class="sidebar-section">
+            <h4 class="filter-subtitle">Sắp xếp</h4>
+            <p-dropdown [options]="sortOptions" [(ngModel)]="sortOption"
+                        (onChange)="onSortChange()" styleClass="w-full custom-dropdown"
+                        placeholder="Chọn kiểu sắp xếp"></p-dropdown>
+          </div>
+
+          <!-- Reset filters button -->
+          <div class="reset-filters-section">
+            <button pButton pRipple label="Xóa bộ lọc" icon="pi pi-refresh"
+                    (click)="resetFilters()" class="p-button-outlined reset-button"></button>
+          </div>
+        </p-card>
+      </div>
+
+      <!-- Product listing -->
+      <div class="product-listing">
+        <!-- Header -->
+        <div class="listing-header">
+          <h2 class="listing-title">
+            {{ selectedCategory.id === 0 ? 'Tất cả sản phẩm' : selectedCategory.name }}
+            <span class="product-count">{{ filteredProducts.length }} sản phẩm</span>
+          </h2>
+          <div class="view-options">
+            <button pButton pRipple icon="pi pi-th-large" class="p-button-text p-button-rounded view-button active"></button>
+            <button pButton pRipple icon="pi pi-list" class="p-button-text p-button-rounded view-button"></button>
+          </div>
+        </div>
+
+        <!-- Product grid -->
+        <div class="product-grid">
+          @for (product of displayProducts; track product.id) {
+            <div class="product-card-wrapper">
+              <div class="product-card">
+                <!-- Product image -->
+                <div class="product-image-container">
+                  <div class="image-wrapper">
+                    <img [src]="getPrimaryImage(product.images)"
+                         [alt]="product.name" class="product-image">
+                  </div>
+                  <div class="product-badge" [ngClass]="{
+                    'in-stock': hasStock(product),
+                    'out-of-stock': !hasStock(product)
+                  }">
+                    {{ hasStock(product) ? 'Còn hàng' : 'Hết hàng' }}
+                  </div>
+                  <div class="quick-actions">
+                    <button pButton pRipple icon="pi pi-heart"
+                            class="p-button-rounded p-button-text action-button wishlist-button"
+                            pTooltip="Yêu thích"></button>
+                    <button pButton pRipple icon="pi pi-eye"
+                            class="p-button-rounded p-button-text action-button view-button"
+                            [routerLink]="['/product', product.id]"
+                            pTooltip="Xem chi tiết"></button>
+                  </div>
                 </div>
-                <div class="flex gap-2">
-                  <p-button
-                    label="Xem chi tiết"
-                    icon="pi pi-eye"
-                    styleClass="p-button-outlined p-button-sm"
-                    [routerLink]="['/customer/detail-product', product.id]">
-                  </p-button>
-                  <p-button
-                    label="Thêm vào giỏ"
-                    icon="pi pi-cart-plus"
-                    styleClass="p-button-sm"
-                    (click)="addToCart(product)">
-                  </p-button>
+
+                <!-- Product info -->
+                <div class="product-info">
+                  <div class="product-brand">{{ product.brand }}</div>
+                  <h3 class="product-name">{{ product.name }}</h3>
+
+                  <div class="product-price-container">
+                    <span class="product-price">{{ formatPrice(getCurrentPrice(product)) }}</span>
+                  </div>
+
+                  <!-- Variant selector -->
+                  @if (product.variants.length > 1) {
+                    <div class="variant-selector">
+                      <p-dropdown [options]="product.variants"
+                                  [(ngModel)]="selectedVariants[product.id!]"
+                                  (onChange)="onVariantChange(product, $event.value)"
+                                  optionLabel="sku"
+                                  styleClass="w-full custom-variant-dropdown"
+                                  placeholder="Chọn phân loại"></p-dropdown>
+                    </div>
+                  }
+
+                  <!-- Add to cart button -->
+                  <button pButton pRipple
+                          icon="pi pi-shopping-cart"
+                          label="Thêm vào giỏ"
+                          (click)="addToCart(product)"
+                          [disabled]="!hasStock(product)"
+                          class="add-to-cart-button"></button>
                 </div>
               </div>
-            </p-card>
+            </div>
+          }
+        </div>
+
+        <!-- Empty state -->
+        @if (displayProducts.length === 0) {
+          <div class="empty-state">
+            <div class="empty-icon">
+              <i class="pi pi-search"></i>
+            </div>
+            <h3 class="empty-title">Không tìm thấy sản phẩm</h3>
+            <p class="empty-message">Thử điều chỉnh bộ lọc hoặc tìm kiếm với từ khóa khác</p>
+            <button pButton pRipple label="Xem tất cả sản phẩm"
+                    (click)="resetFilters()" class="reset-button p-button-primary"></button>
           </div>
-        </ng-template>
-        <ng-template pTemplate="empty">
-          <div class="text-center p-4">
-            <p class="text-600">Không có sản phẩm nào trong danh mục này.</p>
-          </div>
-        </ng-template>
-      </p-dataView>
+        }
+
+        <!-- Paginator -->
+        @if (filteredProducts.length > paginatorRows) {
+          <p-paginator [rows]="paginatorRows" [totalRecords]="filteredProducts.length"
+                       (onPageChange)="onPageChange($event)" [first]="paginatorFirst"
+                       styleClass="custom-paginator"
+                       [rowsPerPageOptions]="[6, 12, 24]"></p-paginator>
+        }
+      </div>
     </div>
-  </div>
+  }
+
+  <p-toast position="top-right" key="mainToast"></p-toast>
 </div>

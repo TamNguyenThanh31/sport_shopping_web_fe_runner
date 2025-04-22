@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {AuthGuard} from "./core/guards/auth/auth.guard";
 import {RoleGuard} from "./core/guards/role/role.guard";
 import {ProfileComponent} from "./shared/profile/profile.component";
+import {CustomerProductComponent} from "./features/customer/components/customer-product/customer-product.component";
 
 const routes: Routes = [
   {
@@ -33,6 +34,7 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   { path: 'profile', component: ProfileComponent },
+  { path: 'products', component: CustomerProductComponent },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

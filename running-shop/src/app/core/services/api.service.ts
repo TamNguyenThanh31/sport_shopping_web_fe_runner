@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Category} from "../../shared/models/category.model";
 import {Product} from "../../shared/models/product.model";
@@ -25,7 +25,7 @@ export class ApiService {
 
   // Thêm sản phẩm mới
   createProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(`${this.baseUrl}/products`, product);
+    return this.http.post<Product>(`${this.baseUrl}/products/create`, product);
   }
 
   deleteProduct(productId: number): Observable<void> {
