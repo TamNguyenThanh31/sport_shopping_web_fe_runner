@@ -19,10 +19,9 @@ import {InputTextModule} from "primeng/inputtext";
 import {DropdownModule} from "primeng/dropdown";
 import {CheckboxModule} from "primeng/checkbox";
 
-import {ApplicationConfig} from '@angular/core';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {providePrimeNG} from 'primeng/config';
-import Aura from '@primeng/themes/lara';
+import Aura from '@primeng/themes/aura';
 import "primeicons/primeicons.css";
 
 

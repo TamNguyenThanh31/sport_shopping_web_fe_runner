@@ -25,7 +25,7 @@ export class ApiService {
 
   // Thêm sản phẩm mới
   createProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(`${this.baseUrl}/products`, product);
+    return this.http.post<Product>(`${this.baseUrl}/products/create`, product);
   }
 
   deleteProduct(productId: number): Observable<void> {

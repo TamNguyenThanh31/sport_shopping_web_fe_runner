@@ -24,7 +24,7 @@ import {Paginator} from "primeng/paginator";
   declarations: [
     CustomerDashboardComponent,
     CustomerEditComponent,
-    CustomerProductComponent,
+
   ],
   imports: [
     CommonModule,
@@ -39,7 +39,7 @@ import {Paginator} from "primeng/paginator";
     BadgeModule,
     DropdownModule,
     ProgressSpinnerModule,
-    Paginator
+    Paginator,
   ],
   providers: [
     MessageService
