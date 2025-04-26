@@ -1,77 +1,80 @@
-<div class="register-container p-fluid">
-  <div class="register-card p-card p-shadow-10">
-    <div class="p-card-header">
+<div class="register-container">
+  <div class="register-card">
+    <div class="card-header">
       <img src="assets/images/running-logo.png" alt="RunShop Logo" class="logo">
       <h2>ĐĂNG KÝ TÀI KHOẢN MỚI</h2>
       <p class="subtitle">Bắt đầu hành trình chạy bộ của bạn</p>
     </div>
 
-    <div class="p-card-body">
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="p-fluid">
-        <div class="p-field">
-          <label for="username" class="p-input-label">Tên người dùng *</label>
-          <span class="p-input-icon-left">
+    <div class="card-body">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form">
+        <div class="form-field">
+          <label for="username">Tên người dùng *</label>
+          <div class="input-container">
             <i class="pi pi-user"></i>
             <input id="username" pInputText formControlName="username"
                    type="text" placeholder="Nhập tên người dùng của bạn">
-          </span>
+          </div>
           <small *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched"
-                 class="p-error p-d-block">
+                 class="error-message">
             Tên người dùng là bắt buộc
           </small>
         </div>
 
-        <div class="p-field">
-          <label for="email" class="p-input-label">Email *</label>
-          <span class="p-input-icon-left">
+        <div class="form-field">
+          <label for="email">Email *</label>
+          <div class="input-container">
             <i class="pi pi-envelope"></i>
             <input id="email" pInputText formControlName="email"
                    type="email" placeholder="Nhập địa chỉ email">
-          </span>
+          </div>
           <small *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
-                 class="p-error p-d-block">
+                 class="error-message">
             Vui lòng nhập email hợp lệ
           </small>
         </div>
 
-        <div class="p-field">
-          <label for="phoneNumber" class="p-input-label">Số điện thoại *</label>
-          <span class="p-input-icon-left">
+        <div class="form-field">
+          <label for="phoneNumber">Số điện thoại *</label>
+          <div class="input-container">
             <i class="pi pi-phone"></i>
             <input id="phoneNumber" pInputText formControlName="phoneNumber"
                    type="text" placeholder="Nhập số điện thoại">
-          </span>
+          </div>
           <small *ngIf="registerForm.get('phoneNumber')?.invalid && registerForm.get('phoneNumber')?.touched"
-                 class="p-error p-d-block">
+                 class="error-message">
             Số điện thoại không hợp lệ
           </small>
         </div>
 
-        <div class="p-field">
-          <label for="password" class="p-input-label">Mật khẩu *</label>
-          <span class="p-input-icon-left">
+        <div class="form-field">
+          <label for="password">Mật khẩu *</label>
+          <div class="input-container">
             <i class="pi pi-lock"></i>
             <input id="password" pInputText formControlName="password"
                    type="password" placeholder="Tạo mật khẩu (tối thiểu 6 ký tự)">
-          </span>
+          </div>
           <small *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
-                 class="p-error p-d-block">
+                 class="error-message">
             Mật khẩu phải có ít nhất 6 ký tự
           </small>
+          <div class="password-strength">
+            <div class="strength-bar" [ngStyle]="{'width': getPasswordStrength() + '%', 'background': getPasswordStrengthColor()}"></div>
+          </div>
         </div>
 
         <div class="terms-agreement">
-          <p-checkbox [binary]="true" formControlName="agreeTerms"></p-checkbox>
-          <span>Tôi đồng ý với <a href="#" class="terms-link">Điều khoản dịch vụ</a> và <a href="#" class="terms-link">Chính sách bảo mật</a></span>
+          <p-checkbox [binary]="true" formControlName="agreeTerms" inputId="agreeTerms"></p-checkbox>
+          <label for="agreeTerms">Tôi đồng ý với <a href="#" class="link">Điều khoản dịch vụ</a> và <a href="#" class="link">Chính sách bảo mật</a></label>
         </div>
 
         <button pButton type="submit" label="ĐĂNG KÝ"
-                [disabled]="registerForm.invalid" class="p-button-raised p-button-rounded"></button>
+                [disabled]="registerForm.invalid" class="submit-button"></button>
       </form>
     </div>
 
-    <div class="p-card-footer">
-      <p>Đã có tài khoản? <a routerLink="/auth/login" class="login-link">Đăng nhập ngay</a></p>
+    <div class="card-footer">
+      <p>Đã có tài khoản? <a routerLink="/auth/login" class="link">Đăng nhập ngay</a></p>
     </div>
   </div>
 
