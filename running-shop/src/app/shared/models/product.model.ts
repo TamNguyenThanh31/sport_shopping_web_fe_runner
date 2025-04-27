@@ -1,3 +1,4 @@
+// product.model.ts
 export interface Product {
   id?: number;
   name: string;
@@ -5,7 +6,7 @@ export interface Product {
   categoryId: number;
   brand: string;
   addedById?: number;
-  isActive: boolean;
+  isActive: boolean; // Sẽ ánh xạ từ "active"
   variants: ProductVariant[];
   images: ProductImage[];
 }
@@ -23,6 +24,7 @@ export interface ProductVariant {
 export interface ProductImage {
   id?: number;
   productId?: number;
+  fileName?: string;
   imageUrl: string;
   isPrimary: boolean;
 }

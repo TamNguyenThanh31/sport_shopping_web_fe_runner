@@ -16,7 +16,7 @@ import {ProgressBarModule} from "primeng/progressbar";
 import {TimelineModule} from "primeng/timeline";
 import { PhonePipe } from './pipes/phone.pipe';
 import {Tooltip} from "primeng/tooltip";
-import {RouterLink} from "@angular/router";
+import {RouterLink, RouterLinkActive} from "@angular/router";
 
 
 
@@ -34,20 +34,21 @@ import {RouterLink} from "@angular/router";
     FooterComponent,
     PhonePipe
   ],
-  imports: [
-    CommonModule,
-    MenubarModule,
-    MenuModule,
-    ButtonModule,
-    AvatarModule,
-    PanelMenuModule,
-    CardModule,
-    RippleModule,
-    DividerModule,
-    ProgressBarModule,
-    TimelineModule,
-    Tooltip,
-    RouterLink
-  ],
+    imports: [
+        CommonModule,
+        MenubarModule,
+        MenuModule,
+        ButtonModule,
+        AvatarModule,
+        PanelMenuModule,
+        CardModule,
+        RippleModule,
+        DividerModule,
+        ProgressBarModule,
+        TimelineModule,
+        Tooltip,
+        RouterLink,
+        RouterLinkActive
+    ],
 })
 export class SharedModule { }

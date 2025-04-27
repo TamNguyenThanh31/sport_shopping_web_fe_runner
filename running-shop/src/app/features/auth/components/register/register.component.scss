@@ -17,8 +17,9 @@ $error-color: #ef4444;
   align-items: center;
   min-height: 100vh;
   padding: 2rem;
+  $image-path: '/assets/images/';
   background: linear-gradient(135deg, rgba(245, 247, 250, 0.9) 0%, rgba(228, 240, 251, 0.9) 100%),
-  url('/assets/images/running-bg.jpg') no-repeat center center;
+  url('#{$image-path}running-logo.png') no-repeat center center;
   background-size: cover;
   background-blend-mode: overlay;
   font-family: 'Inter', 'Segoe UI', sans-serif;

@@ -1,115 +1,141 @@
 <div class="container-fluid mt-4">
+  <!-- Loading overlay -->
+  @if (isLoading) {
+    <div class="loading-overlay">
+      <p-progressSpinner styleClass="custom-spinner"></p-progressSpinner>
+      <p class="loading-text">Đang tải sản phẩm...</p>
+    </div>
+  }
+
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog> <!-- Thêm p-confirmDialog -->
+
   <div class="grid">
     <!-- Sidebar: Danh mục -->
     <div class="col-12 md:col-3">
-      <p-listbox
-        [options]="categories"
-        [(ngModel)]="selectedCategory"
-        optionLabel="name"
-        (onChange)="filterByCategory()"
-        styleClass="w-full"
-        [listStyle]="{ 'max-height': '300px' }">
-        <ng-template pTemplate="item" let-category>
-          <div class="flex justify-content-between align-items-center">
-            <span>{{ category.name }}</span>
-            <p-badge
-              [value]="categoryProductCounts[category.id] || '0'"
-              styleClass="ml-2"
-              severity="info">
-            </p-badge>
+      <p-card styleClass="custom-sidebar-card">
+        <ng-template pTemplate="header">
+          <div class="sidebar-header">
+            <h3 class="sidebar-title">Bộ lọc</h3>
           </div>
         </ng-template>
-      </p-listbox>
+
+        <!-- Search -->
+        <div class="sidebar-section">
+          <span class="p-input-icon-left w-full">
+            <i class="pi pi-search"></i>
+            <input pInputText [(ngModel)]="searchQuery" (ngModelChange)="filterBySearch()" placeholder="Tìm kiếm sản phẩm..." class="w-full custom-input">
+          </span>
+        </div>
+
+        <!-- Categories -->
+        <div class="sidebar-section">
+          <h4 class="filter-subtitle">Danh mục</h4>
+          <p-listbox [options]="categories" [(ngModel)]="selectedCategory" optionLabel="name" (onChange)="filterByCategory()" [listStyle]="{'max-height': '300px'}" styleClass="w-full">
+            <ng-template pTemplate="item" let-category>
+              <div class="flex justify-content-between align-items-center">
+                <span>{{ category.name }}</span>
+                <p-badge [value]="categoryProductCounts[category.id] || '0'" styleClass="ml-2" severity="info"></p-badge>
+              </div>
+            </ng-template>
+          </p-listbox>
+        </div>
+
+        <!-- Sort -->
+        <div class="sidebar-section">
+          <h4 class="filter-subtitle">Sắp xếp</h4>
+          <p-dropdown [options]="sortOptions" [(ngModel)]="sortOption" (onChange)="onSortChange()" styleClass="w-full" placeholder="Chọn kiểu sắp xếp"></p-dropdown>
+        </div>
+
+        <!-- Reset filters -->
+        <div class="sidebar-section">
+          <button pButton pRipple label="Xóa bộ lọc" icon="pi pi-refresh" (click)="resetFilters()" class="p-button-outlined w-full"></button>
+        </div>
+      </p-card>
     </div>
 
     <!-- Danh sách sản phẩm -->
     <div class="col-12 md:col-9">
-      <p-toast></p-toast>
-      <p-dataView [value]="filteredProducts" layout="grid">
+      <p-card>
         <ng-template pTemplate="header">
-          <div class="flex justify-content-between align-items-center">
+          <div class="flex justify-content-between align-items-center p-3">
             <h2>Quản lý sản phẩm</h2>
-            <div class="flex gap-2">
-              <p-button
-                label="Thêm sản phẩm"
-                icon="pi pi-plus"
-                styleClass="p-button-success"
-                [routerLink]="['/admin/add-product']">
-              </p-button>
-              <p-dropdown
-                [options]="[{ label: 'Grid', value: 'grid' }, { label: 'List', value: 'list' }]"
-                [(ngModel)]="layout"
-                styleClass="w-10rem">
-              </p-dropdown>
-            </div>
+            <p-button
+              label="Thêm sản phẩm"
+              icon="pi pi-plus"
+              styleClass="p-button-success"
+              [routerLink]="['/admin/add-product']"
+              *ngIf="canManageProducts()"
+            ></p-button>
           </div>
         </ng-template>
-        <ng-template let-product pTemplate="gridItem">
-          <div class="col-12 sm:col-6 md:col-4 p-2">
-            <p-card [header]="product.name" [subheader]="product.brand" styleClass="shadow-2">
-              <img [src]="product.images[0]?.imageUrl || 'https://via.placeholder.com/300'"
-                   [alt]="product.name"
-                   class="w-full"
-                   style="height: 200px; object-fit: cover;">
-              <p class="mt-2">{{ product.description?.substring(0, 50) || 'Không có mô tả' }}...</p>
-              <p class="mt-2 font-bold text-red-600">{{ product.variants[0]?.price || 'N/A' }} USD</p>
-              <ng-template pTemplate="footer">
+
+        <p-table
+          [value]="displayProducts"
+          [paginator]="true"
+          [rows]="paginatorRows"
+          [totalRecords]="filteredProducts.length"
+          (onPage)="onPageChange($event)"
+          [first]="paginatorFirst"
+          [rowsPerPageOptions]="[6, 12, 24]"
+          [tableStyle]="{'min-width': '50rem'}"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Hình ảnh</th>
+              <th>Tên sản phẩm</th>
+              <th>Thương hiệu</th>
+              <th>Danh mục</th>
+              <th>Giá</th>
+              <th>Trạng thái</th>
+              <th>Hành động</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-product>
+            <tr>
+              <td>
+                <img [src]="getPrimaryImage(product.images)" alt="Product image" style="width: 50px; height: 50px; object-fit: cover;">
+              </td>
+              <td>{{ product.name }}</td>
+              <td>{{ product.brand }}</td>
+              <td>{{ getCategoryName(product.categoryId) }}</td>
+              <td>{{ formatPrice(getCurrentPrice(product)) }}</td>
+              <td>{{ product.isActive ? 'Kích hoạt' : 'Không kích hoạt' }}</td>
+              <td>
                 <div class="flex gap-2">
                   <p-button
                     label="Sửa"
                     icon="pi pi-pencil"
                     styleClass="p-button-outlined p-button-sm"
-                    [routerLink]="['/admin/edit-product', product.id]">
-                  </p-button>
+                    [routerLink]="['/admin/add-product', product.id]"
+                    [queryParams]="{ mode: 'edit' }"
+                    *ngIf="canManageProducts()"
+                  ></p-button>
                   <p-button
                     label="Xóa"
                     icon="pi pi-trash"
                     styleClass="p-button-danger p-button-sm"
-                    (click)="deleteProduct(product.id)">
-                  </p-button>
-                </div>
-              </ng-template>
-            </p-card>
-          </div>
-        </ng-template>
-        <ng-template let-product pTemplate="listItem">
-          <div class="col-12 p-2">
-            <p-card styleClass="shadow-2">
-              <div class="flex align-items-center">
-                <img [src]="product.images[0]?.imageUrl || 'https://via.placeholder.com/150'"
-                     [alt]="product.name"
-                     class="mr-3"
-                     style="width: 100px; height: 100px; object-fit: cover;">
-                <div class="flex-1">
-                  <h3>{{ product.name }}</h3>
-                  <p class="text-600">{{ product.brand }}</p>
-                  <p>{{ product.description?.substring(0, 100) || 'Không có mô tả' }}...</p>
-                  <p class="font-bold text-red-600">{{ product.variants[0]?.price || 'N/A' }} USD</p>
-                </div>
-                <div class="flex gap-2">
+                    (click)="deleteProduct(product.id)"
+                    *ngIf="canManageProducts()"
+                  ></p-button>
                   <p-button
-                    label="Sửa"
-                    icon="pi pi-pencil"
-                    styleClass="p-button-outlined p-button-sm"
-                    [routerLink]="['/admin/edit-product', product.id]">
-                  </p-button>
-                  <p-button
-                    label="Xóa"
-                    icon="pi pi-trash"
-                    styleClass="p-button-danger p-button-sm"
-                    (click)="deleteProduct(product.id)">
-                  </p-button>
+                    label="Chi tiết"
+                    icon="pi pi-eye"
+                    styleClass="p-button-info p-button-sm"
+                    [routerLink]="['/admin/add-product', product.id]"
+                    [queryParams]="{ mode: 'view' }"
+                  ></p-button>
                 </div>
-              </div>
-            </p-card>
-          </div>
-        </ng-template>
-        <ng-template pTemplate="empty">
-          <div class="text-center p-4">
-            <p class="text-600">Không có sản phẩm nào trong danh mục này.</p>
-          </div>
-        </ng-template>
-      </p-dataView>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="7" class="text-center">Không có sản phẩm nào trong danh mục này.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
     </div>
   </div>
 </div>

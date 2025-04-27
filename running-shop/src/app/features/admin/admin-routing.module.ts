@@ -10,13 +10,13 @@ import {AddProductComponent} from "./components/add-product/add-product.componen
 
 const routes: Routes = [
   // { path: '', component: AdminDashboardComponent },
-  { path: '', component: ProductManagementComponent },
   { path: 'customers', component: CustomerStaffManagementComponent, data: { type: 'customer' }, canActivate: [AuthGuard] },
   { path: 'customers/:id', component: CustomerStaffManagementComponent, data: { type: 'customer' }, canActivate: [AuthGuard] },
   { path: 'staff', component: CustomerStaffManagementComponent, data: { type: 'staff' }, canActivate: [AuthGuard] },
   { path: 'staff/:id', component: CustomerStaffManagementComponent, data: { type: 'staff' }, canActivate: [AuthGuard] },
+  { path: 'product-management', component: ProductManagementComponent },
   { path: 'add-product', component: AddProductComponent },
-  { path: 'edit-product/:id', component: AddProductComponent }
+  { path: 'add-product/:id', component: AddProductComponent }
 ];
 
 @NgModule({

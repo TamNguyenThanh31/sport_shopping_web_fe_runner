@@ -1,34 +1,78 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import {Observable} from "rxjs";
-import {Category} from "../../shared/models/category.model";
-import {Product} from "../../shared/models/product.model";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Category } from '../../shared/models/category.model';
+import { Product } from '../../shared/models/product.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
+  private baseUrl = 'http://localhost:8080/api';
 
-  private baseUrl = 'http://localhost:8080/api'; // URL backend
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
-  constructor(private http: HttpClient) {}
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      Authorization: token ? `Bearer ${token}` : ''
+    });
+  }
 
-  // Lấy danh sách danh mục
   getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(`${this.baseUrl}/categories`);
+    return this.http.get<Category[]>(`${this.baseUrl}/categories`, { headers: this.getAuthHeaders() });
   }
 
-  // Lấy danh sách sản phẩm
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.baseUrl}/products`);
+    return this.http.get<Product[]>(`${this.baseUrl}/products`, { headers: this.getAuthHeaders() });
   }
 
-  // Thêm sản phẩm mới
-  createProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(`${this.baseUrl}/products/create`, product);
+  getProductById(id: number): Observable<Product> {
+    return this.http.get<Product>(`${this.baseUrl}/products/${id}`, { headers: this.getAuthHeaders() });
   }
 
-  deleteProduct(productId: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/products/${productId}`);
+  createProduct(product: Product, images: File[], isPrimaryFlags: boolean[]): Observable<Product> {
+    const formData = new FormData();
+    // Ánh xạ isActive → active, isPrimary → primary
+    const productToSend = {
+      ...product,
+      active: product.isActive,
+      images: product.images.map(img => ({
+        ...img,
+        primary: img.isPrimary
+      }))
+    };
+    formData.append('product', JSON.stringify(productToSend));
+    images.forEach((image, index) => {
+      formData.append('images', image, image.name);
+    });
+    formData.append('isPrimaryFlags', JSON.stringify(isPrimaryFlags));
+
+    return this.http.post<Product>(`${this.baseUrl}/products/create`, formData, { headers: this.getAuthHeaders() });
+  }
+
+  updateProduct(product: Product): Observable<Product> {
+    // Ánh xạ isActive → active, isPrimary → primary
+    const productToSend = {
+      ...product,
+      active: product.isActive,
+      images: product.images.map(img => ({
+        ...img,
+        primary: img.isPrimary
+      }))
+    };
+    return this.http.put<Product>(`${this.baseUrl}/products/${product.id}`, productToSend, { headers: this.getAuthHeaders() });
+  }
+
+  deleteProduct(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/products/${id}`, { headers: this.getAuthHeaders() });
+  }
+
+  searchProducts(keyword: string): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.baseUrl}/products/search`, {
+      headers: this.getAuthHeaders(),
+      params: { keyword }
+    });
   }
 }
