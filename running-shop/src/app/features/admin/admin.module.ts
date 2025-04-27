@@ -24,37 +24,37 @@ import {DropdownModule} from "primeng/dropdown";
 import { AddProductComponent } from './components/add-product/add-product.component';
 import {InputNumberModule} from "primeng/inputnumber";
 import {CheckboxModule} from "primeng/checkbox";
+import {ProgressSpinner} from "primeng/progressspinner";
 
 @NgModule({
   declarations: [
     AdminComponent,
     AdminDashboardComponent,
-    CustomerStaffManagementComponent,
-    ProductManagementComponent,
-    AddProductComponent
+    CustomerStaffManagementComponent
   ],
-  imports: [
-    CommonModule,
-    AdminRoutingModule,
-    TableModule,
-    ButtonModule,
-    DialogModule,
-    InputTextModule,
-    ReactiveFormsModule,
-    ToastModule,
-    ConfirmDialogModule,
-    CardModule,
-    TooltipModule,
-    RippleModule,
-    PasswordModule,
-    SharedModule,
-    ListboxModule,
-    FormsModule,
-    BadgeModule,
-    DataViewModule,
-    DropdownModule,
-    InputNumberModule,
-    CheckboxModule,
-  ]
+    imports: [
+        CommonModule,
+        AdminRoutingModule,
+        TableModule,
+        ButtonModule,
+        DialogModule,
+        InputTextModule,
+        ReactiveFormsModule,
+        ToastModule,
+        ConfirmDialogModule,
+        CardModule,
+        TooltipModule,
+        RippleModule,
+        PasswordModule,
+        SharedModule,
+        ListboxModule,
+        FormsModule,
+        BadgeModule,
+        DataViewModule,
+        DropdownModule,
+        InputNumberModule,
+        CheckboxModule,
+        ProgressSpinner,
+    ]
 })
 export class AdminModule { }

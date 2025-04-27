@@ -1,3 +1,16 @@
+@use "sass:color";
+
+$primary-color: #2563eb;
+$primary-light: color.scale($primary-color, $lightness: 20%);
+$primary-dark: color.scale($primary-color, $lightness: -15%);
+$secondary-color: #1e40af;
+$accent-color: #3b82f6;
+$text-color: #1f2937;
+$light-gray: #f3f4f6;
+$medium-gray: #e5e7eb;
+$dark-gray: #6b7280;
+$error-color: #ef4444;
+
 .register-container {
   display: flex;
   justify-content: center;
@@ -5,167 +18,233 @@
   min-height: 100vh;
   padding: 2rem;
   $image-path: '/assets/images/';
-  background-image: linear-gradient(135deg, #f5f7fa 0%, #e4f0fb 100%),
-  url('#{$image-path}running-logo.png');
+  background: linear-gradient(135deg, rgba(245, 247, 250, 0.9) 0%, rgba(228, 240, 251, 0.9) 100%),
+  url('#{$image-path}running-logo.png') no-repeat center center;
   background-size: cover;
-  background-position: center;
   background-blend-mode: overlay;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
 
   .register-card {
     width: 100%;
-    max-width: 500px;
-    border-radius: 12px;
+    max-width: 480px;
+    border-radius: 16px;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(5px);
+    background: white;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
     border: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-    .p-card-header {
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-header {
       text-align: center;
-      padding: 2rem 2rem 1rem;
-      background: linear-gradient(to right, #4361ee, #3a0ca3);
+      padding: 2.5rem 2rem 1.5rem;
+      background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
       color: white;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        transform: rotate(30deg);
+      }
 
       .logo {
         width: 80px;
         margin-bottom: 1rem;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
       }
 
       h2 {
         margin: 0.5rem 0;
         font-weight: 700;
-        letter-spacing: 1px;
+        font-size: 1.5rem;
+        letter-spacing: 0.5px;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
       }
 
       .subtitle {
         margin: 0;
         opacity: 0.9;
-        font-size: 0.9rem;
+        font-size: 0.95rem;
+        font-weight: 400;
       }
     }
 
-    .p-card-body {
-      padding: 2rem;
+    .card-body {
+      padding: 2rem 2.5rem;
 
-      .p-field {
-        margin-bottom: 1.5rem;
+      .form {
+        .form-field {
+          margin-bottom: 1.75rem;
 
-        .p-input-label {
-          display: block;
-          margin-bottom: 0.5rem;
-          font-weight: 500;
-          color: #333;
-        }
-
-        .p-input-icon-left {
-          display: block;
-
-          i {
-            color: #4361ee;
+          label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: $text-color;
+            font-size: 0.95rem;
           }
 
-          input {
-            width: 100%;
-            padding-left: 2.5rem;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            transition: all 0.3s;
+          .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            border-radius: 10px;
+            border: 1px solid $medium-gray;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            background: $light-gray;
 
-            &:focus {
-              border-color: #4361ee;
-              box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.2);
+            &:hover {
+              border-color: $primary-light;
+            }
+
+            &:focus-within {
+              border-color: $primary-color;
+              box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+            }
+
+            i {
+              position: absolute;
+              left: 1rem;
+              color: $primary-color;
+              font-size: 1rem;
+            }
+
+            input {
+              width: 100%;
+              padding: 0.75rem 1rem 0.75rem 2.5rem;
+              border: none;
+              background: transparent;
+              font-size: 0.95rem;
+              color: $text-color;
+              outline: none;
+
+              &::placeholder {
+                color: $dark-gray;
+                opacity: 0.7;
+              }
+            }
+          }
+
+          .error-message {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: $error-color;
+          }
+        }
+
+        .password-strength {
+          margin-top: 0.5rem;
+          height: 4px;
+          background: $medium-gray;
+          border-radius: 2px;
+          overflow: hidden;
+
+          .strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s, background 0.3s;
+          }
+        }
+
+        .terms-agreement {
+          display: flex;
+          align-items: center;
+          margin: 2rem 0 1.5rem;
+          font-size: 0.9rem;
+          color: $dark-gray;
+
+          .p-checkbox {
+            margin-right: 0.75rem;
+
+            .p-checkbox-box {
+              border-radius: 4px;
+              border-color: $medium-gray;
+
+              &.p-highlight {
+                background: $primary-color;
+                border-color: $primary-color;
+              }
+            }
+          }
+
+          .link {
+            color: $primary-color;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+
+            &:hover {
+              color: $primary-dark;
+              text-decoration: underline;
             }
           }
         }
 
-        .p-error {
-          font-size: 0.85rem;
-        }
-      }
-
-      .terms-agreement {
-        display: flex;
-        align-items: center;
-        margin: 1.5rem 0;
-        font-size: 0.9rem;
-
-        .p-checkbox {
-          margin-right: 0.5rem;
-        }
-
-        .terms-link {
-          color: #4361ee;
-          text-decoration: none;
-          transition: color 0.3s;
+        .submit-button {
+          width: 100%;
+          background: linear-gradient(to right, $primary-color, $primary-dark);
+          border: none;
+          font-weight: 600;
+          letter-spacing: 0.5px;
+          padding: 0.85rem;
+          border-radius: 10px;
+          font-size: 1rem;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 6px rgba($primary-color, 0.1);
 
           &:hover {
-            color: #3a0ca3;
-            text-decoration: underline;
+            background: linear-gradient(to right, $primary-light, $primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba($primary-color, 0.15);
           }
-        }
-      }
 
-      button {
-        width: 100%;
-        background: linear-gradient(to right, #4361ee, #3a0ca3);
-        border: none;
-        font-weight: 600;
-        letter-spacing: 1px;
-        padding: 0.8rem;
-        margin-top: 0.5rem;
-        transition: all 0.3s;
+          &:active {
+            transform: translateY(0);
+          }
 
-        &:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
-        }
-
-        &:disabled {
-          background: #ccc;
-          transform: none;
-          box-shadow: none;
+          &:disabled {
+            background: $medium-gray;
+            transform: none;
+            box-shadow: none;
+            cursor: not-allowed;
+          }
         }
       }
     }
 
-    .p-card-footer {
+    .card-footer {
       text-align: center;
-      padding: 1rem 2rem;
-      background: #f8f9fa;
-      border-top: 1px solid #eee;
+      padding: 1.5rem;
+      background: $light-gray;
+      border-top: 1px solid $medium-gray;
+      font-size: 0.9rem;
+      color: $dark-gray;
 
-      p {
-        margin: 0;
-        color: #666;
-      }
-
-      .login-link {
-        color: #4361ee;
+      .link {
+        color: $primary-color;
         font-weight: 600;
         text-decoration: none;
-        transition: color 0.3s;
+        transition: color 0.2s;
 
         &:hover {
-          color: #3a0ca3;
+          color: $primary-dark;
           text-decoration: underline;
         }
       }
     }
-  }
-}
-
-/* Password strength indicator */
-.password-strength {
-  margin-top: 0.5rem;
-  height: 4px;
-  background: #eee;
-  border-radius: 2px;
-  overflow: hidden;
-
-  .strength-bar {
-    height: 100%;
-    width: 0%;
-    transition: width 0.3s, background 0.3s;
   }
 }
 
@@ -174,14 +253,17 @@
   .register-container {
     padding: 1rem;
     background-image: none;
+    background: $light-gray;
 
     .register-card {
-      .p-card-header {
-        padding: 1.5rem 1rem 0.5rem;
+      box-shadow: none;
+
+      .card-header {
+        padding: 2rem 1.5rem 1rem;
       }
 
-      .p-card-body {
-        padding: 1.5rem;
+      .card-body {
+        padding: 1.75rem 1.5rem;
       }
     }
   }

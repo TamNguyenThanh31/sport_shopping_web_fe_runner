@@ -101,13 +101,13 @@ export class NavbarComponent implements OnInit {
         {
           label: 'Login',
           icon: 'pi pi-sign-in',
-          routerLink: ['/login'],
+          routerLink: ['/auth/login'],
           styleClass: 'user-menu-item'
         },
         {
           label: 'Register',
           icon: 'pi pi-user-plus',
-          routerLink: ['/register'],
+          routerLink: ['/auth/register'],
           styleClass: 'user-menu-item'
         }
       ];

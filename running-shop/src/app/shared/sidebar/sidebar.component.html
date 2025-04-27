@@ -22,16 +22,21 @@
     </div>
 
     <div class="menu-section">
-      <div class="section-label" *ngIf="!isCollapsed">MANAGEMENT</div>
+      <div class="section-label" *ngIf="!isCollapsed">QUẢN LÝ</div>
       <a class="menu-item" routerLink="/admin/customers" routerLinkActive="active"
          pTooltip="Products" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
         <i class="pi pi-shopping-bag menu-icon"></i>
-        <span class="menu-text" *ngIf="!isCollapsed">Customers Management</span>
+        <span class="menu-text" *ngIf="!isCollapsed">Khách hàng</span>
       </a>
       <a class="menu-item" routerLink="/admin/staff" routerLinkActive="active"
          pTooltip="Orders" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
         <i class="pi pi-shopping-cart menu-icon"></i>
-        <span class="menu-text" *ngIf="!isCollapsed">Staff Management</span>
+        <span class="menu-text" *ngIf="!isCollapsed">Nhân viên</span>
+      </a>
+      <a class="menu-item" routerLink="/admin/product-management" routerLinkActive="active"
+         pTooltip="Orders" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
+        <i class="pi pi-shopping-cart menu-icon"></i>
+        <span class="menu-text" *ngIf="!isCollapsed">Sản phẩm</span>
       </a>
       <a class="menu-item" routerLink="/admin/users" routerLinkActive="active"
          pTooltip="Users" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
