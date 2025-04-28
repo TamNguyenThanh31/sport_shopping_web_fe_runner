@@ -1,17 +1,25 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserDTO } from '../../../../shared/models/userDTO.model';
 import { AdminService } from '../../admin.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
 
+// Interface for paginated response
+interface Page<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+}
+
 @Component({
-    selector: 'app-customer-staff-management',
-    templateUrl: './customer-staff-management.component.html',
-    styleUrls: ['./customer-staff-management.component.scss'],
-    providers: [ConfirmationService],
-    standalone: false,
-    encapsulation: ViewEncapsulation.None
+  selector: 'app-customer-staff-management',
+  templateUrl: './customer-staff-management.component.html',
+  styleUrls: ['./customer-staff-management.component.scss'],
+  providers: [ConfirmationService],
+  standalone: false
 })
 export class CustomerStaffManagementComponent implements OnInit {
   users: UserDTO[] = [];
@@ -22,6 +30,10 @@ export class CustomerStaffManagementComponent implements OnInit {
   userDetail: UserDTO | null = null;
   selectedUserId: number | null = null;
   loading: boolean = true;
+  first: number = 0; // For paginator
+  rows: number = 10; // Rows per page
+  totalRecords: number = 0; // Total number of records
+  currentPage: number = 0; // Current page number
 
   constructor(
     private fb: FormBuilder,
@@ -34,11 +46,7 @@ export class CustomerStaffManagementComponent implements OnInit {
     this.userForm = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      phoneNumber: ['', Validators.required],
-      password: ['', [Validators.minLength(6)]],
-      role: [''],
-      createdAt: [''],
-      updatedAt: ['']
+      password: ['', [Validators.minLength(6)]]
     });
   }
 
@@ -51,15 +59,19 @@ export class CustomerStaffManagementComponent implements OnInit {
     this.loadUsers();
   }
 
-  loadUsers(): void {
+  loadUsers(page: number = this.currentPage, size: number = this.rows): void {
     this.loading = true;
     const serviceCall = this.type === 'customer'
-      ? this.adminService.getCustomers()
-      : this.adminService.getStaff();
+      ? this.adminService.getCustomers(page, size)
+      : this.adminService.getStaff(page, size);
 
     serviceCall.subscribe({
-      next: (users) => {
-        this.users = users;
+      next: (pageData: Page<UserDTO>) => {
+        this.users = pageData.content;
+        this.totalRecords = pageData.totalElements;
+        this.currentPage = pageData.number;
+        this.rows = pageData.size;
+        this.first = this.currentPage * this.rows;
         this.loading = false;
       },
       error: () => {
@@ -73,6 +85,13 @@ export class CustomerStaffManagementComponent implements OnInit {
     });
   }
 
+  onPageChange(event: any): void {
+    this.first = event.first;
+    this.rows = event.rows;
+    this.currentPage = event.page;
+    this.loadUsers(this.currentPage, this.rows);
+  }
+
   showDialog(user?: UserDTO): void {
     this.selectedUserId = user?.id || null;
     this.userForm.reset({
@@ -82,15 +101,11 @@ export class CustomerStaffManagementComponent implements OnInit {
     if (user) {
       this.userForm.patchValue({
         username: user.username,
-        email: user.email,
-        phoneNumber: user.phoneNumber,
-        role: user.role,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt
+        email: user.email
       });
       this.userForm.get('password')?.clearValidators();
     } else {
-      this.userForm.get('password')?.setValidators([Validators.minLength(6)]);
+      this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
     }
     this.userForm.get('password')?.updateValueAndValidity();
     this.displayDialog = true;
@@ -102,9 +117,11 @@ export class CustomerStaffManagementComponent implements OnInit {
       return;
     }
 
-    const userData: UserDTO = {
-      ...this.userForm.value,
-      id: this.selectedUserId || 0
+    const userData = {
+      username: this.userForm.value.username,
+      email: this.userForm.value.email,
+      password: this.userForm.value.password || undefined,
+      role: this.type.toUpperCase() // CUSTOMER or STAFF
     };
 
     const saveOperation = this.selectedUserId

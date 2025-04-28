@@ -76,7 +76,7 @@
         <div class="listing-header">
           <h2 class="listing-title">
             {{ selectedCategory.id === 0 ? 'Tất cả sản phẩm' : selectedCategory.name }}
-            <span class="product-count">{{ filteredProducts.length }} sản phẩm</span>
+            <span class="product-count">{{ totalElements }} sản phẩm</span>
           </h2>
           <div class="view-options">
             <button pButton pRipple icon="pi pi-th-large" class="p-button-text p-button-rounded view-button active"></button>
@@ -86,7 +86,7 @@
 
         <!-- Product grid -->
         <div class="product-grid">
-          @for (product of displayProducts; track product.id) {
+          @for (product of products; track product.id) {
             <div class="product-card-wrapper">
               <div class="product-card">
                 <!-- Product image -->
@@ -147,7 +147,7 @@
         </div>
 
         <!-- Empty state -->
-        @if (displayProducts.length === 0) {
+        @if (products.length === 0) {
           <div class="empty-state">
             <div class="empty-icon">
               <i class="pi pi-search"></i>
@@ -160,12 +160,10 @@
         }
 
         <!-- Paginator -->
-        @if (filteredProducts.length > paginatorRows) {
-          <p-paginator [rows]="paginatorRows" [totalRecords]="filteredProducts.length"
-                       (onPageChange)="onPageChange($event)" [first]="paginatorFirst"
-                       styleClass="custom-paginator"
-                       [rowsPerPageOptions]="[6, 12, 24]"></p-paginator>
-        }
+        <p-paginator [rows]="size" [totalRecords]="totalElements"
+                     (onPageChange)="onPageChange($event)"
+                     styleClass="custom-paginator"
+                     [rowsPerPageOptions]="[12, 24, 36]"></p-paginator>
       </div>
     </div>
   }
