@@ -24,7 +24,7 @@ export class SidebarComponent implements OnInit {
     });
 
     this.authService.currentUser$.subscribe(user => {
-      this.isAdmin = user?.role === 'ADMIN';
+      this.isAdmin = user?.role === 'ADMIN' || user?.role === 'STAFF';
     });
   }
 

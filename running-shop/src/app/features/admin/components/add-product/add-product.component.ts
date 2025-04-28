@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, ViewEncapsulation} from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api'; // Thêm ConfirmationService
@@ -37,9 +37,10 @@ import { tap } from 'rxjs/operators';
     ProgressSpinnerModule,
     CheckboxModule,
     FileUploadModule,
-    ConfirmDialogModule // Thêm ConfirmDialogModule
+    ConfirmDialogModule
   ],
-  providers: [MessageService, ConfirmationService] // Thêm ConfirmationService
+  providers: [MessageService, ConfirmationService],
+  encapsulation: ViewEncapsulation.None
 })
 export class AddProductComponent implements OnInit {
   productForm: FormGroup;

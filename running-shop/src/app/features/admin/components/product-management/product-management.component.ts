@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, ViewEncapsulation} from '@angular/core';
 import { MessageService, ConfirmationService } from 'primeng/api'; // Thêm ConfirmationService
 import { forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -14,11 +14,13 @@ import { InputTextModule } from 'primeng/inputtext';
 import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
-import { ConfirmDialogModule } from 'primeng/confirmdialog'; // Thêm ConfirmDialogModule
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { Product, ProductImage, ProductVariant } from '../../../../shared/models/product.model';
 import { Category } from '../../../../shared/models/category.model';
 import { ApiService } from '../../../../core/services/api.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import {Paginator} from "primeng/paginator";
+import {Tooltip} from "primeng/tooltip";
 
 @Component({
   selector: 'app-product-management',
@@ -40,9 +42,12 @@ import { AuthService } from '../../../../core/services/auth.service';
     ProgressSpinnerModule,
     InputTextModule,
     CardModule,
-    ConfirmDialogModule // Thêm ConfirmDialogModule
+    ConfirmDialogModule,
+    Paginator,
+    Tooltip,
   ],
-  providers: [MessageService, ConfirmationService] // Thêm ConfirmationService
+  providers: [MessageService, ConfirmationService],
+  encapsulation: ViewEncapsulation.None
 })
 export class ProductManagementComponent implements OnInit {
   products: Product[] = [];
@@ -54,9 +59,9 @@ export class ProductManagementComponent implements OnInit {
   sortOption: string = 'default';
   isLoading: boolean = true;
   categoryProductCounts: { [key: number]: number } = {};
-  paginatorRows: number = 12;
+  paginatorRows: number = 6;
   paginatorFirst: number = 0;
-
+  showFilters = false;
   selectedVariants: { [productId: number]: ProductVariant } = {};
   variantDisplayTexts: { [variantId: number]: string } = {};
 
@@ -69,13 +74,17 @@ export class ProductManagementComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService, // Inject ConfirmationService
+    private confirmationService: ConfirmationService,
     private cdr: ChangeDetectorRef,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.loadData();
+  }
+
+  toggleFilters(): void {
+    this.showFilters = !this.showFilters;
   }
 
   loadData(): void {

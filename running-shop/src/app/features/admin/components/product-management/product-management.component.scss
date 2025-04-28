@@ -1,13 +1,32 @@
-.container-fluid {
-  padding: 1rem;
+/* ===== Theme Variables ===== */
+$primary-color: #2563EB;       // Xanh dương đậm, chuyên nghiệp
+$secondary-color: #DC2626;     // Đỏ nhẹ, nổi bật
+$accent-color: #059669;        // Xanh lá đậm, hiện đại
+$background-color: #F9FAFB;    // Nền xám nhạt thanh lịch
+$text-dark: #111827;           // Chữ đậm, chuyên nghiệp
+$text-medium: #374151;         // Chữ trung bình
+$text-light: #6B7280;          // Chữ nhạt
+$border-color: #D1D5DB;        // Viền nhẹ
+$hover-bg: #E0F2FE;            // Nền hover xanh nhạt
+$shadow: 0 10px 30px rgba(0, 0, 0, 0.05); // Shadow mềm mại
+$card-bg: #FFFFFF;             // Nền thẻ trắng tinh
+$row-bg: #F9FAFB;              // Nền hàng bảng nhẹ
 
+/* ===== Container Styles ===== */
+.container-fluid {
+  padding: 3rem 2rem;
+  background: $background-color;
+  min-height: 100vh;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+
+  /* ===== Loading Overlay ===== */
   .loading-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.8);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -16,71 +35,735 @@
 
     .loading-text {
       color: white;
-      margin-top: 1rem;
-      font-size: 1.2rem;
+      margin-top: 1.5rem;
+      font-size: 1.3rem;
+      font-weight: 500;
+      background: rgba($primary-color, 0.2);
+      padding: 0.5rem 1.5rem;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     .custom-spinner {
-      width: 50px;
-      height: 50px;
+      width: 70px;
+      height: 70px;
+
+      .p-progress-spinner-circle {
+        stroke: $primary-color !important;
+        stroke-width: 3;
+        animation: pulse 2s infinite;
+      }
+    }
+
+    @keyframes pulse {
+      0% { stroke-opacity: 1; }
+      50% { stroke-opacity: 0.5; }
+      100% { stroke-opacity: 1; }
     }
   }
 
-  .custom-sidebar-card {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+  /* ===== Header Section ===== */
+  .header-section {
+    background: $card-bg;
+    border-radius: 16px;
+    box-shadow: $shadow;
+    padding: 2rem;
+    margin-bottom: 2rem;
 
-    .sidebar-header {
-      padding: 1rem;
-      border-bottom: 1px solid #e0e0e0;
+    .header-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
 
-      .sidebar-title {
+      h2 {
         margin: 0;
-        font-size: 1.5rem;
-        color: #333;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: $text-dark;
+        letter-spacing: -0.5px;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        &:before {
+          content: '';
+          width: 6px;
+          height: 28px;
+          background: $primary-color;
+          border-radius: 3px;
+        }
+      }
+
+      .p-button-success {
+        background: linear-gradient(135deg, $primary-color 0%, lighten($primary-color, 10%) 100%) !important;
+        border: none !important;
+        border-radius: 10px;
+        padding: 0.85rem 1.5rem;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba($primary-color, 0.2);
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba($primary-color, 0.3);
+          background: lighten($primary-color, 5%) !important;
+        }
+
+        .p-button-label {
+          color: white !important;
+        }
+
+        .pi-plus {
+          color: white !important;
+        }
       }
     }
 
-    .sidebar-section {
-      padding: 1rem;
+    .filter-section {
+      .filter-toggle {
+        margin-bottom: 1rem;
 
-      .filter-subtitle {
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-        color: #555;
+        .p-button-text {
+          color: $primary-color !important;
+          font-weight: 600;
+          padding: 0.5rem 1rem;
+          border-radius: 8px;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: $hover-bg !important;
+            transform: translateY(-2px);
+          }
+
+          .pi-filter {
+            margin-right: 0.5rem;
+          }
+        }
       }
 
-      .custom-input, .p-listbox, .p-dropdown {
-        width: 100%;
+      .filter-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        background: $row-bg;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03);
+
+        .filter-item {
+          flex: 1;
+          min-width: 200px;
+
+          .p-input-icon-left {
+            display: flex;
+            align-items: center;
+            width: 100%;
+
+            .pi-search {
+              color: $primary-color;
+              font-size: 1.2rem;
+            }
+
+            .custom-input {
+              width: 100%;
+              padding: 0.85rem 1rem 0.85rem 2.75rem;
+              border: 1px solid $border-color;
+              border-radius: 10px;
+              background: $card-bg;
+              box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03);
+              transition: all 0.3s ease;
+              font-size: 0.95rem;
+              color: $text-dark;
+              font-weight: 500;
+              margin-left: 10px;
+
+              &:focus {
+                border-color: $primary-color;
+                box-shadow: 0 0 0 3px rgba($primary-color, 0.15);
+                background: white;
+              }
+
+              &::placeholder {
+                color: $text-light;
+                font-weight: 400;
+              }
+            }
+          }
+
+          .custom-dropdown {
+            width: 100%;
+            border: 1px solid $border-color;
+            border-radius: 10px;
+            background: $card-bg !important;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+
+            .p-select-label {
+              color: $text-dark !important;
+              font-weight: 500;
+              padding: 0.85rem 1rem;
+            }
+
+            .p-dropdown-trigger {
+              color: $primary-color !important;
+            }
+
+            &:hover {
+              border-color: $primary-color;
+              background: white !important;
+              box-shadow: 0 0 0 3px rgba($primary-color, 0.15);
+            }
+
+            .p-dropdown-panel {
+              border-radius: 10px;
+              box-shadow: $shadow;
+              background: $card-bg !important;
+              border: 1px solid $border-color;
+
+              .p-dropdown-items-wrapper {
+                .p-dropdown-item {
+                  color: $text-medium !important;
+                  font-weight: 500;
+                  padding: 0.85rem 1rem;
+
+                  &:hover {
+                    background: $hover-bg !important;
+                    color: $primary-color !important;
+                  }
+                }
+              }
+            }
+          }
+
+          .p-button-outlined {
+            border: 1px solid $border-color;
+            color: $text-medium;
+            background: $card-bg !important;
+            border-radius: 10px;
+            padding: 0.85rem 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            width: 100%;
+
+            &:hover {
+              background: $hover-bg !important;
+              border-color: $primary-color;
+              color: $primary-color !important;
+              transform: translateY(-2px);
+              box-shadow: 0 4px 12px rgba($primary-color, 0.2);
+            }
+
+            .pi-refresh {
+              color: $primary-color;
+              margin-right: 0.5rem;
+            }
+          }
+        }
       }
     }
   }
 
-  .p-card {
-    .p-card-header {
-      border-bottom: 1px solid #e0e0e0;
+  /* ===== Product List Styles ===== */
+  .product-list {
+    .desktop-view {
+      display: block;
+
+      .p-datatable {
+        background: $card-bg !important;
+        border-radius: 12px !important;
+        overflow: hidden !important;
+        border: 1px solid $border-color !important;
+
+        .p-datatable-thead > tr > th {
+          background: $primary-color !important;
+          color: white !important;
+          font-weight: 600 !important;
+          font-size: 0.95rem !important;
+          text-transform: uppercase !important;
+          letter-spacing: 0.5px !important;
+          padding: 1.25rem !important;
+          border: none !important;
+          border-bottom: 2px solid rgba(white, 0.1) !important;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+          text-align: left !important;
+          line-height: 1.2 !important;
+          box-shadow: inset 0 -1px 0 rgba(white, 0.1) !important;
+          vertical-align: middle !important;
+        }
+
+        .p-datatable-tbody > tr {
+          background: $row-bg !important;
+          transition: all 0.3s ease !important;
+
+          &:nth-child(even) {
+            background: $card-bg !important;
+          }
+
+          &:hover {
+            background: $hover-bg !important;
+            transform: scale(1.005) !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+          }
+
+          > td {
+            padding: 1.25rem !important;
+            border: none !important;
+            border-bottom: 1px solid $border-color !important;
+            color: $text-medium !important;
+            font-size: 0.95rem !important;
+            vertical-align: middle !important;
+            background: inherit !important;
+            font-weight: 500 !important;
+            text-align: left !important;
+            line-height: 1.5 !important;
+
+            img {
+              width: 70px !important;
+              height: 70px !important;
+              object-fit: cover !important;
+              border-radius: 12px !important;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+              transition: transform 0.3s ease !important;
+
+              &:hover {
+                transform: scale(1.15) !important;
+              }
+            }
+          }
+        }
+
+        .p-paginator {
+          background: $card-bg !important;
+          border: none !important;
+          padding: 1.25rem !important;
+          color: $text-dark !important;
+          border-top: 1px solid $border-color !important;
+
+          .p-paginator-current {
+            color: $text-medium !important;
+            font-weight: 500 !important;
+            background: $row-bg !important;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px !important;
+          }
+
+          .p-paginator-pages {
+            display: flex !important;
+            align-items: center !important;
+          }
+
+          .p-paginator-page,
+          .p-paginator-next,
+          .p-paginator-prev,
+          .p-paginator-first,
+          .p-paginator-last {
+            background: $card-bg !important;
+            color: $primary-color !important;
+            border: 1px solid $border-color !important;
+            border-radius: 8px !important;
+            min-width: 40px !important;
+            height: 40px !important;
+            margin: 0 6px !important;
+            transition: all 0.3s ease !important;
+            font-weight: 600 !important;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05) !important;
+
+            &.p-highlight {
+              background: $primary-color !important;
+              color: white !important;
+              border-color: $primary-color !important;
+              box-shadow: 0 4px 12px rgba($primary-color, 0.2) !important;
+            }
+
+            &:not(.p-highlight):hover {
+              background: $hover-bg !important;
+              color: $primary-color !important;
+              border-color: $primary-color !important;
+              transform: translateY(-2px) !important;
+            }
+
+            &.p-disabled {
+              color: $text-light !important;
+              opacity: 0.5 !important;
+              border-color: $border-color !important;
+            }
+
+            .pi {
+              font-size: 1rem !important;
+              color: $primary-color !important;
+            }
+          }
+
+          .p-dropdown {
+            background: $card-bg !important;
+            border: 1px solid $border-color !important;
+            border-radius: 8px !important;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+
+            .p-dropdown-label {
+              color: $text-dark !important;
+              font-weight: 500 !important;
+              padding: 0.85rem 1rem !important;
+            }
+
+            .p-dropdown-trigger {
+              color: $primary-color !important;
+            }
+
+            &:hover {
+              background: white !important;
+              border-color: $primary-color !important;
+              box-shadow: 0 0 0 3px rgba($primary-color, 0.15) !important;
+            }
+
+            .p-dropdown-panel {
+              background: $card-bg !important;
+              border-radius: 8px !important;
+              box-shadow: $shadow !important;
+              border: 1px solid $border-color !important;
+
+              .p-dropdown-items-wrapper {
+                .p-dropdown-item {
+                  color: $text-medium !important;
+                  padding: 0.85rem 1rem !important;
+
+                  &:hover {
+                    background: $hover-bg !important;
+                    color: $primary-color !important;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .action-buttons {
+          display: flex;
+          gap: 0.75rem;
+          justify-content: center;
+
+          .p-button-icon {
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+
+            &.p-button-outlined {
+              border: 1px solid $primary-color;
+              background: $card-bg !important;
+              color: $primary-color !important;
+
+              &:hover {
+                background: rgba($primary-color, 0.1) !important;
+                transform: scale(1.1);
+                box-shadow: 0 4px 12px rgba($primary-color, 0.2);
+              }
+
+              .pi-pencil {
+                font-size: 1.1rem;
+                color: $primary-color !important;
+              }
+            }
+
+            &.p-button-danger {
+              border: 1px solid $secondary-color;
+              background: $card-bg !important;
+              color: $secondary-color !important;
+
+              &:hover {
+                background: rgba($secondary-color, 0.1) !important;
+                transform: scale(1.1);
+                box-shadow: 0 4px 12px rgba($secondary-color, 0.2);
+              }
+
+              .pi-trash {
+                font-size: 1.1rem;
+                color: $secondary-color !important;
+              }
+            }
+
+            &.p-button-info {
+              border: 1px solid $accent-color;
+              background: $card-bg !important;
+              color: $accent-color !important;
+
+              &:hover {
+                background: rgba($accent-color, 0.1) !important;
+                transform: scale(1.1);
+                box-shadow: 0 4px 12px rgba($accent-color, 0.2);
+              }
+
+              .pi-eye {
+                font-size: 1.1rem;
+                color: $accent-color !important;
+              }
+            }
+          }
+        }
+
+        .text-center {
+          color: $text-light !important;
+          font-style: italic !important;
+          background: $card-bg !important;
+          padding: 2rem !important;
+          font-size: 1.1rem !important;
+          text-align: center !important;
+        }
+      }
+    }
+
+    .mobile-view {
+      display: none;
+
+      .product-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+
+        .product-card {
+          background: $card-bg;
+          border-radius: 12px;
+          box-shadow: $shadow;
+          padding: 1.5rem;
+          transition: all 0.3s ease;
+
+          &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+          }
+
+          .product-image {
+            margin-bottom: 1rem;
+
+            img {
+              width: 100%;
+              height: 150px;
+              object-fit: cover;
+              border-radius: 10px;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+              transition: transform 0.3s ease;
+
+              &:hover {
+                transform: scale(1.05);
+              }
+            }
+          }
+
+          .product-info {
+            margin-bottom: 1rem;
+
+            h3 {
+              font-size: 1.3rem;
+              font-weight: 600;
+              color: $text-dark;
+              margin-bottom: 0.5rem;
+            }
+
+            p {
+              font-size: 0.95rem;
+              color: $text-medium;
+              margin: 0.25rem 0;
+
+              strong {
+                color: $text-dark;
+                font-weight: 600;
+              }
+            }
+          }
+
+          .action-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+          }
+        }
+
+        .no-products {
+          text-align: center;
+          color: $text-light;
+          font-style: italic;
+          padding: 2rem;
+          font-size: 1.1rem;
+        }
+      }
+
+      .p-paginator {
+        background: $card-bg !important;
+        padding: 1rem;
+        border-top: 1px solid $border-color;
+
+        .p-paginator-current {
+          color: $text-medium !important;
+          font-weight: 500 !important;
+          background: $row-bg !important;
+          padding: 0.5rem 1rem !important;
+          border-radius: 8px !important;
+        }
+
+        .p-paginator-pages {
+          display: flex !important;
+          align-items: center !important;
+        }
+
+        .p-paginator-page,
+        .p-paginator-next,
+        .p-paginator-prev,
+        .p-paginator-first,
+        .p-paginator-last {
+          background: $card-bg !important;
+          color: $primary-color !important;
+          border: 1px solid $border-color !important;
+          border-radius: 8px !important;
+          min-width: 40px !important;
+          height: 40px !important;
+          margin: 0 6px !important;
+          transition: all 0.3s ease !important;
+          font-weight: 600 !important;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05) !important;
+
+          &.p-highlight {
+            background: $primary-color !important;
+            color: white !important;
+            border-color: $primary-color !important;
+            box-shadow: 0 4px 12px rgba($primary-color, 0.2) !important;
+          }
+
+          &:not(.p-highlight):hover {
+            background: $hover-bg !important;
+            color: $primary-color !important;
+            border-color: $primary-color !important;
+            transform: translateY(-2px) !important;
+          }
+
+          &.p-disabled {
+            color: $text-light !important;
+            opacity: 0.5 !important;
+            border-color: $border-color !important;
+          }
+
+          .pi {
+            font-size: 1rem !important;
+            color: $primary-color !important;
+          }
+        }
+      }
     }
   }
 
-  .p-table {
-    .p-table-thead > tr > th {
-      background: #f8f9fa;
-      padding: 1rem;
+  /* ===== Toast and Confirm Dialog ===== */
+  .p-toast {
+    .p-toast-message {
+      border-radius: 10px;
+      box-shadow: $shadow;
+      background: $card-bg !important;
+      border: 1px solid $border-color;
+
+      .p-toast-message-content {
+        color: $text-dark !important;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .p-confirm-dialog {
+    border-radius: 12px;
+    box-shadow: $shadow;
+    background: $card-bg !important;
+    border: 1px solid $border-color;
+
+    .p-dialog-header {
+      background: $primary-color !important;
+      color: white !important;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      padding: 1.5rem;
       font-weight: 600;
     }
 
-    .p-table-tbody > tr > td {
-      padding: 1rem;
-      vertical-align: middle;
+    .p-dialog-content {
+      color: $text-dark !important;
+      padding: 1.5rem;
+    }
+  }
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 1.5rem;
+
+    .header-section {
+      padding: 1.5rem;
+
+      .header-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+
+        h2 {
+          font-size: 1.6rem;
+
+          &:before {
+            height: 20px;
+          }
+        }
+
+        .p-button-success {
+          padding: 0.5rem 1rem;
+          font-size: 0.9rem;
+        }
+      }
+
+      .filter-section {
+        .filter-controls {
+          flex-direction: column;
+          gap: 1rem;
+
+          .filter-item {
+            min-width: 100%;
+          }
+        }
+      }
     }
 
-    .flex.gap-2 {
-      display: flex;
-      gap: 0.5rem;
+    .product-list {
+      .desktop-view {
+        display: none;
+      }
+
+      .mobile-view {
+        display: block;
+
+        .action-buttons {
+          .p-button-icon {
+            width: 40px;
+            height: 40px;
+
+            .pi {
+              font-size: 1.2rem;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 769px) {
+  .product-list {
+    .desktop-view {
+      display: block;
     }
 
-    img {
-      border-radius: 4px;
+    .mobile-view {
+      display: none;
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserDTO } from '../../../../shared/models/userDTO.model';
 import { AdminService } from '../../admin.service';
@@ -10,7 +10,8 @@ import { MessageService, ConfirmationService } from 'primeng/api';
     templateUrl: './customer-staff-management.component.html',
     styleUrls: ['./customer-staff-management.component.scss'],
     providers: [ConfirmationService],
-    standalone: false
+    standalone: false,
+    encapsulation: ViewEncapsulation.None
 })
 export class CustomerStaffManagementComponent implements OnInit {
   users: UserDTO[] = [];
