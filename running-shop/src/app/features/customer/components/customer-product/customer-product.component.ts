@@ -6,18 +6,19 @@ import { Category } from '../../../../shared/models/category.model';
 import { ApiService } from '../../../../core/services/api.service';
 import { Toast } from 'primeng/toast';
 import { Paginator } from 'primeng/paginator';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import {NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase} from '@angular/common';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { RouterLink } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { Listbox } from 'primeng/listbox';
-import { Tag } from 'primeng/tag';
 import { ProgressSpinner } from 'primeng/progressspinner';
 import { InputText } from 'primeng/inputtext';
 import { Card } from 'primeng/card';
 import { Tooltip } from 'primeng/tooltip';
+import { Carousel } from 'primeng/carousel';
+import { Slider } from 'primeng/slider';
 
 interface PageResponse<T> {
   content: T[];
@@ -41,20 +42,28 @@ interface PageResponse<T> {
     FormsModule,
     NgClass,
     Listbox,
-    ProgressSpinner,
     InputText,
     Card,
     Tooltip,
+    ProgressSpinner,
+    Carousel,
+    Slider,
+    NgSwitch,
+    NgIf,
+    NgSwitchCase,
+    NgForOf,
   ],
   providers: [MessageService],
   standalone: true
 })
 export class CustomerProductComponent implements OnInit {
   products: Product[] = [];
+  featuredProducts: Product[] = [];
   categories: Category[] = [];
   selectedCategory: Category = { id: 0, name: 'Tất cả danh mục' };
   searchQuery: string = '';
   sortOption: string = 'default';
+  priceRange: number[] = [0, 10000000];
   isLoading: boolean = true;
   categoryProductCounts: { [key: number]: number } = {};
   page: number = 0;
@@ -63,12 +72,29 @@ export class CustomerProductComponent implements OnInit {
   totalPages: number = 0;
 
   selectedVariants: { [productId: number]: ProductVariant } = {};
-  variantDisplayTexts: { [variantId: number]: string } = {};
 
   sortOptions = [
     { label: 'Mặc định', value: 'default' },
     { label: 'Giá: Thấp đến cao', value: 'priceAsc' },
     { label: 'Giá: Cao đến thấp', value: 'priceDesc' }
+  ];
+
+  // Thêm thuộc tính cho view mode
+  viewMode: 'grid' | 'list' = 'grid';
+
+  // Banner demo
+  banners = [
+    { imageUrl: 'assets/images/running-logo.png', alt: 'Sự kiện giảm giá 1' },
+    { imageUrl: 'assets/images/running-logo.png', alt: 'Sự kiện hot 2' },
+    { imageUrl: 'assets/images/running-logo.png', alt: 'Sự kiện thể thao' },
+  ];
+
+  // Sản phẩm bán chạy (tồn kho nhiều nhất)
+  hotProducts: Product[] = [];
+
+  hotCarouselResponsive = [
+    { breakpoint: '1024px', numVisible: 2, numScroll: 2 },
+    { breakpoint: '600px', numVisible: 1, numScroll: 1 }
   ];
 
   constructor(
@@ -90,9 +116,14 @@ export class CustomerProductComponent implements OnInit {
       next: ({ categories, products }) => {
         this.categories = [{ id: 0, name: 'Tất cả danh mục' }, ...categories];
         this.products = this.processProducts(products.content);
+        this.featuredProducts = this.processProducts(products.content.slice(0, 4));
         this.totalElements = products.totalElements;
         this.totalPages = products.totalPages;
         this.updateCategoryProductCounts();
+        // Lấy top 8 sản phẩm tồn kho nhiều nhất làm hotProducts
+        this.hotProducts = [...products.content]
+          .sort((a, b) => this.getTotalStock(b) - this.getTotalStock(a))
+          .slice(0, 8);
         this.isLoading = false;
         this.cdr.markForCheck();
       },
@@ -108,8 +139,17 @@ export class CustomerProductComponent implements OnInit {
   loadProducts(): void {
     this.isLoading = true;
     const request = this.searchQuery.trim()
-      ? this.apiService.searchProducts(this.searchQuery, this.page, this.size, this.sortOption !== 'default' ? this.sortOption : undefined)
-      : this.apiService.getProducts(this.page, this.size, this.sortOption !== 'default' ? this.sortOption : undefined, this.selectedCategory.id !== 0 ? this.selectedCategory.id : undefined);
+      ? this.apiService.searchProducts(
+        this.searchQuery,
+        this.page,
+        this.size,
+        this.sortOption !== 'default' ? this.sortOption : undefined
+      )
+      : this.apiService.getProducts(
+        this.page,
+        this.size,
+        this.sortOption !== 'default' ? this.sortOption : undefined
+      );
 
     request.subscribe({
       next: (products: PageResponse<Product>) => {
@@ -130,15 +170,28 @@ export class CustomerProductComponent implements OnInit {
   }
 
   processProducts(products: Product[]): Product[] {
-    return products.map(product => {
+    let filteredProducts = products;
+
+    // Lọc theo danh mục
+    if (this.selectedCategory.id !== 0) {
+      filteredProducts = filteredProducts.filter(p => p.categoryId === this.selectedCategory.id);
+    }
+
+    // Lọc theo khoảng giá
+    filteredProducts = filteredProducts.filter(p => {
+      const price = this.getCurrentPrice(p);
+      return price >= this.priceRange[0] && price <= this.priceRange[1];
+    });
+
+    // Cập nhật danh sách sản phẩm đã lọc
+    return filteredProducts.map(product => {
       if (product.id && product.variants.length > 0) {
         this.selectedVariants[product.id] = product.variants[0];
+        product.variants = product.variants.map(v => ({
+          ...v,
+          displayText: this.getVariantDisplayText(v)
+        }));
       }
-      product.variants.forEach(v => {
-        if (v.id) {
-          this.variantDisplayTexts[v.id] = this.getVariantDisplayText(v);
-        }
-      });
       return product;
     });
   }
@@ -166,14 +219,11 @@ export class CustomerProductComponent implements OnInit {
     const baseUrl = 'http://localhost:8080';
     const primaryImage = images.find((img) => img.isPrimary);
     if (primaryImage?.imageUrl) {
-      console.log('Primary image URL:', `${baseUrl}${primaryImage.imageUrl}`);
       return `${baseUrl}${primaryImage.imageUrl}`;
     }
     if (images[0]?.imageUrl) {
-      console.log('Fallback image URL:', `${baseUrl}${images[0].imageUrl}`);
       return `${baseUrl}${images[0].imageUrl}`;
     }
-    console.warn('Falling back to placeholder image');
     return 'assets/images/placeholder-product.png';
   }
 
@@ -204,6 +254,11 @@ export class CustomerProductComponent implements OnInit {
     this.loadProducts();
   }
 
+  filterByPrice(): void {
+    this.page = 0;
+    this.loadProducts();
+  }
+
   onPageChange(event: any): void {
     this.page = event.page;
     this.size = event.rows;
@@ -219,6 +274,7 @@ export class CustomerProductComponent implements OnInit {
     this.selectedCategory = { id: 0, name: 'Tất cả danh mục' };
     this.searchQuery = '';
     this.sortOption = 'default';
+    this.priceRange = [0, 10000000];
     this.page = 0;
     this.loadProducts();
   }
@@ -265,5 +321,20 @@ export class CustomerProductComponent implements OnInit {
       this.selectedVariants[product.id] = variant;
       this.cdr.markForCheck();
     }
+  }
+
+  // Thêm hàm chuyển đổi view
+  setViewMode(mode: 'grid' | 'list') {
+    this.viewMode = mode;
+  }
+
+  // TrackBy cho *ngFor
+  trackByProductId(index: number, product: Product) {
+    return product.id;
+  }
+
+  // Lấy tổng tồn kho của sản phẩm
+  getTotalStock(product: Product): number {
+    return product.variants.reduce((sum, v) => sum + (v.stock || 0), 0);
   }
 }
