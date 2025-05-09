@@ -1,5 +1,5 @@
-import {Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, ViewEncapsulation} from '@angular/core';
-import { MessageService, ConfirmationService } from 'primeng/api'; // Thêm ConfirmationService
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
+import { MessageService, ConfirmationService } from 'primeng/api';
 import { forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -19,8 +19,16 @@ import { Product, ProductImage, ProductVariant } from '../../../../shared/models
 import { Category } from '../../../../shared/models/category.model';
 import { ApiService } from '../../../../core/services/api.service';
 import { AuthService } from '../../../../core/services/auth.service';
-import {Paginator} from "primeng/paginator";
-import {Tooltip} from "primeng/tooltip";
+import { Paginator } from 'primeng/paginator';
+import { Tooltip } from 'primeng/tooltip';
+
+interface PageResponse<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  size: number;
+}
 
 @Component({
   selector: 'app-product-management',
@@ -51,16 +59,16 @@ import {Tooltip} from "primeng/tooltip";
 })
 export class ProductManagementComponent implements OnInit {
   products: Product[] = [];
-  filteredProducts: Product[] = [];
-  displayProducts: Product[] = [];
   categories: Category[] = [];
   selectedCategory: Category = { id: 0, name: 'Tất cả danh mục' };
   searchQuery: string = '';
   sortOption: string = 'default';
   isLoading: boolean = true;
   categoryProductCounts: { [key: number]: number } = {};
-  paginatorRows: number = 6;
-  paginatorFirst: number = 0;
+  page: number = 0;
+  size: number = 6;
+  totalElements: number = 0;
+  totalPages: number = 0;
   showFilters = false;
   selectedVariants: { [productId: number]: ProductVariant } = {};
   variantDisplayTexts: { [variantId: number]: string } = {};
@@ -91,17 +99,13 @@ export class ProductManagementComponent implements OnInit {
     this.isLoading = true;
     forkJoin({
       categories: this.apiService.getCategories(),
-      products: this.apiService.getProducts()
+      products: this.apiService.getProducts(this.page, this.size, this.sortOption !== 'default' ? this.sortOption : undefined)
     }).subscribe({
       next: ({ categories, products }) => {
-        console.log('Danh mục:', categories);
-        console.log('Sản phẩm:', products);
         this.categories = [{ id: 0, name: 'Tất cả danh mục' }, ...categories];
-        this.products = this.processProducts(products);
-        console.log('Sản phẩm sau khi xử lý:', this.products);
-        this.filteredProducts = [...this.products];
-        this.updateDisplayProducts();
-        console.log('Sản phẩm hiển thị:', this.displayProducts);
+        this.products = this.processProducts(products.content);
+        this.totalElements = products.totalElements;
+        this.totalPages = products.totalPages;
         this.updateCategoryProductCounts();
         this.isLoading = false;
         this.cdr.markForCheck();
@@ -148,7 +152,6 @@ export class ProductManagementComponent implements OnInit {
   }
 
   getPrimaryImage(images: ProductImage[]): string {
-    console.log('Images:', images);
     const primaryImage = images.find((img) => img.isPrimary);
     if (primaryImage?.imageUrl) {
       return `http://localhost:8080${primaryImage.imageUrl}`;
@@ -161,7 +164,6 @@ export class ProductManagementComponent implements OnInit {
 
   getCurrentPrice(product: Product): number {
     const variant = product.id !== undefined ? this.selectedVariants[product.id] : undefined;
-    console.log('Selected variant for product', product.id, variant);
     return variant?.price || 0;
   }
 
@@ -178,74 +180,56 @@ export class ProductManagementComponent implements OnInit {
   }
 
   filterByCategory(): void {
-    if (!this.selectedCategory || this.selectedCategory.id === 0) {
-      this.filteredProducts = [...this.products];
-    } else {
-      this.filteredProducts = this.products.filter(
-        product => product.categoryId === this.selectedCategory.id
-      );
-    }
-    this.paginatorFirst = 0;
-    this.filterBySearch();
+    this.page = 0;
+    this.loadProducts();
   }
 
   filterBySearch(): void {
-    if (this.searchQuery.trim()) {
-      this.apiService.searchProducts(this.searchQuery).subscribe({
-        next: (products) => {
-          this.filteredProducts = this.sortProducts(products);
-          this.paginatorFirst = 0;
-          this.updateDisplayProducts();
-          this.cdr.markForCheck();
-        },
-        error: (error) => {
-          console.error('Lỗi khi tìm kiếm sản phẩm', error);
-          this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Tìm kiếm sản phẩm thất bại' });
-        }
-      });
-    } else {
-      this.filteredProducts = this.sortProducts([...this.products]);
-      this.paginatorFirst = 0;
-      this.updateDisplayProducts();
-      this.cdr.markForCheck();
-    }
+    this.page = 0;
+    this.loadProducts();
   }
 
-  sortProducts(products: Product[]): Product[] {
-    const sorted = [...products];
-    switch (this.sortOption) {
-      case 'priceAsc':
-        return sorted.sort((a, b) => this.getCurrentPrice(a) - this.getCurrentPrice(b));
-      case 'priceDesc':
-        return sorted.sort((a, b) => this.getCurrentPrice(b) - this.getCurrentPrice(a));
-      default:
-        return sorted;
-    }
-  }
+  loadProducts(): void {
+    this.isLoading = true;
+    const request = this.searchQuery.trim()
+      ? this.apiService.searchProducts(this.searchQuery, this.page, this.size, this.sortOption !== 'default' ? this.sortOption : undefined)
+      : this.apiService.getProducts(this.page, this.size, this.sortOption !== 'default' ? this.sortOption : undefined, this.selectedCategory.id !== 0 ? this.selectedCategory.id : undefined);
 
-  updateDisplayProducts(): void {
-    const start = this.paginatorFirst;
-    const end = start + this.paginatorRows;
-    this.displayProducts = this.filteredProducts.slice(start, end);
-    console.log('Cập nhật displayProducts:', this.displayProducts);
-    this.cdr.markForCheck();
+    request.subscribe({
+      next: (products: PageResponse<Product>) => {
+        this.products = this.processProducts(products.content);
+        this.totalElements = products.totalElements;
+        this.totalPages = products.totalPages;
+        this.updateCategoryProductCounts();
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: (error) => {
+        console.error('Lỗi khi tải sản phẩm', error);
+        this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Không thể tải sản phẩm' });
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   onPageChange(event: any): void {
-    this.paginatorFirst = event.first;
-    this.updateDisplayProducts();
+    this.page = event.page;
+    this.size = event.rows;
+    this.loadProducts();
   }
 
   onSortChange(): void {
-    this.paginatorFirst = 0;
-    this.filterBySearch();
+    this.page = 0;
+    this.loadProducts();
   }
 
   resetFilters(): void {
     this.selectedCategory = { id: 0, name: 'Tất cả danh mục' };
     this.searchQuery = '';
     this.sortOption = 'default';
-    this.filterByCategory();
+    this.page = 0;
+    this.loadProducts();
   }
 
   deleteProduct(productId: number | undefined): void {
@@ -260,10 +244,10 @@ export class ProductManagementComponent implements OnInit {
           this.apiService.deleteProduct(productId).subscribe({
             next: () => {
               this.products = this.products.filter(p => p.id !== productId);
-              this.filteredProducts = this.filteredProducts.filter(p => p.id !== productId);
-              this.updateDisplayProducts();
+              this.totalElements--;
               this.updateCategoryProductCounts();
               this.messageService.add({ severity: 'success', summary: 'Thành công', detail: 'Xóa sản phẩm thành công' });
+              this.loadProducts();
               this.cdr.markForCheck();
             },
             error: (error) => {
@@ -285,12 +269,11 @@ export class ProductManagementComponent implements OnInit {
     this.categories.forEach(category => {
       const id = category.id ?? -1;
       if (id === 0) {
-        this.categoryProductCounts[0] = this.products.length;
+        this.categoryProductCounts[0] = this.totalElements;
       } else {
         this.categoryProductCounts[id] = this.products.filter(p => p.categoryId === id).length;
       }
     });
-    console.log('categoryProductCounts:', this.categoryProductCounts);
     this.cdr.markForCheck();
   }
 

@@ -1,9 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Category } from '../../shared/models/category.model';
 import { Product } from '../../shared/models/product.model';
 import { AuthService } from './auth.service';
+
+interface PageResponse<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  size: number;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +32,17 @@ export class ApiService {
     return this.http.get<Category[]>(`${this.baseUrl}/categories`, { headers: this.getAuthHeaders() });
   }
 
-  getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.baseUrl}/products`, { headers: this.getAuthHeaders() });
+  getProducts(page: number = 0, size: number = 6, sort?: string, categoryId?: number): Observable<PageResponse<Product>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    if (sort) {
+      params = params.set('sort', sort);
+    }
+    if (categoryId) {
+      params = params.set('categoryId', categoryId.toString());
+    }
+    return this.http.get<PageResponse<Product>>(`${this.baseUrl}/products`, { headers: this.getAuthHeaders(), params });
   }
 
   getProductById(id: number): Observable<Product> {
@@ -69,10 +86,14 @@ export class ApiService {
     return this.http.delete<void>(`${this.baseUrl}/products/${id}`, { headers: this.getAuthHeaders() });
   }
 
-  searchProducts(keyword: string): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.baseUrl}/products/search`, {
-      headers: this.getAuthHeaders(),
-      params: { keyword }
-    });
+  searchProducts(keyword: string, page: number = 0, size: number = 6, sort?: string): Observable<PageResponse<Product>> {
+    let params = new HttpParams()
+      .set('keyword', keyword)
+      .set('page', page.toString())
+      .set('size', size.toString());
+    if (sort) {
+      params = params.set('sort', sort);
+    }
+    return this.http.get<PageResponse<Product>>(`${this.baseUrl}/products/search`, { headers: this.getAuthHeaders(), params });
   }
 }

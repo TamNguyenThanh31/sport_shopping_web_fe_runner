@@ -17,21 +17,16 @@
       <div class="table-responsive-wrapper">
         <p-table
           [value]="users"
-          [paginator]="true"
-          [rows]="10"
+          [loading]="loading"
           [responsive]="true"
           [scrollable]="true"
           scrollHeight="flex"
-          [showCurrentPageReport]="true"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-          [rowsPerPageOptions]="[5,10,25]"
           styleClass="p-datatable-striped p-datatable-gridlines">
           <ng-template pTemplate="header">
             <tr>
               <th style="min-width: 80px">ID</th>
               <th>Username</th>
               <th>Email</th>
-              <th>Phone</th>
               <th style="min-width: 180px">Actions</th>
             </tr>
           </ng-template>
@@ -45,10 +40,6 @@
               <td class="email" data-label="Email">
                 <span class="mobile-label">Email:</span>
                 {{user.email}}
-              </td>
-              <td class="phone" data-label="Phone">
-                <span class="mobile-label">Phone:</span>
-                {{user.phoneNumber | phone}}
               </td>
               <td class="actions" data-label="Actions">
                 <div class="action-buttons">
@@ -73,13 +64,22 @@
           </ng-template>
           <ng-template pTemplate="emptymessage">
             <tr>
-              <td colspan="5" class="empty-message">
+              <td colspan="4" class="empty-message">
                 <i class="pi pi-info-circle"></i>
                 No {{type === 'customer' ? 'customers' : 'staff members'}} found
               </td>
             </tr>
           </ng-template>
         </p-table>
+        <p-paginator
+          [first]="first"
+          [rows]="rows"
+          [totalRecords]="totalRecords"
+          [rowsPerPageOptions]="[5, 10, 25]"
+          (onPageChange)="onPageChange($event)"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+        </p-paginator>
       </div>
     </div>
   </div>
@@ -112,14 +112,6 @@
       </div>
 
       <div class="form-group">
-        <label for="phoneNumber">Phone Number *</label>
-        <input pInputText id="phoneNumber" formControlName="phoneNumber" type="tel" placeholder="Enter phone number" />
-        <small *ngIf="userForm.get('phoneNumber')?.touched && userForm.get('phoneNumber')?.hasError('required')" class="error-message">
-          Phone number is required
-        </small>
-      </div>
-
-      <div class="form-group">
         <label for="password">Password {{selectedUserId ? '' : '*'}}</label>
         <p-password
           id="password"
@@ -129,8 +121,9 @@
           placeholder="Enter password"
           [inputStyleClass]="'w-full'">
         </p-password>
-        <small *ngIf="userForm.get('password')?.touched && userForm.get('password')?.hasError('minlength')" class="error-message">
-          Password must be at least 6 characters
+        <small *ngIf="userForm.get('password')?.touched && userForm.get('password')?.errors" class="error-message">
+          <span *ngIf="userForm.get('password')?.hasError('required')">Password is required</span>
+          <span *ngIf="userForm.get('password')?.hasError('minlength')">Password must be at least 6 characters</span>
         </small>
       </div>
 
@@ -170,10 +163,6 @@
       <div class="detail-item">
         <span class="detail-label">Email:</span>
         <span class="detail-value">{{userDetail.email}}</span>
-      </div>
-      <div class="detail-item">
-        <span class="detail-label">Phone:</span>
-        <span class="detail-value">{{userDetail.phoneNumber | phone}}</span>
       </div>
       <div class="detail-item">
         <span class="detail-label">Role:</span>
