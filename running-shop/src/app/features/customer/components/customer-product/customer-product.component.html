@@ -98,7 +98,7 @@
                 </div>
                 <div class="product-info">
                   <div class="product-brand">{{ product.brand }}</div>
-                  <h3 class="product-name" (click)="navigateToDetail(product.id)">{{ product.name }}</h3>
+                  <h3 class="product-name" (click)="navigateToDetail(product.id!)">{{ product.name }}</h3>
                   <div class="product-price-container">
                     <span class="product-price">{{ formatPrice(getCurrentPrice(product)) }}</span>
                   </div>

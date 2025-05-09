@@ -15,10 +15,10 @@ import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { Product, ProductImage, ProductVariant } from '../../../../shared/models/product.model';
-import { Category } from '../../../../shared/models/category.model';
-import { ApiService } from '../../../../core/services/api.service';
-import { AuthService } from '../../../../core/services/auth.service';
+import { Product, ProductImage, ProductVariant } from '../../../shared/models/product.model';
+import { Category } from '../../../shared/models/category.model';
+import { ApiService } from '../../../core/services/api.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Paginator } from 'primeng/paginator';
 import { Tooltip } from 'primeng/tooltip';
 

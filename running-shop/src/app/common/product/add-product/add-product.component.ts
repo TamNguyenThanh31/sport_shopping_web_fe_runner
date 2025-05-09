@@ -2,10 +2,10 @@ import {Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, ViewEncap
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api'; // Thêm ConfirmationService
-import { Product, ProductImage, ProductVariant } from '../../../../shared/models/product.model';
-import { Category } from '../../../../shared/models/category.model';
-import { ApiService } from '../../../../core/services/api.service';
-import { AuthService } from '../../../../core/services/auth.service';
+import { Product, ProductImage, ProductVariant } from '../../../shared/models/product.model';
+import { Category } from '../../../shared/models/category.model';
+import { ApiService } from '../../../core/services/api.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
