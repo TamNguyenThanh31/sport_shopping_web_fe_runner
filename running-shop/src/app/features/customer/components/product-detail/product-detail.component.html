@@ -1,1 +1,50 @@
-<p>product-detail works!</p>
+<div class="product-detail-container" *ngIf="product">
+    <!-- Phần breadcrumb -->
+    <div class="breadcrumb">
+      <a [routerLink]="['/products']">Sản phẩm</a> > <span>Chi tiết sản phẩm: {{ product.name }}</span>
+    </div>
+  
+    <!-- Phần hiển thị ảnh -->
+    <div class="gallery-section" *ngIf="galleryImages.length > 0">
+      <p-galleria [value]="galleryImages" [(activeIndex)]="activeIndex" [circular]="true" [showThumbnails]="true" [responsiveOptions]="responsiveOptions" [numVisible]="5">
+        <ng-template pTemplate="item" let-item>
+          <img [src]="'http://localhost:8080' + item.imageUrl" [alt]="product.name" style="width: 100%; display: block;" />
+        </ng-template>
+        <ng-template pTemplate="thumbnail" let-item>
+          <img [src]="'http://localhost:8080' + item.imageUrl" [alt]="product.name" style="width: 100%; display: block;" />
+        </ng-template>
+      </p-galleria>
+    </div>
+  
+    <!-- Phần thông tin sản phẩm -->
+    <div class="product-info-section">
+      <h1 class="product-title">{{ product.name }}</h1>
+      <div class="product-brand">Thương hiệu: {{ product.brand }}</div>
+      <div class="product-price">Giá: {{ selectedVariant?.price | currency:'VND':'symbol':'1.0-0' }}</div>
+  
+      <div class="variant-selector" *ngIf="product.variants.length > 1">
+        <p-dropdown [options]="product.variants" [(ngModel)]="selectedVariant" optionLabel="sku" (onChange)="onVariantChange($event.value)" placeholder="Chọn phân loại" [style]="{'width':'100%'}"></p-dropdown>
+      </div>
+  
+      <div class="product-description">
+        <h3>Mô tả sản phẩm</h3>
+        <p>{{ product.description }}</p>
+      </div>
+  
+      <div class="product-actions">
+        <button pButton pRipple label="Thêm vào giỏ" icon="pi pi-shopping-cart" [disabled]="!selectedVariant?.stock" class="p-button-primary"></button>
+        <button pButton pRipple label="Yêu thích" icon="pi pi-heart" class="p-button-secondary"></button>
+      </div>
+  
+      <div class="stock-info" *ngIf="selectedVariant">
+        <span [ngClass]="{'in-stock': selectedVariant.stock > 0, 'out-of-stock': selectedVariant.stock === 0}">
+          {{ selectedVariant.stock > 0 ? 'Còn hàng' : 'Hết hàng' }}
+        </span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Hiển thị khi chưa có dữ liệu -->
+  <div class="loading-state" *ngIf="!product">
+    <p>Đang tải sản phẩm...</p>
+  </div>

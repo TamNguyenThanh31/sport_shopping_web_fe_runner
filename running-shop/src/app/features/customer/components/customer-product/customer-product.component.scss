@@ -778,6 +778,17 @@
   }
 }
 
+.product-name {
+  cursor: pointer;
+  color: #007bff; // Màu xanh ban đầu
+  transition: color 0.3s ease, filter 0.3s ease; // Hiệu ứng mượt mà
+
+  &:hover {
+    color: #0056b3; // Màu xanh đậm hơn khi hover
+    filter: brightness(1.1); // Tăng độ sáng nhẹ
+  }
+}
+
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }

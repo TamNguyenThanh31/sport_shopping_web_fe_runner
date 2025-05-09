@@ -9,7 +9,7 @@ import { Paginator } from 'primeng/paginator';
 import {NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase} from '@angular/common';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { Listbox } from 'primeng/listbox';
@@ -100,7 +100,8 @@ export class CustomerProductComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private messageService: MessageService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -336,5 +337,9 @@ export class CustomerProductComponent implements OnInit {
   // Lấy tổng tồn kho của sản phẩm
   getTotalStock(product: Product): number {
     return product.variants.reduce((sum, v) => sum + (v.stock || 0), 0);
+  }
+
+  navigateToDetail(id: number) {
+    this.router.navigate(['/products/detail-product', id]);
   }
 }

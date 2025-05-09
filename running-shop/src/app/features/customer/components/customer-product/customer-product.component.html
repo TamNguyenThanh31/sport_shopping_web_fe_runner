@@ -93,12 +93,12 @@
                   </div>
                   <div class="quick-actions">
                     <button pButton pRipple icon="pi pi-heart" class="p-button-rounded p-button-text action-button wishlist-button" pTooltip="Yêu thích"></button>
-                    <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-text action-button view-button" [routerLink]="['/detail-product', product.id]" pTooltip="Xem chi tiết"></button>
+                    <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-text action-button view-button" [routerLink]="['/products/detail-product', product.id]" pTooltip="Xem nhanh"></button>
                   </div>
                 </div>
                 <div class="product-info">
                   <div class="product-brand">{{ product.brand }}</div>
-                  <h3 class="product-name">{{ product.name }}</h3>
+                  <h3 class="product-name" (click)="navigateToDetail(product.id)">{{ product.name }}</h3>
                   <div class="product-price-container">
                     <span class="product-price">{{ formatPrice(getCurrentPrice(product)) }}</span>
                   </div>
