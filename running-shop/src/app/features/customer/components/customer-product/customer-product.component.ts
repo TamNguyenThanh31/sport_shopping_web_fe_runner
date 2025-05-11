@@ -19,6 +19,7 @@ import { Card } from 'primeng/card';
 import { Tooltip } from 'primeng/tooltip';
 import { Carousel } from 'primeng/carousel';
 import { Slider } from 'primeng/slider';
+import {QuickViewComponent} from "../quick-view/quick-view.component";
 
 interface PageResponse<T> {
   content: T[];
@@ -52,6 +53,7 @@ interface PageResponse<T> {
     NgIf,
     NgSwitchCase,
     NgForOf,
+    QuickViewComponent,
   ],
   providers: [MessageService],
   standalone: true
@@ -70,6 +72,8 @@ export class CustomerProductComponent implements OnInit {
   size: number = 12;
   totalElements: number = 0;
   totalPages: number = 0;
+  quickViewVisible: boolean = false;
+  quickViewProductId: number | null = null;
 
   selectedVariants: { [productId: number]: ProductVariant } = {};
 
@@ -341,5 +345,14 @@ export class CustomerProductComponent implements OnInit {
 
   navigateToDetail(id: number) {
     this.router.navigate(['/products/detail-product', id]);
+  }
+
+  openQuickView(productId: number) {
+    this.quickViewProductId = productId;
+    this.quickViewVisible = true;
+  }
+  closeQuickView() {
+    this.quickViewVisible = false;
+    this.quickViewProductId = null;
   }
 }

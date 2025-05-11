@@ -1,50 +1,69 @@
-<div class="product-detail-container" *ngIf="product">
-    <!-- Phần breadcrumb -->
-    <div class="breadcrumb">
-      <a [routerLink]="['/products']">Sản phẩm</a> > <span>Chi tiết sản phẩm: {{ product.name }}</span>
+<div class="product-detail-ui" *ngIf="product">
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb-ui">
+    <a [routerLink]="['/products']">Trang chủ</a>
+    <span>/</span>
+    <a *ngIf="category" [routerLink]="['/products']" [queryParams]="{category: category.id}">{{ category.name }}</a>
+    <span>/</span>
+    <span>{{ product.name }}</span>
+  </nav>
+
+  <div class="product-main-ui">
+    <!-- Gallery -->
+    <div class="gallery-ui">
+      <div class="main-img-ui">
+        <img [src]="'http://localhost:8080' + galleryImages[activeIndex]?.imageUrl" [alt]="product.name" />
+      </div>
+      <div class="thumbs-ui">
+        <img *ngFor="let img of galleryImages; let i = index"
+             [src]="'http://localhost:8080' + img.imageUrl"
+             [alt]="product.name"
+             [class.active]="i === activeIndex"
+             (click)="activeIndex = i" />
+      </div>
     </div>
-  
-    <!-- Phần hiển thị ảnh -->
-    <div class="gallery-section" *ngIf="galleryImages.length > 0">
-      <p-galleria [value]="galleryImages" [(activeIndex)]="activeIndex" [circular]="true" [showThumbnails]="true" [responsiveOptions]="responsiveOptions" [numVisible]="5">
-        <ng-template pTemplate="item" let-item>
-          <img [src]="'http://localhost:8080' + item.imageUrl" [alt]="product.name" style="width: 100%; display: block;" />
-        </ng-template>
-        <ng-template pTemplate="thumbnail" let-item>
-          <img [src]="'http://localhost:8080' + item.imageUrl" [alt]="product.name" style="width: 100%; display: block;" />
-        </ng-template>
-      </p-galleria>
-    </div>
-  
-    <!-- Phần thông tin sản phẩm -->
-    <div class="product-info-section">
-      <h1 class="product-title">{{ product.name }}</h1>
-      <div class="product-brand">Thương hiệu: {{ product.brand }}</div>
-      <div class="product-price">Giá: {{ selectedVariant?.price | currency:'VND':'symbol':'1.0-0' }}</div>
-  
-      <div class="variant-selector" *ngIf="product.variants.length > 1">
-        <p-dropdown [options]="product.variants" [(ngModel)]="selectedVariant" optionLabel="sku" (onChange)="onVariantChange($event.value)" placeholder="Chọn phân loại" [style]="{'width':'100%'}"></p-dropdown>
+
+    <!-- Info -->
+    <div class="info-ui">
+      <h1 class="title-ui">{{ product.name }}</h1>
+      <div class="brand-cat-ui">
+        <span class="brand-ui">{{ product.brand }}</span>
+        <span class="dot-ui">•</span>
+        <a class="cat-ui" *ngIf="category" [routerLink]="['/products']" [queryParams]="{category: category.id}">{{ category.name }}</a>
       </div>
-  
-      <div class="product-description">
-        <h3>Mô tả sản phẩm</h3>
-        <p>{{ product.description }}</p>
+      <div class="price-ui">{{ selectedVariant?.price | currency:'VND':'symbol':'1.0-0' }}</div>
+      <div class="variant-ui" *ngIf="product.variants.length > 1">
+        <p-dropdown [options]="product.variants" [(ngModel)]="selectedVariant" optionLabel="sku" (onChange)="onVariantChange($event.value)" placeholder="Chọn phân loại"></p-dropdown>
       </div>
-  
-      <div class="product-actions">
-        <button pButton pRipple label="Thêm vào giỏ" icon="pi pi-shopping-cart" [disabled]="!selectedVariant?.stock" class="p-button-primary"></button>
-        <button pButton pRipple label="Yêu thích" icon="pi pi-heart" class="p-button-secondary"></button>
+      <!-- Thông tin chi tiết biến thể -->
+      <div class="variant-detail-ui" *ngIf="selectedVariant">
+        <div class="variant-row-ui"><span>Mã SKU:</span> <b>{{ selectedVariant.sku }}</b></div>
+        <div class="variant-row-ui" *ngIf="selectedVariant.color"><span>Màu sắc:</span> <b>{{ selectedVariant.color }}</b></div>
+        <div class="variant-row-ui" *ngIf="selectedVariant.size"><span>Size:</span> <b>{{ selectedVariant.size }}</b></div>
+        <div class="variant-row-ui"><span>Giá:</span> <b>{{ selectedVariant.price | currency:'VND':'symbol':'1.0-0' }}</b></div>
+        <div class="variant-row-ui"><span>Tồn kho:</span> <b>{{ selectedVariant.stock }}</b></div>
       </div>
-  
-      <div class="stock-info" *ngIf="selectedVariant">
+      <div class="stock-ui" *ngIf="selectedVariant">
         <span [ngClass]="{'in-stock': selectedVariant.stock > 0, 'out-of-stock': selectedVariant.stock === 0}">
           {{ selectedVariant.stock > 0 ? 'Còn hàng' : 'Hết hàng' }}
         </span>
       </div>
+      <div class="actions-ui">
+        <button pButton pRipple label="Thêm vào giỏ" icon="pi pi-shopping-cart" [disabled]="!selectedVariant?.stock" class="cta-ui"></button>
+        <button pButton pRipple icon="pi pi-heart" class="wishlist-ui" pTooltip="Yêu thích"></button>
+      </div>
+      <div class="desc-ui">
+        {{ product.description }}
+      </div>
+      <div class="share-ui">
+        <span>Chia sẻ:</span>
+        <i class="pi pi-facebook"></i>
+        <i class="pi pi-instagram"></i>
+        <i class="pi pi-twitter"></i>
+      </div>
     </div>
   </div>
-  
-  <!-- Hiển thị khi chưa có dữ liệu -->
-  <div class="loading-state" *ngIf="!product">
-    <p>Đang tải sản phẩm...</p>
-  </div>
+</div>
+<div class="loading-ui" *ngIf="!product">
+  <p>Đang tải sản phẩm...</p>
+</div>
