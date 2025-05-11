@@ -21,6 +21,7 @@ body, .product-detail-ui {
   display: flex;
   flex-direction: column;
   gap: 32px;
+  margin-top: 60px;
   @media (max-width: 900px) {
     padding: 18px 4vw 24px 4vw;
     gap: 18px;
