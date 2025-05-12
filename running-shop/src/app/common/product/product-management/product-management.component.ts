@@ -15,10 +15,10 @@ import { CardModule } from 'primeng/card';
 import { ToastModule } from 'primeng/toast';
 import { TableModule } from 'primeng/table';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { Product, ProductImage, ProductVariant } from '../../../../shared/models/product.model';
-import { Category } from '../../../../shared/models/category.model';
-import { ApiService } from '../../../../core/services/api.service';
-import { AuthService } from '../../../../core/services/auth.service';
+import { Product, ProductImage, ProductVariant } from '../../../shared/models/product.model';
+import { Category } from '../../../shared/models/category.model';
+import { ApiService } from '../../../core/services/api.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Paginator } from 'primeng/paginator';
 import { Tooltip } from 'primeng/tooltip';
 
@@ -128,7 +128,7 @@ export class ProductManagementComponent implements OnInit {
         categoryId: product.categoryId,
         brand: product.brand,
         addedById: product.addedById,
-        isActive: product.isActive,
+        active: product.active,
         variants: product.variants || product.productVariants || [],
         images: product.images || product.productImages || []
       };
@@ -152,7 +152,7 @@ export class ProductManagementComponent implements OnInit {
   }
 
   getPrimaryImage(images: ProductImage[]): string {
-    const primaryImage = images.find((img) => img.isPrimary);
+    const primaryImage = images.find((img) => img.primary);
     if (primaryImage?.imageUrl) {
       return `http://localhost:8080${primaryImage.imageUrl}`;
     }

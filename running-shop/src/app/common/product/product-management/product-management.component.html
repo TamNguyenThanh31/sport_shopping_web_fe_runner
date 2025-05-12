@@ -82,7 +82,7 @@
             <td data-label="Thương hiệu">{{ product.brand }}</td>
             <td data-label="Danh mục">{{ getCategoryName(product.categoryId) }}</td>
             <td data-label="Giá">{{ formatPrice(getCurrentPrice(product)) }}</td>
-            <td data-label="Trạng thái">{{ product.isActive ? 'Kích hoạt' : 'Không kích hoạt' }}</td>
+            <td data-label="Trạng thái">{{ product.active ? 'Kích hoạt' : 'Không kích hoạt' }}</td>
             <td data-label="Thêm bởi">{{ product.addedById }}</td>
             <td data-label="Hành động">
               <div class="action-buttons">
@@ -142,7 +142,7 @@
               <p><strong>Thương hiệu:</strong> {{ product.brand }}</p>
               <p><strong>Danh mục:</strong> {{ getCategoryName(product.categoryId) }}</p>
               <p><strong>Giá:</strong> {{ formatPrice(getCurrentPrice(product)) }}</p>
-              <p><strong>Trạng thái:</strong> {{ product.isActive ? 'Kích hoạt' : 'Không kích hoạt' }}</p>
+              <p><strong>Trạng thái:</strong> {{ product.active ? 'Kích hoạt' : 'Không kích hoạt' }}</p>
             </div>
             <div class="action-buttons">
               <p-button

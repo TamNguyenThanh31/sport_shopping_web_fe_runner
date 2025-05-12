@@ -1,0 +1,64 @@
+<p-dialog
+  [(visible)]="visible"
+  (onHide)="visibleChange.emit(false)"
+  [modal]="true"
+  [style]="{width: '90vw', maxWidth: '800px'}"
+  [contentStyle]="{padding: '0'}"
+  [baseZIndex]="1100"
+  [dismissableMask]="true"
+  [showHeader]="false"
+  [breakpoints]="{'900px': '98vw', '600px': '100vw'}"
+  class="quick-view-dialog-ui"
+>
+  <div class="quick-view-ui" *ngIf="product">
+    <div class="quick-gallery-ui">
+      <div class="main-img-ui">
+        <img [src]="'http://localhost:8080' + galleryImages[activeIndex]?.imageUrl" [alt]="product.name" />
+      </div>
+      <div class="thumbs-ui">
+        <img *ngFor="let img of galleryImages; let i = index"
+             [src]="'http://localhost:8080' + img.imageUrl"
+             [alt]="product.name"
+             [class.active]="i === activeIndex"
+             (click)="activeIndex = i" />
+      </div>
+    </div>
+    <div class="quick-info-ui">
+      <div class="quick-header-ui">
+        <h2 class="title-ui">{{ product.name }}</h2>
+        <span class="brand-ui">{{ product.brand }}</span>
+      </div>
+      <div class="cat-ui-row">
+        <i class="pi pi-tag"></i>
+        <a class="cat-ui" *ngIf="category" [routerLink]="['/products']" [queryParams]="{category: category.id}">{{ category.name }}</a>
+      </div>
+      <div class="price-ui">{{ selectedVariant?.price | currency:'VND':'symbol':'1.0-0' }}</div>
+      <div class="variant-ui" *ngIf="product.variants.length > 1">
+        <p-dropdown [options]="product.variants" [(ngModel)]="selectedVariant" optionLabel="sku" (onChange)="onVariantChange($event.value)" placeholder="Chọn phân loại"></p-dropdown>
+      </div>
+      <div class="variant-attrs-ui" *ngIf="selectedVariant">
+        <div class="attr-card-ui">
+          <span class="attr-label-ui">SKU</span>
+          <span class="attr-value-ui">{{ selectedVariant.sku }}</span>
+        </div>
+        <div class="attr-card-ui" *ngIf="selectedVariant.color">
+          <span class="attr-label-ui">Màu sắc</span>
+          <span class="attr-value-ui">{{ selectedVariant.color }}</span>
+        </div>
+        <div class="attr-card-ui" *ngIf="selectedVariant.size">
+          <span class="attr-label-ui">Size</span>
+          <span class="attr-value-ui">{{ selectedVariant.size }}</span>
+        </div>
+        <div class="attr-card-ui">
+          <span class="attr-label-ui">Tồn kho</span>
+          <span class="attr-value-ui" [ngClass]="{'in-stock': selectedVariant.stock > 0, 'out-of-stock': selectedVariant.stock === 0}">
+            {{ selectedVariant.stock > 0 ? selectedVariant.stock : 'Hết hàng' }}
+          </span>
+        </div>
+      </div>
+      <div class="desc-ui">
+        {{ product.description }}
+      </div>
+    </div>
+  </div>
+</p-dialog>

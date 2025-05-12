@@ -1,0 +1,18 @@
+<p-toast></p-toast>
+
+<p-dialog [header]="dialogHeader" [(visible)]="visible" [modal]="true" [style]="{ width: '30rem' }" (onHide)="close()">
+  <div class="p-fluid">
+    <div class="field">
+      <label for="name">Tên</label>
+      <input pInputText id="name" [(ngModel)]="category.name" [disabled]="mode === 'detail'" required />
+    </div>
+    <div class="field">
+      <label for="description">Mô tả</label>
+      <textarea pInputTextarea id="description" [(ngModel)]="category.description" [disabled]="mode === 'detail'" rows="4"></textarea>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button label="Đóng" styleClass="p-button-text" (click)="close()"></p-button>
+    <p-button label="{{ mode === 'add' ? 'Tạo' : 'Cập nhật' }}" (click)="saveCategory()" *ngIf="mode !== 'detail'"></p-button>
+  </ng-template>
+</p-dialog>

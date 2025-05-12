@@ -4,7 +4,7 @@ import {CustomerDashboardComponent} from "./components/customer-dashboard/custom
 import {CustomerEditComponent} from "./components/customer-edit/customer-edit.component";
 import {AuthGuard} from "../../core/guards/auth/auth.guard";
 import {CustomerProductComponent} from "./components/customer-product/customer-product.component";
-import {AddProductComponent} from "../admin/components/add-product/add-product.component";
+import {AddProductComponent} from "../../common/product/add-product/add-product.component";
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 
 const routes: Routes = [

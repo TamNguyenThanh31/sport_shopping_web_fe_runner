@@ -1,0 +1,174 @@
+/* ===== Theme Variables ===== */
+$primary-color: #2563EB;       // Xanh dương đậm, chuyên nghiệp
+$secondary-color: #DC2626;     // Đỏ nhẹ, nổi bật
+$background-color: #F9FAFB;    // Nền xám nhạt thanh lịch
+$text-dark: #111827;           // Chữ đậm, chuyên nghiệp
+$text-medium: #374151;         // Chữ trung bình
+$text-light: #6B7280;          // Chữ nhạt
+$border-color: #D1D5DB;        // Viền nhẹ
+$hover-bg: #E0F2FE;            // Nền hover xanh nhạt
+$shadow: 0 10px 30px rgba(0, 0, 0, 0.05); // Shadow mềm mại
+$card-bg: #FFFFFF;             // Nền thẻ trắng tinh
+
+/* ===== Dialog Styles ===== */
+.p-dialog {
+  border-radius: 12px;
+  box-shadow: $shadow;
+  background: $card-bg !important;
+  border: 1px solid $border-color;
+
+  .p-dialog-header {
+    background: $primary-color !important;
+    color: white !important;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    padding: 1.5rem;
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+
+  .p-dialog-content {
+    padding: 1.5rem;
+    background: $card-bg !important;
+
+    .p-fluid {
+      .field {
+        margin-bottom: 1.5rem;
+
+        label {
+          display: block;
+          font-size: 1rem;
+          font-weight: 600;
+          color: $text-dark;
+          margin-bottom: 0.5rem;
+        }
+
+        .p-inputtext,
+        .p-inputtextarea {
+          width: 100%;
+          padding: 0.85rem 1rem;
+          border: 1px solid $border-color;
+          border-radius: 10px;
+          background: $card-bg;
+          box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03);
+          transition: all 0.3s ease;
+          font-size: 0.95rem;
+          color: $text-dark;
+          font-weight: 500;
+
+          &:focus {
+            border-color: $primary-color;
+            box-shadow: 0 0 0 3px rgba($primary-color, 0.15);
+            background: white;
+          }
+
+          &::placeholder {
+            color: $text-light;
+            font-weight: 400;
+          }
+
+          &[disabled] {
+            background: $background-color !important;
+            opacity: 0.7;
+            cursor: not-allowed;
+          }
+        }
+
+        .p-inputtextarea {
+          resize: vertical;
+          min-height: 100px;
+        }
+      }
+    }
+  }
+
+  .p-dialog-footer {
+    padding: 1rem 1.5rem;
+    background: $card-bg !important;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+
+    .p-button {
+      border-radius: 10px;
+      padding: 0.85rem 1.5rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+
+      &.p-button-text {
+        color: $text-medium !important;
+        background: transparent !important;
+        border: 1px solid $border-color;
+
+        &:hover {
+          background: $hover-bg !important;
+          color: $primary-color !important;
+          border-color: $primary-color;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba($primary-color, 0.2);
+        }
+      }
+
+      &.p-button-primary {
+        background: linear-gradient(135deg, $primary-color 0%, lighten($primary-color, 10%) 100%) !important;
+        border: none !important;
+        box-shadow: 0 4px 12px rgba($primary-color, 0.2);
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba($primary-color, 0.3);
+          background: lighten($primary-color, 5%) !important;
+        }
+
+        .p-button-label {
+          color: white !important;
+        }
+      }
+    }
+  }
+}
+
+/* ===== Toast ===== */
+.p-toast {
+  .p-toast-message {
+    border-radius: 10px;
+    box-shadow: $shadow;
+    background: $card-bg !important;
+    border: 1px solid $border-color;
+
+    .p-toast-message-content {
+      color: $text-dark !important;
+      font-weight: 500;
+    }
+  }
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  .p-dialog {
+    width: 90% !important;
+    margin: 1rem;
+
+    .p-dialog-header {
+      padding: 1rem;
+      font-size: 1rem;
+    }
+
+    .p-dialog-content {
+      padding: 1rem;
+    }
+
+    .p-dialog-footer {
+      padding: 0.75rem 1rem;
+      flex-direction: column;
+      gap: 0.75rem;
+
+      .p-button {
+        width: 100%;
+        padding: 0.75rem;
+      }
+    }
+  }
+}

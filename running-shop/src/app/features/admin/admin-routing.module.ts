@@ -5,8 +5,10 @@ import {AuthGuard} from "../../core/guards/auth/auth.guard";
 import {
   CustomerStaffManagementComponent
 } from "./components/customer-staff-management/customer-staff-management.component";
-import {ProductManagementComponent} from "./components/product-management/product-management.component";
-import {AddProductComponent} from "./components/add-product/add-product.component";
+import {ProductManagementComponent} from "../../common/product/product-management/product-management.component";
+import {AddProductComponent} from "../../common/product/add-product/add-product.component";
+import {AddCategoryComponent} from "../../common/category/add-category/add-category.component";
+import {CategoryManagementComponent} from "../../common/category/category-management/category-management.component";
 
 const routes: Routes = [
   // { path: '', component: AdminDashboardComponent },
@@ -16,7 +18,13 @@ const routes: Routes = [
   { path: 'staff/:id', component: CustomerStaffManagementComponent, data: { type: 'staff' }, canActivate: [AuthGuard] },
   { path: 'product-management', component: ProductManagementComponent },
   { path: 'add-product', component: AddProductComponent },
-  { path: 'add-product/:id', component: AddProductComponent }
+  { path: 'add-product/:id', component: AddProductComponent },
+
+  { path: 'categories', component: CategoryManagementComponent },
+  { path: 'categories/add', component: AddCategoryComponent, data: { mode: 'add' } },
+  { path: 'categories/edit/:id', component: AddCategoryComponent, data: { mode: 'edit' } },
+  { path: 'categories/detail/:id', component: AddCategoryComponent, data: { mode: 'detail' } },
+  { path: '', redirectTo: '/categories', pathMatch: 'full' }
 ];
 
 @NgModule({
