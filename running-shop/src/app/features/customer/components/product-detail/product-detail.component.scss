@@ -11,7 +11,14 @@ body, .product-detail-ui {
   font-family: 'Inter', Arial, sans-serif;
 }
 
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .product-detail-ui {
+  flex: 1;
   max-width: 1200px;
   margin: 32px auto 0 auto;
   background: #fff;

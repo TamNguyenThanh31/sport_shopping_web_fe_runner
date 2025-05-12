@@ -10,17 +10,19 @@ import {ButtonDirective} from "primeng/button";
 import {Ripple} from "primeng/ripple";
 import { CategoryService } from 'src/app/common/service/category.service';
 import { Category } from 'src/app/shared/models/category.model';
+import {FooterComponent} from "../../../../shared/footer/footer.component";
 
 @Component({
   selector: 'app-product-detail',
-  imports: [
-    GalleriaModule,
-    DropdownModule,
-    FormsModule,
-    ButtonDirective,
-    Ripple,
-    RouterLink
-  ],
+    imports: [
+        GalleriaModule,
+        DropdownModule,
+        FormsModule,
+        ButtonDirective,
+        Ripple,
+        RouterLink,
+        FooterComponent
+    ],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.scss'
 })
@@ -38,7 +40,7 @@ export class ProductDetailComponent implements OnInit {
   ];
 
   constructor(
-    private route: ActivatedRoute, 
+    private route: ActivatedRoute,
     private apiService: ApiService,
     private categoryService: CategoryService
   ) {}
@@ -50,7 +52,7 @@ export class ProductDetailComponent implements OnInit {
         this.product = product;
         this.selectedVariant = product.variants[0];
         this.galleryImages = product.images || [];
-        
+
         // Lấy thông tin danh mục
         if (product.categoryId) {
           this.categoryService.getById(product.categoryId).subscribe({

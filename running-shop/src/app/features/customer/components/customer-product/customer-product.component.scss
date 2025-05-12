@@ -7,7 +7,15 @@ $gray: #F5F8FA;
 $text: #222;
 $shadow: 0 4px 24px 0 rgba(25, 118, 210, 0.09);
 
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 .product-listing-ui {
+  flex: 1;
+  padding-bottom: 2rem;
   font-family: 'Inter', Arial, sans-serif;
   background: $gray;
   min-height: 100vh;

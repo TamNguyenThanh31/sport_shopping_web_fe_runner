@@ -24,31 +24,29 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
   declarations: [
     NavbarComponent,
     SidebarComponent,
-    FooterComponent,
     ProfileComponent,
     PhonePipe
   ],
   exports: [
     NavbarComponent,
     SidebarComponent,
-    FooterComponent,
     PhonePipe
   ],
-    imports: [
-        CommonModule,
-        MenubarModule,
-        MenuModule,
-        ButtonModule,
-        AvatarModule,
-        PanelMenuModule,
-        CardModule,
-        RippleModule,
-        DividerModule,
-        ProgressBarModule,
-        TimelineModule,
-        Tooltip,
-        RouterLink,
-        RouterLinkActive
-    ],
+  imports: [
+    CommonModule,
+    MenubarModule,
+    MenuModule,
+    ButtonModule,
+    AvatarModule,
+    PanelMenuModule,
+    CardModule,
+    RippleModule,
+    DividerModule,
+    ProgressBarModule,
+    TimelineModule,
+    Tooltip,
+    RouterLink,
+    RouterLinkActive
+  ],
 })
 export class SharedModule { }

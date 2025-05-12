@@ -18,13 +18,13 @@ import {MessageService, PrimeIcons} from "primeng/api";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {DataViewModule} from "primeng/dataview";
 import {Paginator} from "primeng/paginator";
+import {FooterComponent} from "../../shared/footer/footer.component";
 
 
 @NgModule({
   declarations: [
     CustomerDashboardComponent,
-    CustomerEditComponent,
-
+    CustomerEditComponent
   ],
   imports: [
     CommonModule,
@@ -40,6 +40,7 @@ import {Paginator} from "primeng/paginator";
     DropdownModule,
     ProgressSpinnerModule,
     Paginator,
+    FooterComponent,
   ],
   providers: [
     MessageService

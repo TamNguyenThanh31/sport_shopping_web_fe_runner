@@ -20,6 +20,8 @@ import { Tooltip } from 'primeng/tooltip';
 import { Carousel } from 'primeng/carousel';
 import { Slider } from 'primeng/slider';
 import {QuickViewComponent} from "../quick-view/quick-view.component";
+import {FooterComponent} from "../../../../shared/footer/footer.component";
+import {SharedModule} from "../../../../shared/shared.module";
 
 interface PageResponse<T> {
   content: T[];
@@ -54,6 +56,8 @@ interface PageResponse<T> {
     NgSwitchCase,
     NgForOf,
     QuickViewComponent,
+    FooterComponent,
+    SharedModule,
   ],
   providers: [MessageService],
   standalone: true

@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../core/services/auth.service";
+import {NgIf} from "@angular/common";
 
 @Component({
-    selector: 'app-footer',
-    templateUrl: './footer.component.html',
-    styleUrls: ['./footer.component.scss'],
-    standalone: false
+  selector: 'app-footer',
+  templateUrl: './footer.component.html',
+  imports: [
+    NgIf
+  ],
+  styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent{
 
