@@ -22,7 +22,6 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
 
 @NgModule({
   declarations: [
-    NavbarComponent,
     SidebarComponent,
     ProfileComponent,
     PhonePipe
@@ -46,7 +45,8 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
     TimelineModule,
     Tooltip,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    NavbarComponent
   ],
 })
 export class SharedModule { }

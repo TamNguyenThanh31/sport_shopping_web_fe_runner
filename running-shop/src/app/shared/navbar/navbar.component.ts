@@ -1,15 +1,29 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { MenuItem } from 'primeng/api';
-import { AuthService } from '../../core/services/auth.service';
-import { Router } from '@angular/router';
+import {Component, OnInit, HostListener, ViewEncapsulation} from '@angular/core';
+import {MenuItem, PrimeTemplate} from 'primeng/api';
+import {AuthService} from '../../core/services/auth.service';
+import {Router, RouterLink} from '@angular/router';
 // import { CartService } from '../../core/services/cart.service';
-import { Subscription } from 'rxjs';
+import {Subscription} from 'rxjs';
+import {Menubar} from "primeng/menubar";
+import {ButtonDirective} from "primeng/button";
+import {NgIf, NgStyle} from "@angular/common";
+import {Avatar} from "primeng/avatar";
+import {Menu} from "primeng/menu";
 
 @Component({
-    selector: 'app-navbar',
-    templateUrl: './navbar.component.html',
-    styleUrls: ['./navbar.component.scss'],
-    standalone: false
+  selector: 'app-navbar',
+  templateUrl: './navbar.component.html',
+  styleUrls: ['./navbar.component.scss'],
+  imports: [
+    Menubar,
+    PrimeTemplate,
+    ButtonDirective,
+    RouterLink,
+    NgIf,
+    Avatar,
+    NgStyle,
+    Menu
+  ]
 })
 export class NavbarComponent implements OnInit {
   items: MenuItem[] = [];
@@ -17,13 +31,15 @@ export class NavbarComponent implements OnInit {
   currentUser: any;
   cartItems: number = 0;
   isScrolled = false;
+
   // private cartSubscription: Subscription;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     // private cartService: CartService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.authService.currentUser$.subscribe(user => {
@@ -89,7 +105,7 @@ export class NavbarComponent implements OnInit {
           routerLink: ['/wishlist'],
           styleClass: 'user-menu-item'
         },
-        { separator: true },
+        {separator: true},
         {
           label: 'Logout',
           icon: 'pi pi-sign-out',
