@@ -1,24 +1,24 @@
 import {Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, ViewEncapsulation} from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService, ConfirmationService } from 'primeng/api'; // Thêm ConfirmationService
-import { Product, ProductImage, ProductVariant } from '../../../shared/models/product.model';
-import { Category } from '../../../shared/models/category.model';
-import { ApiService } from '../../../core/services/api.service';
-import { AuthService } from '../../../core/services/auth.service';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
-import { CardModule } from 'primeng/card';
-import { ToastModule } from 'primeng/toast';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { CheckboxModule } from 'primeng/checkbox';
-import { FileUploadModule } from 'primeng/fileupload';
-import { ConfirmDialogModule } from 'primeng/confirmdialog'; // Thêm ConfirmDialogModule
-import { Observable, of, switchMap } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import {FormBuilder, FormGroup, FormArray, Validators} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MessageService, ConfirmationService} from 'primeng/api';
+import {Product, ProductImage, ProductVariant} from '../../../shared/models/product.model';
+import {Category} from '../../../shared/models/category.model';
+import {ApiService} from '../../../core/services/api.service';
+import {AuthService} from '../../../core/services/auth.service';
+import {CommonModule} from '@angular/common';
+import {ReactiveFormsModule} from '@angular/forms';
+import {ButtonModule} from 'primeng/button';
+import {InputTextModule} from 'primeng/inputtext';
+import {SelectModule} from 'primeng/select';
+import {CardModule} from 'primeng/card';
+import {ToastModule} from 'primeng/toast';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import {CheckboxModule} from 'primeng/checkbox';
+import {FileUploadModule} from 'primeng/fileupload';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {Observable, of, switchMap} from 'rxjs';
+import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-product',
@@ -45,7 +45,8 @@ import { tap } from 'rxjs/operators';
 export class AddProductComponent implements OnInit {
   productForm: FormGroup;
   categories: Category[] = [];
-  uploadedImages: File[] = [];
+  uploadedImages: File[] = []; // Chỉ chứa ảnh mới
+  existingImages: ProductImage[] = []; // Lưu ảnh hiện có từ backend
   isPrimaryFlags: boolean[] = [];
   isLoading = false;
   mode: 'add' | 'edit' | 'view' = 'add';
@@ -55,7 +56,7 @@ export class AddProductComponent implements OnInit {
     private fb: FormBuilder,
     private apiService: ApiService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService, // Inject ConfirmationService
+    private confirmationService: ConfirmationService,
     private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService,
@@ -66,16 +67,16 @@ export class AddProductComponent implements OnInit {
       description: [''],
       categoryId: [null, Validators.required],
       brand: ['', Validators.required],
-      isActive: [true],
+      active: [true],
       variants: this.fb.array([]),
       images: this.fb.array([])
     });
   }
 
   ngOnInit(): void {
-    console.log('AddProductComponent initialized, mode:', this.mode, 'productId:', this.productId); // Debug
+    console.log('AddProductComponent initialized, mode:', this.mode, 'productId:', this.productId);
     if (!this.authService.isAdminOrStaff()) {
-      this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Bạn không có quyền truy cập' });
+      this.messageService.add({severity: 'error', summary: 'Lỗi', detail: 'Bạn không có quyền truy cập'});
       this.router.navigate(['/admin/product-management']);
       return;
     }
@@ -84,7 +85,7 @@ export class AddProductComponent implements OnInit {
       switchMap(params => {
         this.productId = params['id'] ? +params['id'] : undefined;
         this.mode = this.route.snapshot.queryParams['mode'] || 'add';
-        console.log('Route params:', params, 'mode:', this.mode); // Debug
+        console.log('Route params:', params, 'mode:', this.mode);
         return this.loadCategories();
       }),
       switchMap(() => {
@@ -95,7 +96,7 @@ export class AddProductComponent implements OnInit {
       })
     ).subscribe({
       next: (product) => {
-        console.log('Dữ liệu sản phẩm từ API:', product); // Debug
+        console.log('Dữ liệu sản phẩm từ API:', product);
         if (product) {
           this.loadProductData(product);
         }
@@ -106,8 +107,8 @@ export class AddProductComponent implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('Lỗi tải dữ liệu:', err); // Debug
-        this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Không thể tải dữ liệu sản phẩm' });
+        console.error('Lỗi tải dữ liệu:', err);
+        this.messageService.add({severity: 'error', summary: 'Lỗi', detail: 'Không thể tải dữ liệu sản phẩm'});
         this.cdr.detectChanges();
       }
     });
@@ -124,7 +125,7 @@ export class AddProductComponent implements OnInit {
   loadCategories(): Observable<Category[]> {
     return this.apiService.getCategories().pipe(
       tap(categories => {
-        console.log('Danh mục:', categories); // Debug
+        console.log('Danh mục:', categories);
         this.categories = categories;
         this.cdr.detectChanges();
       })
@@ -135,15 +136,17 @@ export class AddProductComponent implements OnInit {
     this.variants.clear();
     this.images.clear();
     this.isPrimaryFlags = [];
+    this.uploadedImages = [];
+    this.existingImages = [];
 
     const formData = {
       name: product.name || '',
       description: product.description || '',
       categoryId: product.categoryId || null,
       brand: product.brand || '',
-      isActive: product.active ?? true
+      active: product.active ?? true
     };
-    console.log('Dữ liệu đổ vào form:', formData); // Debug
+    console.log('Dữ liệu đổ vào form:', formData);
     this.productForm.patchValue(formData);
 
     (product.variants || []).forEach((variant: any) => {
@@ -156,7 +159,7 @@ export class AddProductComponent implements OnInit {
         price: variant.price,
         sku: variant.sku
       });
-      console.log('Biến thể:', variantForm.value); // Debug
+      console.log('Biến thể:', variantForm.value);
       this.variants.push(variantForm);
     });
 
@@ -166,19 +169,27 @@ export class AddProductComponent implements OnInit {
         productId: image.productId,
         fileName: image.fileName,
         imageUrl: image.imageUrl,
-        isPrimary: image.primary ?? false
+        primary: image.primary ?? false
       });
-      console.log('Hình ảnh:', imageForm.value); // Debug
+      console.log('Hình ảnh:', imageForm.value);
       this.images.push(imageForm);
+      this.existingImages.push({
+        id: image.id,
+        productId: image.productId,
+        fileName: image.fileName,
+        imageUrl: image.imageUrl,
+        primary: image.primary ?? false
+      });
       this.isPrimaryFlags.push(image.primary ?? false);
       if (index === 0 && !this.isPrimaryFlags.includes(true)) {
         this.isPrimaryFlags[0] = true;
-        imageForm.patchValue({ isPrimary: true });
+        imageForm.patchValue({isPrimary: true});
       }
     });
 
-    console.log('Form value sau load:', this.productForm.value); // Debug
-    console.log('isPrimaryFlags sau load:', this.isPrimaryFlags); // Debug
+    console.log('Form value sau load:', this.productForm.value);
+    console.log('existingImages sau load:', this.existingImages);
+    console.log('isPrimaryFlags sau load:', this.isPrimaryFlags);
     this.cdr.detectChanges();
   }
 
@@ -200,7 +211,7 @@ export class AddProductComponent implements OnInit {
       productId: [image?.productId || null],
       fileName: [image?.fileName || ''],
       imageUrl: [image?.imageUrl ? `http://localhost:8080${image.imageUrl}` : ''],
-      isPrimary: [image?.isPrimary ?? false]
+      isPrimary: [image?.primary ?? false]
     });
   }
 
@@ -218,11 +229,11 @@ export class AddProductComponent implements OnInit {
       rejectLabel: 'Không',
       accept: () => {
         this.variants.removeAt(index);
-        this.messageService.add({ severity: 'success', summary: 'Thành công', detail: 'Xóa biến thể thành công' });
+        this.messageService.add({severity: 'success', summary: 'Thành công', detail: 'Xóa biến thể thành công'});
         this.cdr.detectChanges();
       },
       reject: () => {
-        this.messageService.add({ severity: 'info', summary: 'Hủy', detail: 'Hủy xóa biến thể' });
+        this.messageService.add({severity: 'info', summary: 'Hủy', detail: 'Hủy xóa biến thể'});
       }
     });
   }
@@ -239,7 +250,7 @@ export class AddProductComponent implements OnInit {
     if (files.length) {
       const newFiles = Array.from(files).filter(file => !this.uploadedImages.some(existingFile => existingFile.name === file.name));
       if (newFiles.length === 0) {
-        console.log('File đã tồn tại, không thêm:', files); // Debug
+        console.log('File đã tồn tại, không thêm:', files);
         return;
       }
 
@@ -248,12 +259,12 @@ export class AddProductComponent implements OnInit {
         const isPrimary = this.isPrimaryFlags.length === 0 && index === 0;
         const imageData: Partial<ProductImage> = {
           fileName: file.name,
-          isPrimary: isPrimary
+          primary: isPrimary
         };
         this.images.push(this.createImageFormGroup(imageData));
         this.isPrimaryFlags.push(isPrimary);
       });
-      console.log('Sau khi chọn file - uploadedImages:', this.uploadedImages.length, 'isPrimaryFlags:', this.isPrimaryFlags); // Debug
+      console.log('Sau khi chọn file - uploadedImages:', this.uploadedImages.length, 'existingImages:', this.existingImages.length, 'isPrimaryFlags:', this.isPrimaryFlags);
       this.cdr.detectChanges();
     }
   }
@@ -263,13 +274,13 @@ export class AddProductComponent implements OnInit {
     const index = this.uploadedImages.findIndex(f => f.name === file.name);
     if (index !== -1) {
       this.uploadedImages.splice(index, 1);
-      this.images.removeAt(index);
-      this.isPrimaryFlags.splice(index, 1);
+      this.images.removeAt(index + this.existingImages.length); // Điều chỉnh chỉ số vì ảnh hiện có ở trước
+      this.isPrimaryFlags.splice(index + this.existingImages.length, 1);
       if (this.isPrimaryFlags.length > 0 && !this.isPrimaryFlags.includes(true)) {
         this.isPrimaryFlags[0] = true;
-        this.images.at(0).patchValue({ isPrimary: true });
+        this.images.at(0).patchValue({isPrimary: true});
       }
-      console.log('Sau khi xóa file qua UI - uploadedImages:', this.uploadedImages.length, 'isPrimaryFlags:', this.isPrimaryFlags); // Debug
+      console.log('Sau khi xóa file qua UI - uploadedImages:', this.uploadedImages.length, 'existingImages:', this.existingImages.length, 'isPrimaryFlags:', this.isPrimaryFlags);
       this.cdr.detectChanges();
     }
   }
@@ -282,19 +293,26 @@ export class AddProductComponent implements OnInit {
       acceptLabel: 'Có',
       rejectLabel: 'Không',
       accept: () => {
-        this.uploadedImages.splice(index, 1);
+        if (index < this.existingImages.length) {
+          // Xóa ảnh hiện có
+          this.existingImages.splice(index, 1);
+        } else {
+          // Xóa ảnh mới
+          const newImageIndex = index - this.existingImages.length;
+          this.uploadedImages.splice(newImageIndex, 1);
+        }
         this.images.removeAt(index);
         this.isPrimaryFlags.splice(index, 1);
         if (this.isPrimaryFlags.length > 0 && !this.isPrimaryFlags.includes(true)) {
           this.isPrimaryFlags[0] = true;
-          this.images.at(0).patchValue({ isPrimary: true });
+          this.images.at(0).patchValue({isPrimary: true});
         }
-        this.messageService.add({ severity: 'success', summary: 'Thành công', detail: 'Xóa ảnh thành công' });
-        console.log('Sau khi xóa qua nút Xóa - uploadedImages:', this.uploadedImages.length, 'isPrimaryFlags:', this.isPrimaryFlags); // Debug
+        this.messageService.add({severity: 'success', summary: 'Thành công', detail: 'Xóa ảnh thành công'});
+        console.log('Sau khi xóa qua nút Xóa - uploadedImages:', this.uploadedImages.length, 'existingImages:', this.existingImages.length, 'isPrimaryFlags:', this.isPrimaryFlags);
         this.cdr.detectChanges();
       },
       reject: () => {
-        this.messageService.add({ severity: 'info', summary: 'Hủy', detail: 'Hủy xóa ảnh' });
+        this.messageService.add({severity: 'info', summary: 'Hủy', detail: 'Hủy xóa ảnh'});
       }
     });
   }
@@ -302,35 +320,39 @@ export class AddProductComponent implements OnInit {
   setPrimaryImage(index: number): void {
     this.isPrimaryFlags = this.isPrimaryFlags.map((_, i) => i === index);
     this.images.controls.forEach((control, i) => {
-      control.patchValue({ isPrimary: i === index });
+      control.patchValue({isPrimary: i === index});
     });
-    console.log('isPrimaryFlags sau khi set:', this.isPrimaryFlags); // Debug
+    console.log('isPrimaryFlags sau khi set:', this.isPrimaryFlags);
     this.cdr.detectChanges();
   }
 
   onSubmit(): void {
     if (this.productForm.invalid || !this.variants.length) {
-      this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Vui lòng điền đầy đủ thông tin và thêm ít nhất một biến thể' });
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Lỗi',
+        detail: 'Vui lòng điền đầy đủ thông tin và thêm ít nhất một biến thể'
+      });
       this.productForm.markAllAsTouched();
       this.cdr.detectChanges();
       return;
     }
 
-    if (this.mode === 'add' && !this.uploadedImages.length) {
-      this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Vui lòng chọn ít nhất một ảnh sản phẩm' });
+    if (this.mode === 'add' && !this.uploadedImages.length && !this.existingImages.length) {
+      this.messageService.add({severity: 'error', summary: 'Lỗi', detail: 'Vui lòng chọn ít nhất một ảnh sản phẩm'});
       this.cdr.detectChanges();
       return;
     }
 
     if (!this.authService.isAdminOrStaff()) {
-      this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Bạn không có quyền thực hiện' });
+      this.messageService.add({severity: 'error', summary: 'Lỗi', detail: 'Bạn không có quyền thực hiện'});
       return;
     }
 
-    console.log('Trước khi submit - uploadedImages:', this.uploadedImages.length, 'isPrimaryFlags:', this.isPrimaryFlags); // Debug
-    if (this.uploadedImages.length !== this.isPrimaryFlags.length) {
-      this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Số lượng ảnh và primary flags không khớp' });
-      console.error('Lỗi: uploadedImages:', this.uploadedImages.length, 'isPrimaryFlags:', this.isPrimaryFlags.length);
+    // Không kiểm tra uploadedImages.length với isPrimaryFlags.length trong mode edit
+    if (this.mode === 'edit' && this.uploadedImages.length + this.existingImages.length !== this.isPrimaryFlags.length) {
+      this.messageService.add({severity: 'error', summary: 'Lỗi', detail: 'Số lượng ảnh và primary flags không khớp'});
+      console.error('Lỗi: uploadedImages:', this.uploadedImages.length, 'existingImages:', this.existingImages.length, 'isPrimaryFlags:', this.isPrimaryFlags.length);
       return;
     }
 
@@ -342,42 +364,46 @@ export class AddProductComponent implements OnInit {
       images: this.images.getRawValue()
     };
 
-    console.log('Dữ liệu gửi lên:', product, 'uploadedImages:', this.uploadedImages.length, 'isPrimaryFlags:', this.isPrimaryFlags); // Debug
-
+    console.log('Dữ liệu gửi lên:', product, 'uploadedImages:', this.uploadedImages.length, 'existingImages:', this.existingImages.length, 'isPrimaryFlags:', this.isPrimaryFlags);
     this.isLoading = true;
     this.cdr.detectChanges();
 
     if (this.mode === 'add') {
       this.apiService.createProduct(product, this.uploadedImages, this.isPrimaryFlags).subscribe({
         next: () => {
-          // Tùy chỉnh thông báo "Thêm thành công"
           this.messageService.add({
             severity: 'success',
             summary: 'Thành công',
             detail: 'Thêm sản phẩm thành công',
-            life: 5000, // Hiển thị trong 5 giây
-            styleClass: 'custom-success-toast' // Class tùy chỉnh để thay đổi giao diện
+            life: 5000,
+            styleClass: 'custom-success-toast'
           });
           this.router.navigate(['/admin/product-management']);
         },
         error: (err) => {
-          console.error('Lỗi thêm sản phẩm:', err); // Debug
+          console.error('Lỗi thêm sản phẩm:', err);
           const message = err.status === 403 ? 'Bạn không có quyền thêm sản phẩm' : err.error?.message || 'Thêm sản phẩm thất bại';
-          this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: message });
+          this.messageService.add({severity: 'error', summary: 'Lỗi', detail: message});
           this.isLoading = false;
           this.cdr.detectChanges();
         }
       });
     } else if (this.mode === 'edit') {
-      this.apiService.updateProduct(product).subscribe({
+      this.apiService.updateProduct(product, this.uploadedImages, this.isPrimaryFlags).subscribe({
         next: () => {
-          this.messageService.add({ severity: 'success', summary: 'Thành công', detail: 'Cập nhật sản phẩm thành công' });
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Thành công',
+            detail: 'Cập nhật sản phẩm thành công',
+            life: 5000,
+            styleClass: 'custom-success-toast'
+          });
           this.router.navigate(['/admin/product-management']);
         },
         error: (err) => {
-          console.error('Lỗi cập nhật sản phẩm:', err); // Debug
+          console.error('Lỗi cập nhật sản phẩm:', err);
           const message = err.status === 403 ? 'Bạn không có quyền cập nhật' : err.error?.message || 'Cập nhật sản phẩm thất bại';
-          this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: message });
+          this.messageService.add({severity: 'error', summary: 'Lỗi', detail: message});
           this.isLoading = false;
           this.cdr.detectChanges();
         }

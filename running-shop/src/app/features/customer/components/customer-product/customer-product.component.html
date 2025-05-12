@@ -110,7 +110,7 @@
             <div class="product-list-item-ui">
               <img [src]="getPrimaryImage(product.images)" [alt]="product.name" class="img-ui">
               <div class="info-ui">
-                <div class="name-ui">{{ product.name }}</div>
+                <div class="name-ui" (click)="navigateToDetail(product.id!)">{{ product.name }}</div>
                 <div class="brand-ui">{{ product.brand }}</div>
                 <div class="price-ui">{{ formatPrice(getCurrentPrice(product)) }}</div>
                 <div *ngIf="product.variants.length > 1" class="variant-ui">

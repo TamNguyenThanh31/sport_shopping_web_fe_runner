@@ -128,7 +128,7 @@ export class ProductManagementComponent implements OnInit {
         categoryId: product.categoryId,
         brand: product.brand,
         addedById: product.addedById,
-        isActive: product.isActive,
+        active: product.active,
         variants: product.variants || product.productVariants || [],
         images: product.images || product.productImages || []
       };
@@ -152,7 +152,7 @@ export class ProductManagementComponent implements OnInit {
   }
 
   getPrimaryImage(images: ProductImage[]): string {
-    const primaryImage = images.find((img) => img.isPrimary);
+    const primaryImage = images.find((img) => img.primary);
     if (primaryImage?.imageUrl) {
       return `http://localhost:8080${primaryImage.imageUrl}`;
     }

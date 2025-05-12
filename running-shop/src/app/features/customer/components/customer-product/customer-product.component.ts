@@ -222,7 +222,7 @@ export class CustomerProductComponent implements OnInit {
 
   getPrimaryImage(images: ProductImage[]): string {
     const baseUrl = 'http://localhost:8080';
-    const primaryImage = images.find((img) => img.isPrimary);
+    const primaryImage = images.find((img) => img.primary);
     if (primaryImage?.imageUrl) {
       return `${baseUrl}${primaryImage.imageUrl}`;
     }

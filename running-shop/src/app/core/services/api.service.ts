@@ -51,35 +51,22 @@ export class ApiService {
 
   createProduct(product: Product, images: File[], isPrimaryFlags: boolean[]): Observable<Product> {
     const formData = new FormData();
-    // Ánh xạ isActive → active, isPrimary → primary
-    const productToSend = {
-      ...product,
-      active: product.isActive,
-      images: product.images.map(img => ({
-        ...img,
-        primary: img.isPrimary
-      }))
-    };
-    formData.append('product', JSON.stringify(productToSend));
+    formData.append('product', JSON.stringify(product)); // Không cần ánh xạ
     images.forEach((image, index) => {
       formData.append('images', image, image.name);
     });
     formData.append('isPrimaryFlags', JSON.stringify(isPrimaryFlags));
-
     return this.http.post<Product>(`${this.baseUrl}/products/create`, formData, { headers: this.getAuthHeaders() });
   }
 
-  updateProduct(product: Product): Observable<Product> {
-    // Ánh xạ isActive → active, isPrimary → primary
-    const productToSend = {
-      ...product,
-      active: product.isActive,
-      images: product.images.map(img => ({
-        ...img,
-        primary: img.isPrimary
-      }))
-    };
-    return this.http.put<Product>(`${this.baseUrl}/products/${product.id}`, productToSend, { headers: this.getAuthHeaders() });
+  updateProduct(product: Product, images: File[], isPrimaryFlags: boolean[]): Observable<Product> {
+    const formData = new FormData();
+    formData.append('product', JSON.stringify(product)); // Không cần ánh xạ
+    images.forEach((image, index) => {
+      formData.append('images', image, image.name);
+    });
+    formData.append('isPrimaryFlags', JSON.stringify(isPrimaryFlags));
+    return this.http.put<Product>(`${this.baseUrl}/products/${product.id}`, formData, { headers: this.getAuthHeaders() });
   }
 
   deleteProduct(id: number): Observable<void> {

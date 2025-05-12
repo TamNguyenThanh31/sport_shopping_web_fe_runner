@@ -6,7 +6,7 @@ export interface Product {
   categoryId: number;
   brand: string;
   addedById?: number;
-  isActive: boolean; // Sẽ ánh xạ từ "active"
+  active: boolean;
   variants: ProductVariant[];
   images: ProductImage[];
 }
@@ -26,5 +26,5 @@ export interface ProductImage {
   productId?: number;
   fileName?: string;
   imageUrl: string;
-  isPrimary: boolean;
+  primary: boolean;
 }
