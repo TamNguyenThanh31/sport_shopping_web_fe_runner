@@ -19,8 +19,8 @@ import { Product, ProductImage, ProductVariant } from '../../../shared/models/pr
 import { Category } from '../../../shared/models/category.model';
 import { ApiService } from '../../../core/services/api.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { Paginator } from 'primeng/paginator';
-import { Tooltip } from 'primeng/tooltip';
+import {PaginatorModule} from 'primeng/paginator';
+import {TooltipModule} from 'primeng/tooltip';
 
 interface PageResponse<T> {
   content: T[];
@@ -51,8 +51,8 @@ interface PageResponse<T> {
     InputTextModule,
     CardModule,
     ConfirmDialogModule,
-    Paginator,
-    Tooltip,
+    PaginatorModule,
+    TooltipModule,
   ],
   providers: [MessageService, ConfirmationService],
   encapsulation: ViewEncapsulation.None

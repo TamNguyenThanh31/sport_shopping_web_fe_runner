@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {UserDTO} from "../../../../shared/models/userDTO.model";
-import {CustomerService} from "../../customer.service";
+import {CustomerService} from "../../services/customer.service";
 import {AuthService} from "../../../../core/services/auth.service";
 import {MessageService} from "primeng/api";
 

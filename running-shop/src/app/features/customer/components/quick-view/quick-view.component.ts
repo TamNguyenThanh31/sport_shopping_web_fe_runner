@@ -3,20 +3,20 @@ import { ApiService } from 'src/app/core/services/api.service';
 import { CategoryService } from 'src/app/common/service/category.service';
 import { Product, ProductImage, ProductVariant } from 'src/app/shared/models/product.model';
 import { Category } from 'src/app/shared/models/category.model';
-import {Dialog} from "primeng/dialog";
+import {DialogModule} from "primeng/dialog";
 import {DropdownModule} from "primeng/dropdown";
 import {RouterLink} from "@angular/router";
-import {CurrencyPipe, NgClass, NgIf} from "@angular/common";
+import {CurrencyPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ButtonDirective} from "primeng/button";
 import {Ripple} from "primeng/ripple";
-import {Tooltip} from "primeng/tooltip";
+import {TooltipModule} from "primeng/tooltip";
 
 @Component({
   selector: 'app-quick-view',
   templateUrl: './quick-view.component.html',
   imports: [
-    Dialog,
+    DialogModule,
     DropdownModule,
     RouterLink,
     NgIf,
@@ -24,9 +24,11 @@ import {Tooltip} from "primeng/tooltip";
     NgClass,
     ButtonDirective,
     Ripple,
-    Tooltip,
-    CurrencyPipe
+    TooltipModule,
+    CurrencyPipe,
+    NgForOf
   ],
+  standalone: true,
   styleUrls: ['./quick-view.component.scss']
 })
 export class QuickViewComponent implements OnInit, OnChanges {

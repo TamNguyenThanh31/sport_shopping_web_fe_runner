@@ -1,98 +1,335 @@
-<p-card [header]="mode === 'add' ? 'Thêm sản phẩm' : mode === 'edit' ? 'Sửa sản phẩm' : 'Chi tiết sản phẩm'">
-  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
-    <!-- Thông tin sản phẩm -->
-    <div class="p-field">
-      <label for="name">Tên sản phẩm</label>
-      <input id="name" pInputText formControlName="name" />
-      <small *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched" class="p-error">
-        Tên sản phẩm phải có ít nhất 3 ký tự
-      </small>
+<div class="product-form-container">
+  <div class="custom-card">
+    <div class="card-header">
+      <h2>{{ mode === 'add' ? 'Thêm sản phẩm' : mode === 'edit' ? 'Sửa sản phẩm' : 'Chi tiết sản phẩm' }}</h2>
     </div>
+    <div class="card-body">
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+        <!-- Thông tin cơ bản -->
+        <div class="form-section basic-info">
+          <div class="section-header">
+            <i class="pi pi-info-circle" aria-hidden="true"></i>
+            <h3>Thông tin cơ bản</h3>
+          </div>
 
-    <div class="p-field">
-      <label for="description">Mô tả</label>
-      <input id="description" pInputText formControlName="description" />
+          <div class="form-grid">
+            <!-- Tên sản phẩm - Full width -->
+            <div class="field full-width">
+              <label for="name">Tên sản phẩm</label>
+              <input
+                id="name"
+                pInputText
+                formControlName="name"
+                [class.p-invalid]="productForm.get('name')?.invalid && productForm.get('name')?.touched"
+                class="p-inputtext-lg"
+              />
+              <small
+                *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched"
+                class="p-error"
+              >
+                Tên sản phẩm phải có ít nhất 3 ký tự
+              </small>
+            </div>
+
+            <!-- Mô tả - Full width -->
+            <div class="field full-width">
+              <label for="description">Mô tả sản phẩm</label>
+              <textarea
+                id="description"
+                pInputTextarea
+                formControlName="description"
+                [class.p-invalid]="productForm.get('description')?.invalid && productForm.get('description')?.touched"
+                rows="4"
+                class="p-inputtext-lg"
+              ></textarea>
+            </div>
+
+            <!-- Thương hiệu và Danh mục -->
+            <div class="field">
+              <label for="brand">Thương hiệu</label>
+              <input
+                id="brand"
+                pInputText
+                formControlName="brand"
+                [class.p-invalid]="productForm.get('brand')?.invalid && productForm.get('brand')?.touched"
+                class="p-inputtext-lg"
+              />
+              <small
+                *ngIf="productForm.get('brand')?.invalid && productForm.get('brand')?.touched"
+                class="p-error"
+              >
+                Vui lòng nhập thương hiệu
+              </small>
+            </div>
+
+            <div class="field">
+              <label for="categoryId">Danh mục</label>
+              <p-dropdown
+                id="categoryId"
+                [options]="categories"
+                formControlName="categoryId"
+                optionLabel="name"
+                optionValue="id"
+                [filter]="true"
+                filterBy="name"
+                placeholder="Chọn danh mục"
+                [showClear]="true"
+                [class.p-invalid]="productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched"
+                class="p-inputtext-lg"
+              ></p-dropdown>
+              <small
+                *ngIf="productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched"
+                class="p-error"
+              >
+                Vui lòng chọn danh mục
+              </small>
+            </div>
+
+            <!-- Trạng thái -->
+            <div class="field">
+              <div class="switch-container">
+                <p-checkbox
+                  [binary]="true"
+                  formControlName="active"
+                  [inputId]="'active'"
+                  [disabled]="mode === 'view'"
+                ></p-checkbox>
+                <label for="active" class="switch-label">Kích hoạt sản phẩm</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Biến thể sản phẩm -->
+        <div class="form-section variants">
+          <div class="section-header">
+            <i class="pi pi-box" aria-hidden="true"></i>
+            <h3>Biến thể sản phẩm</h3>
+          </div>
+
+          <div formArrayName="variants" class="variants-container">
+            <div
+              *ngFor="let variant of variants.controls; let i = index"
+              [formGroupName]="i"
+              class="variant-item"
+              [@fadeInOut]
+            >
+              <div class="variant-grid">
+                <!-- Kích thước -->
+                <div class="field">
+                  <label [for]="'size-' + i">Kích thước</label>
+                  <input
+                    [id]="'size-' + i"
+                    pInputText
+                    formControlName="size"
+                    [class.p-invalid]="variant.get('size')?.invalid && variant.get('size')?.touched"
+                    class="p-inputtext-lg"
+                    [disabled]="mode === 'view'"
+                  />
+                  <small
+                    *ngIf="variant.get('size')?.invalid && variant.get('size')?.touched"
+                    class="p-error"
+                  >
+                    Vui lòng nhập kích thước
+                  </small>
+                </div>
+
+                <!-- Màu sắc -->
+                <div class="field">
+                  <label [for]="'color-' + i">Màu sắc</label>
+                  <input
+                    [id]="'color-' + i"
+                    pInputText
+                    formControlName="color"
+                    [class.p-invalid]="variant.get('color')?.invalid && variant.get('color')?.touched"
+                    class="p-inputtext-lg"
+                    [disabled]="mode === 'view'"
+                  />
+                  <small
+                    *ngIf="variant.get('color')?.invalid && variant.get('color')?.touched"
+                    class="p-error"
+                  >
+                    Vui lòng nhập màu sắc
+                  </small>
+                </div>
+
+                <!-- Tồn kho -->
+                <div class="field">
+                  <label [for]="'stock-' + i">Tồn kho</label>
+                  <p-inputnumber
+                    [id]="'stock-' + i"
+                    formControlName="stock"
+                    buttonLayout="horizontal"
+                    spinnerMode="horizontal"
+                    decrementButtonClass="p-button-secondary"
+                    incrementButtonClass="p-button-secondary"
+                    incrementButtonIcon="pi pi-plus"
+                    decrementButtonIcon="pi pi-minus"
+                    [class.p-invalid]="variant.get('stock')?.invalid && variant.get('stock')?.touched"
+                    class="p-inputtext-lg"
+                    [disabled]="mode === 'view'"
+                  ></p-inputnumber>
+                  <small
+                    *ngIf="variant.get('stock')?.invalid && variant.get('stock')?.touched"
+                    class="p-error"
+                  >
+                    Vui lòng nhập số lượng tồn kho
+                  </small>
+                </div>
+
+                <!-- Giá -->
+                <div class="field">
+                  <label [for]="'price-' + i">Giá</label>
+                  <p-inputnumber
+                    [id]="'price-' + i"
+                    formControlName="price"
+                    mode="currency"
+                    currency="VND"
+                    locale="vi-VN"
+                    [class.p-invalid]="variant.get('price')?.invalid && variant.get('price')?.touched"
+                    class="p-inputtext-lg"
+                    [disabled]="mode === 'view'"
+                  ></p-inputnumber>
+                  <small
+                    *ngIf="variant.get('price')?.invalid && variant.get('price')?.touched"
+                    class="p-error"
+                  >
+                    Vui lòng nhập giá sản phẩm
+                  </small>
+                </div>
+
+                <!-- SKU -->
+                <div class="field">
+                  <label [for]="'sku-' + i">SKU</label>
+                  <input
+                    [id]="'sku-' + i"
+                    pInputText
+                    formControlName="sku"
+                    [class.p-invalid]="variant.get('sku')?.invalid && variant.get('sku')?.touched"
+                    class="p-inputtext-lg"
+                    [disabled]="mode === 'view'"
+                  />
+                  <small
+                    *ngIf="variant.get('sku')?.invalid && variant.get('sku')?.touched"
+                    class="p-error"
+                  >
+                    Vui lòng nhập mã SKU
+                  </small>
+                </div>
+
+                <!-- Nút xóa -->
+                <div class="field actions">
+                  <p-button
+                    icon="pi pi-trash"
+                    (click)="removeVariant(i)"
+                    [disabled]="mode === 'view'"
+                    styleClass="p-button-rounded p-button-danger p-button-text"
+                    pTooltip="Xóa biến thể"
+                    tooltipPosition="top"
+                  ></p-button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="add-variant">
+            <p-button
+              icon="pi pi-plus"
+              label="Thêm biến thể"
+              (click)="addVariant()"
+              [disabled]="mode === 'view'"
+              styleClass="p-button-outlined"
+            ></p-button>
+          </div>
+        </div>
+
+        <!-- Hình ảnh sản phẩm -->
+        <div class="form-section images">
+          <div class="section-header">
+            <i class="pi pi-images" aria-hidden="true"></i>
+            <h3>Hình ảnh sản phẩm</h3>
+          </div>
+
+          <div class="upload-section">
+            <p-fileUpload
+              mode="advanced"
+              [multiple]="true"
+              accept="image/*"
+              [maxFileSize]="1000000"
+              chooseLabel="Chọn ảnh"
+              cancelLabel="Hủy"
+              (onSelect)="onFileSelect($event)"
+              (onRemove)="onFileRemove($event)"
+              [disabled]="mode === 'view'"
+              styleClass="custom-fileupload"
+              [showUploadButton]="false"
+              [showCancelButton]="false"
+            ></p-fileUpload>
+          </div>
+
+          <div formArrayName="images" class="images-grid">
+            <div
+              *ngFor="let image of images.controls; let i = index"
+              [formGroupName]="i"
+              class="image-item"
+              [@fadeInOut]
+            >
+              <div class="image-container">
+                <img
+                  [src]="getImagePreviewUrl(uploadedImages[i], image.get('imageUrl')?.value)"
+                  alt="Product image"
+                />
+                <div class="image-overlay">
+                  <div class="image-actions">
+                    <p-button
+                      icon="pi pi-check"
+                      [outlined]="true"
+                      [text]="true"
+                      [severity]="image.get('isPrimary')?.value ? 'success' : 'secondary'"
+                      (click)="setPrimaryImage(i)"
+                      [disabled]="mode === 'view'"
+                      pTooltip="Đặt làm ảnh chính"
+                      tooltipPosition="top"
+                    ></p-button>
+                    <p-button
+                      icon="pi pi-trash"
+                      [outlined]="true"
+                      [text]="true"
+                      severity="danger"
+                      (click)="removeImage(i)"
+                      [disabled]="mode === 'view'"
+                      pTooltip="Xóa ảnh"
+                      tooltipPosition="top"
+                    ></p-button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nút điều khiển -->
+        <div class="form-actions">
+          <p-button
+            type="submit"
+            [label]="mode === 'add' ? 'Thêm sản phẩm' : 'Lưu thay đổi'"
+            [disabled]="isLoading || mode === 'view'"
+            icon="pi pi-check"
+            styleClass="p-button-lg"
+          ></p-button>
+          <p-button
+            type="button"
+            label="Hủy"
+            (click)="cancel()"
+            icon="pi pi-times"
+            styleClass="p-button-outlined p-button-lg"
+          ></p-button>
+        </div>
+      </form>
     </div>
+  </div>
 
-    <div class="p-field">
-      <label for="categoryId">Danh mục</label>
-      <p-select
-        id="categoryId"
-        [options]="categories"
-        formControlName="categoryId"
-        optionLabel="name"
-        optionValue="id"
-        placeholder="Chọn danh mục"
-      ></p-select>
-      <small *ngIf="productForm.get('categoryId')?.invalid && productForm.get('categoryId')?.touched" class="p-error">
-        Vui lòng chọn danh mục
-      </small>
-    </div>
-
-    <div class="p-field">
-      <label for="brand">Thương hiệu</label>
-      <input id="brand" pInputText formControlName="brand" />
-      <small *ngIf="productForm.get('brand')?.invalid && productForm.get('brand')?.touched" class="p-error">
-        Vui lòng nhập thương hiệu
-      </small>
-    </div>
-
-    <div class="p-field">
-      <label for="brand">Kích hoạt</label>
-      <p-checkbox formControlName="active" label="Kích hoạt" [binary]="true"></p-checkbox>
-    </div>
-
-    <!-- Biến thể -->
-    <h3>Biến thể</h3>
-    <div formArrayName="variants">
-      <div *ngFor="let variant of variants.controls; let i=index" [formGroupName]="i" class="variant-group">
-        <input pInputText formControlName="size" placeholder="Kích thước" />
-        <input pInputText formControlName="color" placeholder="Màu sắc" />
-        <input pInputText type="number" formControlName="stock" placeholder="Tồn kho" />
-        <input pInputText type="number" formControlName="price" placeholder="Giá" />
-        <input pInputText formControlName="sku" placeholder="SKU" />
-        <p-button label="Xóa" (click)="removeVariant(i)" [disabled]="mode === 'view'"></p-button>
-      </div>
-    </div>
-    <p-button label="Thêm biến thể" (click)="addVariant()" [disabled]="mode === 'view'"></p-button>
-
-    <!-- Hình ảnh -->
-    <h3>Hình ảnh</h3>
-    <p-fileUpload
-      (onSelect)="onFileSelect($event)"
-      (onRemove)="onFileRemove($event)"
-      [multiple]="true"
-      [disabled]="mode === 'view'"
-    ></p-fileUpload>
-    <div formArrayName="images">
-      <div *ngFor="let image of images.controls; let i=index" [formGroupName]="i" class="image-group">
-        <img
-          [src]="getImagePreviewUrl(uploadedImages[i], image.get('imageUrl')?.value)"
-          width="100"
-          alt="Product image"
-        />
-        <p-checkbox
-          formControlName="isPrimary"
-          label="Ảnh chính"
-          (onChange)="setPrimaryImage(i)"
-          [disabled]="mode === 'view'"
-        ></p-checkbox>
-        <p-button label="Xóa" (click)="removeImage(i)" [disabled]="mode === 'view'"></p-button>
-      </div>
-    </div>
-
-    <!-- Nút điều khiển -->
-    <div class="p-field">
-      <p-button
-        type="submit"
-        [label]="mode === 'add' ? 'Thêm' : 'Lưu'"
-        [disabled]="isLoading || mode === 'view'"
-      ></p-button>
-      <p-button type="button" label="Hủy" (click)="cancel()"></p-button>
-    </div>
-  </form>
-
-  <p-toast></p-toast>
-  <p-confirmDialog></p-confirmDialog> <!-- Thêm p-confirmDialog -->
-  <p-progressSpinner *ngIf="isLoading"></p-progressSpinner>
-</p-card>
+  <p-toast position="top-right"></p-toast>
+  <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
+  <p-progressSpinner *ngIf="isLoading" styleClass="custom-spinner"></p-progressSpinner>
+</div>

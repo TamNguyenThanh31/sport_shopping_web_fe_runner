@@ -10,7 +10,7 @@ import {CommonModule} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
 import {ButtonModule} from 'primeng/button';
 import {InputTextModule} from 'primeng/inputtext';
-import {SelectModule} from 'primeng/select';
+import {DropdownModule} from 'primeng/dropdown';
 import {CardModule} from 'primeng/card';
 import {ToastModule} from 'primeng/toast';
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
@@ -19,6 +19,9 @@ import {FileUploadModule} from 'primeng/fileupload';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {Observable, of, switchMap} from 'rxjs';
 import {tap} from 'rxjs/operators';
+import {InputNumber, InputNumberModule} from "primeng/inputnumber";
+import {Tooltip, TooltipModule} from "primeng/tooltip";
+import {InputTextarea, InputTextareaModule} from 'primeng/inputtextarea';
 
 @Component({
   selector: 'app-add-product',
@@ -31,13 +34,16 @@ import {tap} from 'rxjs/operators';
     ReactiveFormsModule,
     ButtonModule,
     InputTextModule,
-    SelectModule,
+    DropdownModule,
     CardModule,
     ToastModule,
     ProgressSpinnerModule,
     CheckboxModule,
     FileUploadModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    InputNumberModule,
+    TooltipModule,
+    InputTextareaModule
   ],
   providers: [MessageService, ConfirmationService],
   encapsulation: ViewEncapsulation.None

@@ -17,7 +17,7 @@ import {CardModule} from "primeng/card";
 import {MessageService, PrimeIcons} from "primeng/api";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {DataViewModule} from "primeng/dataview";
-import {Paginator} from "primeng/paginator";
+import {Paginator, PaginatorModule} from "primeng/paginator";
 import {FooterComponent} from "../../shared/footer/footer.component";
 
 
@@ -39,7 +39,7 @@ import {FooterComponent} from "../../shared/footer/footer.component";
     BadgeModule,
     DropdownModule,
     ProgressSpinnerModule,
-    Paginator,
+    PaginatorModule,
     FooterComponent,
   ],
   providers: [

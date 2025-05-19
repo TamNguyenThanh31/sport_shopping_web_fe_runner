@@ -1,0 +1,296 @@
+:host {
+  --primary-color: #1a237e;
+  --secondary-color: #0d47a1;
+  --accent-color: #ff4081;
+  --text-light: #ffffff;
+  --text-dark: #333333;
+  --background-light: #f8f9fa;
+  --border-color: #e0e0e0;
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --error-color: #f44336;
+  --transition-speed: 0.3s;
+  display: block;
+}
+
+.p-sidebar-right {
+  width: 40rem !important;
+}
+
+.cart-sidebar-content {
+  padding: 2rem;
+  background: var(--background-light) !important;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  h3 {
+    color: var(--primary-color);
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+    font-size: 2rem;
+    text-align: left;
+    position: static;
+    padding-bottom: 0;
+    &::after { display: none; }
+  }
+  .cart-subtitle {
+    color: #8a94a6;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+}
+
+.cart-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+  margin: 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.cart-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 0.75rem 0;
+  background: transparent;
+  margin-bottom: 0;
+  box-shadow: none;
+  border: none;
+  position: relative;
+  overflow: visible;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #f0f0f0;
+  }
+}
+
+.cart-item-img {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #f3f3f3;
+  flex-shrink: 0;
+}
+
+.cart-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cart-item-name {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--text-dark);
+  margin-bottom: 0.1rem;
+}
+
+.cart-item-details {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #666;
+  font-size: 0.95rem;
+  span {
+    background: rgba(26, 35, 126, 0.05);
+    padding: 0.25rem 0.75rem;
+    border-radius: 8px;
+    font-weight: 500;
+    color: var(--primary-color);
+  }
+}
+
+:host ::ng-deep {
+  .p-inputnumber {
+    .p-inputnumber-input {
+      width: 32px;
+      min-width: 32px;
+      max-width: 40px;
+      height: 32px;
+      padding: 0.2rem 0.2rem;
+      font-size: 0.95rem;
+      border-radius: 6px;
+    }
+    .p-button {
+      width: 1.8rem;
+      height: 1.8rem;
+      min-width: 1.8rem;
+      min-height: 1.8rem;
+      border-radius: 6px;
+      .p-button-icon {
+        font-size: 0.95rem;
+      }
+    }
+  }
+}
+
+.cart-item-price {
+  font-weight: 700;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  margin-left: auto;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+:host ::ng-deep {
+  .p-button.p-button-text.p-button-danger {
+    color: var(--error-color);
+    transition: all var(--transition-speed) ease;
+    padding: 0.5rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    margin-left: 0.5rem;
+    &:hover {
+      background: rgba(244, 67, 54, 0.1);
+      transform: translateY(-1px);
+    }
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+.cart-total {
+  background: transparent;
+  padding: 2rem 0 1rem 0;
+  border-radius: 0;
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  box-shadow: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+  span {
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+}
+
+:host ::ng-deep {
+  .p-button.p-button-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    transition: all var(--transition-speed) ease;
+    width: 100%;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-bottom: 0.75rem;
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(26, 35, 126, 0.2);
+    }
+    &:active {
+      transform: translateY(0);
+    }
+  }
+  .p-button.p-button-secondary {
+    background: #2196f3;
+    color: #fff;
+    border: none;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    &:hover {
+      background: #1976d2;
+    }
+  }
+}
+
+.empty-cart {
+  text-align: center;
+  padding: 3rem 1rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin: 2rem 0;
+  border: 1px solid rgba(26, 35, 126, 0.1);
+  p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 2rem;
+    font-weight: 500;
+  }
+}
+
+@media (max-width: 600px) {
+  .cart-sidebar-content {
+    padding: 1rem;
+    h3 { font-size: 1.3rem; }
+    .cart-subtitle { font-size: 0.95rem; }
+  }
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+  }
+  .cart-item-img {
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
+  }
+  .cart-item-info {
+    gap: 0.1rem;
+  }
+  .cart-item-name {
+    font-size: 0.98rem;
+  }
+  .cart-item-details span {
+    font-size: 0.9rem;
+    padding: 0.15rem 0.5rem;
+  }
+  .cart-item-price {
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+  }
+  .cart-total {
+    font-size: 1.05rem;
+    padding: 1rem 0 0.5rem 0;
+  }
+  :host ::ng-deep .p-button.p-button-primary,
+  :host ::ng-deep .p-button.p-button-secondary {
+    font-size: 1rem;
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+  }
+  :host ::ng-deep {
+    .p-inputnumber {
+      .p-inputnumber-input {
+        width: 26px;
+        min-width: 26px;
+        max-width: 32px;
+        height: 26px;
+        font-size: 0.9rem;
+        border-radius: 5px;
+      }
+      .p-button {
+        width: 1.3rem;
+        height: 1.3rem;
+        min-width: 1.3rem;
+        min-height: 1.3rem;
+        border-radius: 5px;
+        .p-button-icon {
+          font-size: 0.85rem;
+        }
+      }
+    }
+  }
+}

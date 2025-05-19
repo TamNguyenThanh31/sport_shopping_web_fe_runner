@@ -562,3 +562,9 @@ $shadow: 0 4px 24px 0 rgba(25, 118, 210, 0.09);
     }
   }
 }
+
+
+.cart-sidebar {
+  width: 600px !important; /* Tăng chiều rộng sidebar */
+  max-width: 90vw; /* Đảm bảo không vượt quá 90% chiều rộng màn hình */
+}
