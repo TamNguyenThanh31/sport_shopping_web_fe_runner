@@ -14,16 +14,17 @@ import {FooterComponent} from "../../../../shared/footer/footer.component";
 
 @Component({
   selector: 'app-product-detail',
-    imports: [
-        GalleriaModule,
-        DropdownModule,
-        FormsModule,
-        ButtonDirective,
-        Ripple,
-        RouterLink,
-        FooterComponent
-    ],
+  imports: [
+    GalleriaModule,
+    DropdownModule,
+    FormsModule,
+    ButtonDirective,
+    Ripple,
+    RouterLink,
+    FooterComponent
+  ],
   templateUrl: './product-detail.component.html',
+  standalone: true,
   styleUrl: './product-detail.component.scss'
 })
 export class ProductDetailComponent implements OnInit {

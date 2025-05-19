@@ -1,31 +1,31 @@
-import {Component, EventEmitter, Input, Output, ViewEncapsulation} from '@angular/core';
-import {Category} from "../../../shared/models/category.model";
-import {CategoryService} from "../../service/category.service";
-import {MessageService, PrimeTemplate} from "primeng/api";
-import {Toast} from "primeng/toast";
-import {Dialog} from "primeng/dialog";
-import {InputText} from "primeng/inputtext";
-import {FormsModule} from "@angular/forms";
-import {InputTextarea} from "primeng/inputtextarea";
-import {Button} from "primeng/button";
-import {NgIf} from "@angular/common";
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { Category } from '../../../shared/models/category.model';
+import { CategoryService } from '../../service/category.service';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast'; // Import module Toast
+import { DialogModule } from 'primeng/dialog'; // Import module Dialog
+import { InputTextModule } from 'primeng/inputtext'; // Import module InputText
+import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { InputTextareaModule } from 'primeng/inputtextarea'; // Import module InputTextarea
+import { ButtonModule } from 'primeng/button'; // Import module Button
+import { NgIf } from '@angular/common'; // Import NgIf
 
 @Component({
   selector: 'app-add-category',
+  standalone: true,
   imports: [
-    Toast,
-    Dialog,
-    InputText,
+    ToastModule,
+    DialogModule,
+    InputTextModule,
     FormsModule,
-    InputTextarea,
-    Button,
-    NgIf,
-    PrimeTemplate
+    InputTextareaModule,
+    ButtonModule,
+    NgIf
   ],
   templateUrl: './add-category.component.html',
-  styleUrl: './add-category.component.scss',
+  styleUrls: ['./add-category.component.scss'],
   providers: [MessageService],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None // Giữ nguyên nếu bạn muốn áp dụng CSS toàn cục
 })
 export class AddCategoryComponent {
   @Input() visible: boolean = false;

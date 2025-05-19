@@ -19,9 +19,9 @@ import {FileUploadModule} from 'primeng/fileupload';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {Observable, of, switchMap} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {InputNumber} from "primeng/inputnumber";
-import {Tooltip} from "primeng/tooltip";
-import {InputTextarea} from 'primeng/inputtextarea';
+import {InputNumber, InputNumberModule} from "primeng/inputnumber";
+import {Tooltip, TooltipModule} from "primeng/tooltip";
+import {InputTextarea, InputTextareaModule} from 'primeng/inputtextarea';
 
 @Component({
   selector: 'app-add-product',
@@ -41,9 +41,9 @@ import {InputTextarea} from 'primeng/inputtextarea';
     CheckboxModule,
     FileUploadModule,
     ConfirmDialogModule,
-    InputNumber,
-    Tooltip,
-    InputTextarea
+    InputNumberModule,
+    TooltipModule,
+    InputTextareaModule
   ],
   providers: [MessageService, ConfirmationService],
   encapsulation: ViewEncapsulation.None

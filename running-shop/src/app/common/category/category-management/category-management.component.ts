@@ -1,30 +1,34 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {MessageService} from "primeng/api";
-import {Category} from "../../../shared/models/category.model";
-import {CategoryService} from "../../service/category.service";
-import {Toast} from "primeng/toast";
-import {FormsModule} from "@angular/forms";
-import {Button} from "primeng/button";
-import {TableModule} from "primeng/table";
-import {AddCategoryComponent} from "../add-category/add-category.component";
-import {InputText} from "primeng/inputtext";
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { MessageService } from 'primeng/api';
+import { Category } from '../../../shared/models/category.model';
+import { CategoryService } from '../../service/category.service';
+import { ToastModule } from 'primeng/toast'; // Import module Toast
+import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { ButtonModule } from 'primeng/button'; // Import module Button
+import { TableModule } from 'primeng/table'; // Import module Table
+import { AddCategoryComponent } from '../add-category/add-category.component'; // Import AddCategoryComponent
+import { InputTextModule } from 'primeng/inputtext';
+import {NgForOf, NgIf} from "@angular/common"; // Import module InputText
 
 @Component({
   selector: 'app-category-management',
+  standalone: true, // Khai báo rõ ràng là standalone component
   imports: [
-    Toast,
+    ToastModule,
     FormsModule,
-    Button,
+    ButtonModule,
     TableModule,
     AddCategoryComponent,
-    InputText
+    InputTextModule,
+    NgIf,
+    NgForOf
   ],
   templateUrl: './category-management.component.html',
-  styleUrl: './category-management.component.scss',
+  styleUrls: ['./category-management.component.scss'],
   providers: [MessageService],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None // Giữ nguyên nếu bạn muốn áp dụng CSS toàn cục
 })
-export class CategoryManagementComponent implements OnInit{
+export class CategoryManagementComponent implements OnInit {
   categories: Category[] = [];
   selectedCategory: Category = { name: '' };
   dialogVisible: boolean = false;

@@ -15,7 +15,7 @@ import {DividerModule} from "primeng/divider";
 import {ProgressBarModule} from "primeng/progressbar";
 import {TimelineModule} from "primeng/timeline";
 import { PhonePipe } from './pipes/phone.pipe';
-import {Tooltip} from "primeng/tooltip";
+import {Tooltip, TooltipModule} from "primeng/tooltip";
 import {RouterLink, RouterLinkActive} from "@angular/router";
 
 
@@ -43,7 +43,7 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
     DividerModule,
     ProgressBarModule,
     TimelineModule,
-    Tooltip,
+    TooltipModule,
     RouterLink,
     RouterLinkActive,
     NavbarComponent

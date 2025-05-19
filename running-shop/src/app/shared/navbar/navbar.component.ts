@@ -3,29 +3,30 @@ import {MenuItem, PrimeTemplate} from 'primeng/api';
 import {AuthService} from '../../core/services/auth.service';
 import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {Menubar} from "primeng/menubar";
+import {Menubar, MenubarModule} from "primeng/menubar";
 import {ButtonDirective} from "primeng/button";
 import {NgIf, NgStyle} from "@angular/common";
-import {Avatar} from "primeng/avatar";
-import {Menu} from "primeng/menu";
+import {Avatar, AvatarModule} from "primeng/avatar";
+import {Menu, MenuModule} from "primeng/menu";
 import {CartService} from "../../features/customer/services/cart.servcie";
-import {Sidebar} from "primeng/sidebar";
+import {Sidebar, SidebarModule} from "primeng/sidebar";
 import {CartSidebarComponent} from "../../features/customer/components/cart-sidebar/cart-sidebar.component";
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
+  standalone: true,
   imports: [
-    Menubar,
+    MenubarModule,
     PrimeTemplate,
     ButtonDirective,
     RouterLink,
     NgIf,
-    Avatar,
+    AvatarModule,
     NgStyle,
-    Menu,
-    Sidebar,
+    MenuModule,
+    SidebarModule,
     RouterOutlet,
     CartSidebarComponent
   ]

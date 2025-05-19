@@ -8,6 +8,7 @@ import {NgIf} from "@angular/common";
   imports: [
     NgIf
   ],
+  standalone: true,
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent{

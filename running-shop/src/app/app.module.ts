@@ -20,8 +20,6 @@ import {DropdownModule} from "primeng/dropdown";
 import {CheckboxModule} from "primeng/checkbox";
 
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
-import {providePrimeNG} from 'primeng/config';
-import Aura from '@primeng/themes/aura';
 import "primeicons/primeicons.css";
 
 
@@ -52,12 +50,6 @@ import "primeicons/primeicons.css";
       multi: true,
     },
     provideHttpClient(withInterceptorsFromDi()),
-    provideAnimationsAsync(),
-    providePrimeNG({
-      theme: {
-        preset: Aura
-      }
-    })
   ]
 })
 export class AppModule {

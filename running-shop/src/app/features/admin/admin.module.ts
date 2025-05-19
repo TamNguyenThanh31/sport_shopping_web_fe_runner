@@ -24,8 +24,8 @@ import {DropdownModule} from "primeng/dropdown";
 import { AddProductComponent } from '../../common/product/add-product/add-product.component';
 import {InputNumberModule} from "primeng/inputnumber";
 import {CheckboxModule} from "primeng/checkbox";
-import {ProgressSpinner} from "primeng/progressspinner";
-import {Paginator} from "primeng/paginator";
+import {ProgressSpinner, ProgressSpinnerModule} from "primeng/progressspinner";
+import {Paginator, PaginatorModule} from "primeng/paginator";
 
 @NgModule({
   declarations: [
@@ -55,8 +55,8 @@ import {Paginator} from "primeng/paginator";
     DropdownModule,
     InputNumberModule,
     CheckboxModule,
-    ProgressSpinner,
-    Paginator,
+    ProgressSpinnerModule,
+    PaginatorModule,
   ]
 })
 export class AdminModule { }

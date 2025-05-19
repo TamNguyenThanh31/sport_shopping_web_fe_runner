@@ -4,21 +4,21 @@ import { forkJoin } from 'rxjs';
 import { Product, ProductImage, ProductVariant } from '../../../../shared/models/product.model';
 import { Category } from '../../../../shared/models/category.model';
 import { ApiService } from '../../../../core/services/api.service';
-import { Toast } from 'primeng/toast';
-import { Paginator } from 'primeng/paginator';
+import {Toast, ToastModule} from 'primeng/toast';
+import {Paginator, PaginatorModule} from 'primeng/paginator';
 import {NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase} from '@angular/common';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { Router, RouterLink } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
-import { Listbox } from 'primeng/listbox';
-import { ProgressSpinner } from 'primeng/progressspinner';
-import { InputText } from 'primeng/inputtext';
-import { Card } from 'primeng/card';
-import { Tooltip } from 'primeng/tooltip';
-import { Carousel } from 'primeng/carousel';
-import { Slider } from 'primeng/slider';
+import {Listbox, ListboxModule} from 'primeng/listbox';
+import {ProgressSpinner, ProgressSpinnerModule} from 'primeng/progressspinner';
+import {InputText, InputTextModule} from 'primeng/inputtext';
+import {Card, CardModule} from 'primeng/card';
+import {Tooltip, TooltipModule} from 'primeng/tooltip';
+import {Carousel, CarouselModule} from 'primeng/carousel';
+import {Slider, SliderModule} from 'primeng/slider';
 import {QuickViewComponent} from "../quick-view/quick-view.component";
 import {FooterComponent} from "../../../../shared/footer/footer.component";
 import {SharedModule} from "../../../../shared/shared.module";
@@ -36,21 +36,21 @@ interface PageResponse<T> {
   templateUrl: './customer-product.component.html',
   styleUrls: ['./customer-product.component.scss'],
   imports: [
-    Toast,
-    Paginator,
+    ToastModule,
+    PaginatorModule,
     ButtonDirective,
     Ripple,
     RouterLink,
     DropdownModule,
     FormsModule,
     NgClass,
-    Listbox,
-    InputText,
-    Card,
-    Tooltip,
-    ProgressSpinner,
-    Carousel,
-    Slider,
+    ListboxModule,
+    InputTextModule,
+    CardModule,
+    TooltipModule,
+    ProgressSpinnerModule,
+    CarouselModule,
+    SliderModule,
     NgSwitch,
     NgIf,
     NgSwitchCase,
