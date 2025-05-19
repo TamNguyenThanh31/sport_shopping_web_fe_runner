@@ -1,14 +1,16 @@
 import {Component, OnInit, HostListener, ViewEncapsulation} from '@angular/core';
 import {MenuItem, PrimeTemplate} from 'primeng/api';
 import {AuthService} from '../../core/services/auth.service';
-import {Router, RouterLink} from '@angular/router';
-// import { CartService } from '../../core/services/cart.service';
+import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Menubar} from "primeng/menubar";
 import {ButtonDirective} from "primeng/button";
 import {NgIf, NgStyle} from "@angular/common";
 import {Avatar} from "primeng/avatar";
 import {Menu} from "primeng/menu";
+import {CartService} from "../../features/customer/services/cart.servcie";
+import {Sidebar} from "primeng/sidebar";
+import {CartSidebarComponent} from "../../features/customer/components/cart-sidebar/cart-sidebar.component";
 
 @Component({
   selector: 'app-navbar',
@@ -22,14 +24,18 @@ import {Menu} from "primeng/menu";
     NgIf,
     Avatar,
     NgStyle,
-    Menu
+    Menu,
+    Sidebar,
+    RouterOutlet,
+    CartSidebarComponent
   ]
 })
 export class NavbarComponent implements OnInit {
   items: MenuItem[] = [];
   userMenuItems: MenuItem[] = [];
   currentUser: any;
-  cartItems: number = 0;
+  cartItems = 0;
+  showSidebar = false;
   isScrolled = false;
 
   // private cartSubscription: Subscription;
@@ -37,7 +43,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    // private cartService: CartService
+    private cartService: CartService
   ) {
   }
 
@@ -146,6 +152,17 @@ export class NavbarComponent implements OnInit {
     if (!this.currentUser?.username) return 'U';
     const names: string[] = this.currentUser.username.split(' ');
     return names.map((n: string) => n.charAt(0)).join('').toUpperCase().slice(0, 2);
+  }
+
+  loadCartItemCount(): void {
+    this.cartService.getCartItemCount(this.currentUser ? 1 : 0).subscribe({
+      next: (count) => (this.cartItems = count),
+      error: (err) => console.error('Lỗi khi lấy số lượng giỏ hàng:', err)
+    });
+  }
+
+  toggleCartSidebar(): void {
+    this.showSidebar = !this.showSidebar;
   }
 
   // ngOnDestroy() {

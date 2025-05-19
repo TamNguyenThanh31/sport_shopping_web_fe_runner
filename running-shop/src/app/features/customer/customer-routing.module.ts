@@ -6,12 +6,14 @@ import {AuthGuard} from "../../core/guards/auth/auth.guard";
 import {CustomerProductComponent} from "./components/customer-product/customer-product.component";
 import {AddProductComponent} from "../../common/product/add-product/add-product.component";
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
+import {CartSidebarComponent} from "./components/cart-sidebar/cart-sidebar.component";
 
 const routes: Routes = [
   // { path: '', component: CustomerDashboardComponent },
   { path: '', component: CustomerProductComponent },
   { path: 'edit-customer-profile', component: CustomerEditComponent, canActivate: [AuthGuard] },
-  { path: 'detail-product/:id', component: ProductDetailComponent }
+  { path: 'detail-product/:id', component: ProductDetailComponent },
+  { path: 'cart', component: CartSidebarComponent },
 ];
 
 @NgModule({

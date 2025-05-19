@@ -1,5 +1,4 @@
 <p-menubar [model]="items" class="navbar">
-  <!-- Logo Section -->
   <ng-template pTemplate="start">
     <div class="brand-container" (click)="navigateToHome()">
       <div class="brand-logo">
@@ -11,18 +10,14 @@
       </div>
     </div>
   </ng-template>
-
-  <!-- User Section -->
   <ng-template pTemplate="end">
     <div class="user-section">
       <button pButton type="button" icon="pi pi-search" class="p-button-rounded p-button-text search-btn"
               (click)="toggleSearch()"></button>
-
       <button pButton type="button" icon="pi pi-shopping-cart" class="p-button-rounded p-button-text cart-btn"
-              [routerLink]="['/cart']" *ngIf="currentUser?.role === 'CUSTOMER'">
-        <span class="cart-badge" *ngIf="cartItems > 0">{{ cartItems }}</span>
+              (click)="toggleCartSidebar()" *ngIf="currentUser?.role === 'CUSTOMER'">
+        <span class="cart-badge">{{ cartItems }}</span>
       </button>
-
       <div class="user-menu">
         <p-avatar [label]="getUserInitials()" size="normal" shape="circle"
                   class="user-avatar" (click)="menu.toggle($event)"
@@ -32,3 +27,7 @@
     </div>
   </ng-template>
 </p-menubar>
+<p-sidebar [(visible)]="showSidebar" position="right" styleClass="cart-sidebar">
+  <app-cart-sidebar (onCartUpdate)="loadCartItemCount()"></app-cart-sidebar>
+</p-sidebar>
+<router-outlet></router-outlet>

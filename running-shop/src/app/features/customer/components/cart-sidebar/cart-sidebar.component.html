@@ -1,0 +1,40 @@
+<div class="cart-sidebar-content">
+  <h3>Giỏ hàng</h3>
+  <p-progressSpinner *ngIf="loading" styleClass="custom-spinner"></p-progressSpinner>
+  <div class="cart-items" *ngIf="cartItems.length > 0 && !loading; else emptyCart">
+    <h3>Giỏ hàng ({{ cartItems.length }} sản phẩm)</h3>
+    <div class="cart-item" *ngFor="let item of cartItems">
+      <img [src]="item.imageUrl" alt="Hình ảnh sản phẩm" class="cart-item-img" />
+      <div class="cart-item-info">
+        <div class="cart-item-name">{{ item.productName }}</div>
+        <div class="cart-item-details">
+          <span>{{ item.size }} / {{ item.color }}</span>
+          <p-inputNumber
+            [(ngModel)]="item.quantity"
+            [min]="1"
+            [max]="item.stock"
+            (onInput)="updateQuantity(item, $event.value)"
+            [showButtons]="true"
+            buttonLayout="horizontal"
+            styleClass="cart-item-quantity"
+            [useGrouping]="false"
+            inputStyleClass="input-number"
+          ></p-inputNumber>
+        </div>
+        <div class="cart-item-price">{{ item.totalPrice | currency: 'VND' }}</div>
+        <button pButton icon="pi pi-trash" class="p-button-text p-button-danger" (click)="removeFromCart(item.id)"></button>
+      </div>
+    </div>
+    <div class="cart-total">
+      Tổng cộng: {{ getTotal() | currency: 'VND' }}
+    </div>
+    <button pButton label="Xem giỏ hàng" class="p-button-primary" [routerLink]="['/cart']"></button>
+  </div>
+  <ng-template #emptyCart>
+    <div class="empty-cart" *ngIf="!loading">
+      <p>Giỏ hàng trống</p>
+      <button pButton label="Mua sắm ngay" class="p-button-primary" [routerLink]="['/products']"></button>
+    </div>
+  </ng-template>
+  <p-confirmDialog></p-confirmDialog>
+</div>

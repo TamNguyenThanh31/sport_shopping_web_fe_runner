@@ -21,3 +21,8 @@
   width: 100%;
 }
 
+.cart-sidebar {
+  width: 600px !important; /* Tăng chiều rộng sidebar */
+  max-width: 90vw; /* Đảm bảo không vượt quá 90% chiều rộng màn hình */
+}
+
