@@ -17,6 +17,7 @@ import {TimelineModule} from "primeng/timeline";
 import { PhonePipe } from './pipes/phone.pipe';
 import {Tooltip, TooltipModule} from "primeng/tooltip";
 import {RouterLink, RouterLinkActive} from "@angular/router";
+import {CountdownTimerComponent} from "./countdown-timer/countdown-timer.component";
 
 
 
@@ -46,7 +47,8 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
     TooltipModule,
     RouterLink,
     RouterLinkActive,
-    NavbarComponent
+    NavbarComponent,
+    CountdownTimerComponent
   ],
 })
 export class SharedModule { }

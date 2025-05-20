@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { forkJoin } from 'rxjs';
 import { Product, ProductImage, ProductVariant } from '../../../../shared/models/product.model';
@@ -22,6 +22,10 @@ import {Slider, SliderModule} from 'primeng/slider';
 import {QuickViewComponent} from "../quick-view/quick-view.component";
 import {FooterComponent} from "../../../../shared/footer/footer.component";
 import {SharedModule} from "../../../../shared/shared.module";
+import { CartService } from '../../services/cart.servcie';
+import { CartItem } from '../../../../shared/models/CartItem.model';
+import { CartEventService } from 'src/app/core/services/cart-event.service';
+import { CountdownTimerComponent } from 'src/app/shared/countdown-timer/countdown-timer.component';
 
 interface PageResponse<T> {
   content: T[];
@@ -58,6 +62,7 @@ interface PageResponse<T> {
     QuickViewComponent,
     FooterComponent,
     SharedModule,
+    CountdownTimerComponent
   ],
   providers: [MessageService],
   standalone: true
@@ -78,6 +83,7 @@ export class CustomerProductComponent implements OnInit {
   totalPages: number = 0;
   quickViewVisible: boolean = false;
   quickViewProductId: number | null = null;
+  currentUserId: number = 1; // Thay bằng ID người dùng thực tế
 
   selectedVariants: { [productId: number]: ProductVariant } = {};
 
@@ -90,13 +96,6 @@ export class CustomerProductComponent implements OnInit {
   // Thêm thuộc tính cho view mode
   viewMode: 'grid' | 'list' = 'grid';
 
-  // Banner demo
-  banners = [
-    { imageUrl: 'assets/images/running-logo.png', alt: 'Sự kiện giảm giá 1' },
-    { imageUrl: 'assets/images/running-logo.png', alt: 'Sự kiện hot 2' },
-    { imageUrl: 'assets/images/running-logo.png', alt: 'Sự kiện thể thao' },
-  ];
-
   // Sản phẩm bán chạy (tồn kho nhiều nhất)
   hotProducts: Product[] = [];
 
@@ -105,11 +104,16 @@ export class CustomerProductComponent implements OnInit {
     { breakpoint: '600px', numVisible: 1, numScroll: 1 }
   ];
 
+  // Thơì gian count down
+  flashSaleEndTime = '2025-05-22T23:59:59';
+
   constructor(
     private apiService: ApiService,
     private messageService: MessageService,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private cartService: CartService,
+    private cartEventService: CartEventService
   ) {}
 
   ngOnInit(): void {
@@ -149,17 +153,16 @@ export class CustomerProductComponent implements OnInit {
     this.isLoading = true;
     const request = this.searchQuery.trim()
       ? this.apiService.searchProducts(
-        this.searchQuery,
-        this.page,
-        this.size,
-        this.sortOption !== 'default' ? this.sortOption : undefined
-      )
+          this.searchQuery,
+          this.page,
+          this.size,
+          this.sortOption !== 'default' ? this.sortOption : undefined
+        )
       : this.apiService.getProducts(
-        this.page,
-        this.size,
-        this.sortOption !== 'default' ? this.sortOption : undefined
-      );
-
+          this.page,
+          this.size,
+          this.sortOption !== 'default' ? this.sortOption : undefined
+        );
     request.subscribe({
       next: (products: PageResponse<Product>) => {
         this.products = this.processProducts(products.content);
@@ -170,7 +173,6 @@ export class CustomerProductComponent implements OnInit {
         this.cdr.markForCheck();
       },
       error: (error) => {
-        console.error('Error loading products', error);
         this.showError('Không thể tải sản phẩm');
         this.isLoading = false;
         this.cdr.markForCheck();
@@ -294,7 +296,41 @@ export class CustomerProductComponent implements OnInit {
       return;
     }
 
-    this.showSuccess(`Đã thêm ${product.name} vào giỏ hàng`);
+    const variant = this.getSelectedVariant(product);
+    if (!variant) {
+      this.showError('Vui lòng chọn phân loại sản phẩm');
+      return;
+    }
+
+    const cartItem: any = {
+      userId: this.currentUserId,
+      variantId: variant.id!,
+      quantity: 1,
+      stock: variant.stock || 0,
+      priceAtTime: variant.price || 0,
+      productName: product.name,
+      imageUrl: this.getPrimaryImage(product.images),
+      size: variant.size || '',
+      color: variant.color || '',
+      totalPrice: (variant.price || 0) * 1
+    };
+
+    this.cartService.addToCart(cartItem).subscribe({
+      next: () => {
+        this.showSuccess(`Đã thêm ${product.name} vào giỏ hàng`);
+        this.cartEventService.notifyCartChanged();
+        // Thêm hiệu ứng animation
+        const button = document.querySelector(`[data-product-id="${product.id}"]`) as HTMLElement;
+        if (button) {
+          button.classList.add('added-to-cart');
+          setTimeout(() => button.classList.remove('added-to-cart'), 1000);
+        }
+      },
+      error: (error) => {
+        console.error('Error adding to cart:', error);
+        this.showError('Không thể thêm vào giỏ hàng');
+      }
+    });
   }
 
   hasDiscount(product: Product): boolean {
@@ -358,5 +394,17 @@ export class CustomerProductComponent implements OnInit {
   closeQuickView() {
     this.quickViewVisible = false;
     this.quickViewProductId = null;
+  }
+
+  selectCategory(category: Category): void {
+    this.selectedCategory = category;
+    this.filterByCategory();
+  }
+
+  scrollToProducts() {
+    const el = document.querySelector('.hot-products-ui');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }

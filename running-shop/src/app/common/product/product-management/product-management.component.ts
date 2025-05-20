@@ -4,7 +4,7 @@ import { forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
-import { RouterLink } from '@angular/router';
+import {RouterLink, RouterOutlet} from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { ListboxModule } from 'primeng/listbox';
@@ -53,6 +53,7 @@ interface PageResponse<T> {
     ConfirmDialogModule,
     PaginatorModule,
     TooltipModule,
+    RouterOutlet,
   ],
   providers: [MessageService, ConfirmationService],
   encapsulation: ViewEncapsulation.None

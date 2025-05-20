@@ -1,0 +1,38 @@
+<div class="black-friday-component">
+  <div class="coupon">
+    <div class="box"><span>{{ offPercent }}%</span><span>OFF</span></div>
+    <div class="diver"></div>
+    <div class="content">
+      <h3>
+        <span *ngFor="let c of promoTitleArray; let i = index" [class.end]="i === 4">{{ c }}</span>
+        <span *ngIf="showIcon">🎉</span>
+      </h3>
+      <p [innerHTML]="promoDesc"></p>
+    </div>
+  </div>
+  <div class="timer">
+    <div class="simple-countdown-ui">
+      <div class="countdown-items">
+        <div class="countdown-item">
+          <span class="countdown-number" [@flip]="days">{{ days | number: '2.0' }}</span>
+          <span class="countdown-label">ngày</span>
+        </div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-item">
+          <span class="countdown-number" [@flip]="hours">{{ hours | number: '2.0' }}</span>
+          <span class="countdown-label">giờ</span>
+        </div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-item">
+          <span class="countdown-number" [@flip]="minutes">{{ minutes | number: '2.0' }}</span>
+          <span class="countdown-label">phút</span>
+        </div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-item">
+          <span class="countdown-number" [@flip]="seconds">{{ seconds | number: '2.0' }}</span>
+          <span class="countdown-label">giây</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
