@@ -49,7 +49,7 @@
         </div>
         <div class="category-ui">
           <h4>Danh mục</h4>
-          <p-listbox [options]="categories" [(ngModel)]="selectedCategory" optionLabel="name" (onChange)="filterByCategory()" [listStyle]="{ 'max-height': '300px' }" styleClass="w-full custom-category-listbox">
+          <p-listbox [options]="categories" [(ngModel)]="selectedCategory" optionLabel="name" (onChange)="filterByCategory()" [listStyle]="{ 'max-height': '900px' }" styleClass="w-full custom-category-listbox">
             <ng-template pTemplate="item" let-category>
               <div class="category-item-ui">
                 <span>{{ category.name }}</span>
