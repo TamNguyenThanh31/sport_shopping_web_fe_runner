@@ -40,8 +40,7 @@ import {FooterComponent} from "../../shared/footer/footer.component";
     DropdownModule,
     ProgressSpinnerModule,
     PaginatorModule,
-    FooterComponent,
-  ],
+    FooterComponent,],
   providers: [
     MessageService
   ],

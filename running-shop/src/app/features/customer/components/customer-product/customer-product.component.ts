@@ -25,6 +25,7 @@ import {SharedModule} from "../../../../shared/shared.module";
 import { CartService } from '../../services/cart.servcie';
 import { CartItem } from '../../../../shared/models/CartItem.model';
 import { CartEventService } from 'src/app/core/services/cart-event.service';
+import { CountdownTimerComponent } from 'src/app/shared/countdown-timer/countdown-timer.component';
 
 interface PageResponse<T> {
   content: T[];
@@ -61,6 +62,7 @@ interface PageResponse<T> {
     QuickViewComponent,
     FooterComponent,
     SharedModule,
+    CountdownTimerComponent
   ],
   providers: [MessageService],
   standalone: true
@@ -94,13 +96,6 @@ export class CustomerProductComponent implements OnInit {
   // Thêm thuộc tính cho view mode
   viewMode: 'grid' | 'list' = 'grid';
 
-  // Banner demo
-  banners = [
-    { imageUrl: 'assets/images/running-logo.png', alt: 'Sự kiện giảm giá 1' },
-    { imageUrl: 'assets/images/running-logo.png', alt: 'Sự kiện hot 2' },
-    { imageUrl: 'assets/images/running-logo.png', alt: 'Sự kiện thể thao' },
-  ];
-
   // Sản phẩm bán chạy (tồn kho nhiều nhất)
   hotProducts: Product[] = [];
 
@@ -108,6 +103,9 @@ export class CustomerProductComponent implements OnInit {
     { breakpoint: '1024px', numVisible: 2, numScroll: 2 },
     { breakpoint: '600px', numVisible: 1, numScroll: 1 }
   ];
+
+  // Thơì gian count down
+  flashSaleEndTime = '2025-05-22T23:59:59';
 
   constructor(
     private apiService: ApiService,
@@ -401,5 +399,12 @@ export class CustomerProductComponent implements OnInit {
   selectCategory(category: Category): void {
     this.selectedCategory = category;
     this.filterByCategory();
+  }
+
+  scrollToProducts() {
+    const el = document.querySelector('.hot-products-ui');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 }

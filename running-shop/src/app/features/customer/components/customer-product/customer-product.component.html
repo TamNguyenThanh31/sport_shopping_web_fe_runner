@@ -1,12 +1,18 @@
 <div class="page-wrapper">
   <div class="product-listing-ui">
-    <!-- Banner -->
-    <div class="banner-ui">
-      <p-carousel [value]="banners" [numVisible]="1" [circular]="true" [autoplayInterval]="5000" styleClass="banner-carousel-ui">
-        <ng-template pTemplate="item" let-banner>
-          <img [src]="banner.imageUrl" [alt]="banner.alt" class="banner-img-ui" />
-        </ng-template>
-      </p-carousel>
+    <!-- Hero Section -->
+    <div class="hero-section-ui">
+      <div class="hero-img-ui">
+        <img src="assets/images/hero-ui/hero-ui-50percent.jpg" alt="Flash Sale" />
+      </div>
+      <div class="hero-content-ui">
+        <h1 class="hero-title-ui">Flash Sale cuối tuần!</h1>
+        <p class="hero-desc-ui">Ưu đãi giảm giá lên tới <b>50%</b> cho tất cả sản phẩm chạy bộ. Nhanh tay kẻo lỡ!</p>
+        <div class="hero-countdown-ui">
+          <app-countdown-timer [endTime]="flashSaleEndTime"></app-countdown-timer>
+        </div>
+        <button pButton pRipple class="hero-cta-ui" (click)="scrollToProducts()">Mua ngay</button>
+      </div>
     </div>
 
     <!-- Sản phẩm bán chạy Carousel -->
@@ -56,7 +62,9 @@
                 [class.active]="selectedCategory.id === category.id"
                 class="category-link">
               <span>{{ category.name }}</span>
-              <span class="category-count-ui">{{ categoryProductCounts[category.id] || 0 }}</span>
+              <span class="category-count-ui">
+                {{ categoryProductCounts[category?.id || 0] || 0 }}
+              </span>
             </li>
           </ul>
         </div>
