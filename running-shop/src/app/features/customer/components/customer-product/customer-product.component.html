@@ -3,7 +3,13 @@
     <!-- Hero Section -->
     <div class="hero-section-ui">
       <div class="hero-img-ui">
-        <img src="assets/images/hero-ui/hero-ui-50percent.jpg" alt="Flash Sale" />
+        <p-carousel [value]="heroImages" [numVisible]="1" [numScroll]="1" [circular]="true" [autoplayInterval]="5000" [showIndicators]="true" [showNavigators]="true" styleClass="hero-carousel-ui">
+          <ng-template pTemplate="item" let-image>
+            <div class="hero-carousel-item">
+              <img [src]="image.src" [alt]="image.alt" />
+            </div>
+          </ng-template>
+        </p-carousel>
       </div>
       <div class="hero-content-ui">
         <h1 class="hero-title-ui">Flash Sale cuối tuần!</h1>
