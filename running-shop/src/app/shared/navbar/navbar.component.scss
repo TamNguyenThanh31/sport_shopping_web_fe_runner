@@ -18,7 +18,7 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 1000 !important;
 
     .p-menubar-root-list {
       background: transparent !important;
@@ -200,4 +200,31 @@
   z-index: 10;
   top: 2px;
   right: 2px;
+}
+
+.admin-sidebar {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  height: calc(100vh - 70px);
+  width: 280px;
+  z-index: 1010;
+  transition: width 0.3s ease;
+  &.collapsed {
+    width: 80px;
+  }
+}
+
+.main-content {
+  margin-top: 70px;
+  margin-left: 280px;
+  transition: margin-left 0.3s;
+}
+
+.sidebar-collapsed .main-content {
+  margin-left: 80px;
+}
+
+::ng-deep .p-menubar {
+  z-index: 1000 !important;
 }

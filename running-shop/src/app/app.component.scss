@@ -1,28 +1,34 @@
 .main-layout {
   display: flex;
-  min-height: calc(100vh - 60px - 60px);
+  min-height: 100vh;
+}
+
+app-sidebar {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  height: calc(100vh - 70px);
+  z-index: 100;
+  transition: width 0.3s;
+  width: 250px;
+}
+
+app-sidebar.collapsed {
+  width: 60px !important;
 }
 
 .content {
+  margin-top: 70px;
   margin-left: 250px;
   width: calc(100% - 250px);
   padding: 20px;
   background-color: #f7fafc;
-  transition: margin-left 0.3s ease, width 0.3s ease;
+  transition: margin-left 0.3s, width 0.3s;
+  position: relative;
+  z-index: 200;
 }
 
 .content-collapsed {
-  margin-left: 60px;
-  width: calc(100% - 60px);
+  margin-left: 60px !important;
+  width: calc(100% - 60px) !important;
 }
-
-:host ::ng-deep app-sidebar:empty + .content {
-  margin-left: 0;
-  width: 100%;
-}
-
-.cart-sidebar {
-  width: 600px !important; /* Tăng chiều rộng sidebar */
-  max-width: 90vw; /* Đảm bảo không vượt quá 90% chiều rộng màn hình */
-}
-

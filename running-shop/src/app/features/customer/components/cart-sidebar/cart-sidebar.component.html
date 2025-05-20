@@ -1,34 +1,34 @@
 <div class="cart-sidebar-content">
-  <h3>Giỏ hàng</h3>
+  <div class="cart-header">
+    <h3>Giỏ hàng của bạn</h3>
+    <span class="cart-subtitle">Bạn có {{ cartItems.length }} mặt hàng trong giỏ hàng</span>
+  </div>
   <p-progressSpinner *ngIf="loading" styleClass="custom-spinner"></p-progressSpinner>
   <div class="cart-items" *ngIf="cartItems.length > 0 && !loading; else emptyCart">
-    <h3>Giỏ hàng ({{ cartItems.length }} sản phẩm)</h3>
     <div class="cart-item" *ngFor="let item of cartItems">
       <img [src]="item.imageUrl" alt="Hình ảnh sản phẩm" class="cart-item-img" />
       <div class="cart-item-info">
         <div class="cart-item-name">{{ item.productName }}</div>
         <div class="cart-item-details">
           <span>{{ item.size }} / {{ item.color }}</span>
-          <p-inputNumber
-            [(ngModel)]="item.quantity"
-            [min]="1"
-            [max]="item.stock"
-            (onInput)="updateQuantity(item, $event.value)"
-            [showButtons]="true"
-            buttonLayout="horizontal"
-            styleClass="cart-item-quantity"
-            [useGrouping]="false"
-            inputStyleClass="input-number"
-          ></p-inputNumber>
         </div>
+        <div class="cart-item-quantity-group">
+          <button pButton icon="pi pi-minus" class="quantity-btn" (click)="updateQuantity(item, item.quantity - 1)" [disabled]="item.quantity <= 1"></button>
+          <span class="quantity-value">{{ item.quantity }}</span>
+          <button pButton icon="pi pi-plus" class="quantity-btn" (click)="updateQuantity(item, item.quantity + 1)" [disabled]="item.quantity >= item.stock"></button>
+        </div>
+      </div>
+      <div class="cart-item-action">
         <div class="cart-item-price">{{ item.totalPrice | currency: 'VND' }}</div>
-        <button pButton icon="pi pi-trash" class="p-button-text p-button-danger" (click)="removeFromCart(item.id)"></button>
+        <button pButton label="Remove" class="p-button-text p-button-danger remove-btn" (click)="removeFromCart(item.id)"></button>
       </div>
     </div>
     <div class="cart-total">
-      Tổng cộng: {{ getTotal() | currency: 'VND' }}
+      <span>Total</span>
+      <span>{{ getTotal() | currency: 'VND' }}</span>
     </div>
-    <button pButton label="Xem giỏ hàng" class="p-button-primary" [routerLink]="['/cart']"></button>
+    <button pButton label="Checkout" class="p-button-primary checkout-btn"></button>
+    <button pButton label="Clear Cart" class="p-button-secondary clear-btn"></button>
   </div>
   <ng-template #emptyCart>
     <div class="empty-cart" *ngIf="!loading">

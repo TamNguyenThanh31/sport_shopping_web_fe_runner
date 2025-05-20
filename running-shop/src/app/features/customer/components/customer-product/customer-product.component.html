@@ -100,8 +100,14 @@
                   <div *ngIf="product.variants.length > 1" class="variant-ui">
                     <p-dropdown [options]="product.variants" [(ngModel)]="selectedVariants[product.id!]" (onChange)="onVariantChange(product, $event.value)" optionLabel="sku" styleClass="w-full custom-variant-dropdown" placeholder="Chọn phân loại"></p-dropdown>
                   </div>
-                  <button pButton pRipple icon="pi pi-shopping-cart" label="Thêm vào giỏ" (click)="addToCart(product)" [disabled]="!hasStock(product)" class="add-cart-ui"></button>
-                </div>
+                  <button pButton pRipple
+                          icon="pi pi-shopping-cart"
+                          label="Thêm vào giỏ"
+                          (click)="addToCart(product)"
+                          [disabled]="!hasStock(product)"
+                          class="add-cart-ui"
+                          [attr.data-product-id]="product.id">
+                  </button>                </div>
               </div>
             </ng-container>
           </div>
@@ -117,8 +123,14 @@
                   <div *ngIf="product.variants.length > 1" class="variant-ui">
                     <p-dropdown [options]="product.variants" [(ngModel)]="selectedVariants[product.id!]" (onChange)="onVariantChange(product, $event.value)" optionLabel="sku" styleClass="w-full custom-variant-dropdown" placeholder="Chọn phân loại"></p-dropdown>
                   </div>
-                  <button pButton pRipple icon="pi pi-shopping-cart" label="Thêm vào giỏ" (click)="addToCart(product)" [disabled]="!hasStock(product)" class="add-cart-ui"></button>
-                </div>
+                  <button pButton pRipple
+                          icon="pi pi-shopping-cart"
+                          label="Thêm vào giỏ"
+                          (click)="addToCart(product)"
+                          [disabled]="!hasStock(product)"
+                          class="add-cart-ui"
+                          [attr.data-product-id]="product.id">
+                  </button>                </div>
               </div>
             </ng-container>
           </div>
@@ -144,4 +156,3 @@
   </div>
   <app-footer></app-footer>
 </div>
-
