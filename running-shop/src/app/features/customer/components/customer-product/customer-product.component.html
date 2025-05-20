@@ -42,22 +42,25 @@
       <!-- Sidebar (ẩn trên mobile, chuyển lên trên nếu cần) -->
       <aside class="sidebar-ui">
         <div class="search-ui">
-          <span class="p-input-icon-left w-full">
-            <i class="pi pi-search"></i>
-            <input pInputText [(ngModel)]="searchQuery" (ngModelChange)="filterBySearch()" placeholder="Tìm kiếm sản phẩm..." class="w-full custom-input">
-          </span>
+          <input
+            class="sidebar-search-input"
+            [(ngModel)]="searchQuery"
+            (ngModelChange)="filterBySearch()"
+            placeholder="Tìm kiếm sản phẩm..."
+          />
         </div>
         <div class="category-ui">
-          <h4>Danh mục</h4>
-          <p-listbox [options]="categories" [(ngModel)]="selectedCategory" optionLabel="name" (onChange)="filterByCategory()" [listStyle]="{ 'max-height': '900px' }" styleClass="w-full custom-category-listbox">
-            <ng-template pTemplate="item" let-category>
-              <div class="category-item-ui">
-                <span>{{ category.name }}</span>
-                <span class="category-count-ui">{{ categoryProductCounts[category.id] || 0 }}</span>
-              </div>
-            </ng-template>
-          </p-listbox>
+          <div class="sidebar-title">Danh mục sản phẩm</div>
+          <ul class="category-list">
+            <li *ngFor="let category of categories" (click)="selectCategory(category)"
+                [class.active]="selectedCategory.id === category.id"
+                class="category-link">
+              <span>{{ category.name }}</span>
+              <span class="category-count-ui">{{ categoryProductCounts[category.id] || 0 }}</span>
+            </li>
+          </ul>
         </div>
+        <!-- Có thể thêm filter giá ở đây nếu muốn -->
       </aside>
 
       <!-- Product List -->

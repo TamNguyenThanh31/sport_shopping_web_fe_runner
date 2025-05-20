@@ -397,4 +397,9 @@ export class CustomerProductComponent implements OnInit {
     this.quickViewVisible = false;
     this.quickViewProductId = null;
   }
+
+  selectCategory(category: Category): void {
+    this.selectedCategory = category;
+    this.filterByCategory();
+  }
 }
