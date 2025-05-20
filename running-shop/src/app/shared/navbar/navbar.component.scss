@@ -1,6 +1,8 @@
 :host {
-  --primary-color: #1a237e;
-  --secondary-color: #0d47a1;
+  --primary-color: #1976D2;
+  --primary-dark: #1565C0;
+  --primary-light: #42a5f5;
+  --secondary-color: #1a237e;
   --accent-color: #ff4081;
   --text-light: #ffffff;
   --text-dark: #333333;
@@ -10,35 +12,57 @@
 
 ::ng-deep {
   .p-menubar {
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 100%) !important;
     border: none;
-    padding: 0.5rem 2rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 0.8rem 2rem;
+    box-shadow: 0 4px 24px 0 rgba(25, 118, 210, 0.13);
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000 !important;
-
-    .p-menubar-root-list {
-      background: transparent !important;
-
-      .p-menuitem-link {
-        color: var(--text-light) !important;
-        font-weight: 500;
-        padding: 0.75rem 1.25rem;
-        border-radius: 6px;
-        transition: all var(--transition-speed) ease;
-
-        &:hover {
-          background: rgba(255,255,255,0.1) !important;
-          transform: translateY(-2px);
-        }
-
-        .p-menuitem-icon {
-          color: var(--text-light) !important;
-          margin-right: 0.5rem;
-        }
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+  }
+  .p-menubar-root-list {
+    background: transparent !important;
+    .p-menuitem-link {
+      color: #fff !important;
+      font-weight: 600;
+      font-size: 1.05rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      letter-spacing: -0.2px;
+      position: relative;
+      transition: all var(--transition-speed) cubic-bezier(0.4,0,0.2,1);
+      &:hover, &.active {
+        background: rgba(255,255,255,0.10) !important;
+        color: var(--primary-light) !important;
+      }
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 18px;
+        right: 18px;
+        bottom: 8px;
+        height: 2.5px;
+        border-radius: 2px;
+        background: var(--primary-light);
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      &:hover::after, &.active::after {
+        opacity: 1;
+      }
+      .p-menuitem-icon {
+        color: #fff !important;
+        margin-right: 0.5rem;
+        font-size: 1.15rem;
+        transition: color 0.2s;
+      }
+      &:hover .p-menuitem-icon {
+        color: var(--primary-light) !important;
       }
     }
   }
@@ -51,91 +75,102 @@
   cursor: pointer;
   padding: 0.5rem;
   transition: transform var(--transition-speed) ease;
-
   &:hover {
     transform: scale(1.02);
   }
 }
-
-.brand-logo {
-  img {
-    height: 45px;
-    width: auto;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-  }
+.brand-logo img {
+  height: 40px;
+  width: auto;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.13));
 }
-
 .brand-name-container {
   display: flex;
   flex-direction: column;
 }
-
 .brand-name {
-  color: var(--text-light);
-  font-size: 1.5rem;
+  color: #fff;
+  font-size: 1.4rem;
   font-weight: 700;
-  letter-spacing: 1px;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  letter-spacing: -0.5px;
 }
-
 .brand-tagline {
-  color: rgba(255,255,255,0.9);
-  font-size: 0.8rem;
+  color: #e3f2fd;
+  font-size: 0.75rem;
   font-weight: 500;
+  letter-spacing: 0.2px;
 }
-
 .user-section {
   display: flex;
   align-items: center;
   gap: 1.25rem;
   margin-left: auto;
 }
-
 ::ng-deep {
   .search-btn, .cart-btn {
-    width: 2.75rem !important;
-    height: 2.75rem !important;
-    color: var(--text-light) !important;
-    background: transparent !important;
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    color: #fff !important;
+    background: rgba(255,255,255,0.10) !important;
     border: none !important;
     border-radius: 50% !important;
     transition: all var(--transition-speed) ease !important;
     position: relative;
-
-    &:hover {
-      background: rgba(255,255,255,0.1) !important;
-      transform: translateY(-2px);
-    }
-
     .p-button-icon {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
+      color: #fff !important;
+      transition: color 0.2s;
+    }
+    &:hover {
+      background: var(--primary-light) !important;
+      color: #fff !important;
+      .p-button-icon {
+        color: #fff !important;
+      }
     }
   }
 }
-
 .cart-btn {
   position: relative;
+  min-width: 44px;
+  min-height: 44px;
 }
-
 .cart-badge {
   position: absolute;
-  top: -8px;
-  right: -8px;
+  top: 2px;
+  right: 2px;
   background: var(--accent-color);
-  color: white;
+  color: #fff;
   border-radius: 50%;
-  min-width: 24px;
-  height: 24px;
+  min-width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 0.92rem;
   font-weight: 700;
-  border: 2px solid var(--primary-color);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.13);
   animation: badgePulse 2s infinite;
   z-index: 10;
-  padding: 0 4px;
+  padding: 0 5px;
+  transition: all 0.18s cubic-bezier(0.4,0,0.2,1);
+  letter-spacing: 0.5px;
+}
+::ng-deep {
+  .user-avatar {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    background: rgba(255,255,255,0.18) !important;
+    color: #fff !important;
+    font-weight: 600;
+    border: 2px solid #90caf9;
+    transition: all var(--transition-speed) ease;
+    &:hover {
+      transform: scale(1.05);
+      border-color: #fff;
+    }
+  }
 }
 
 @keyframes badgePulse {
@@ -144,62 +179,58 @@
   100% { transform: scale(1); }
 }
 
-::ng-deep {
-  .user-avatar {
-    width: 2.75rem !important;
-    height: 2.75rem !important;
-    background: var(--primary-color) !important;
-    color: var(--text-light) !important;
-    font-weight: 600;
-    border: 2px solid rgba(255,255,255,0.3);
-    transition: all var(--transition-speed) ease;
+@media (max-width: 768px) {
+  ::ng-deep .p-menubar {
+    padding: 0.6rem 1rem;
+  }
 
-    &:hover {
-      transform: scale(1.1);
-      border-color: var(--text-light);
+  .brand-name {
+    font-size: 1.2rem;
+  }
+
+  .brand-tagline {
+    font-size: 0.7rem;
+  }
+
+  .brand-logo img {
+    height: 32px;
+  }
+
+  ::ng-deep {
+    .search-btn, .cart-btn {
+      width: 2.2rem !important;
+      height: 2.2rem !important;
+    }
+
+    .user-avatar {
+      width: 2.2rem !important;
+      height: 2.2rem !important;
     }
   }
 
-  .p-menu {
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    padding: 0.5rem;
-    min-width: 200px;
+  .cart-btn {
+    min-width: 36px;
+    min-height: 36px;
+  }
 
-    .p-menuitem-link {
-      padding: 0.75rem 1rem;
-      border-radius: 6px;
-      transition: all var(--transition-speed) ease;
-
-      &:hover {
-        background: #f5f5f5;
-      }
-
-      .p-menuitem-icon {
-        color: var(--primary-color);
-        margin-right: 0.75rem;
-      }
-    }
+  .cart-badge {
+    min-width: 16px;
+    height: 16px;
+    font-size: 0.75rem;
+    padding: 0 3px;
+    top: 1px;
+    right: 1px;
   }
 }
 
-:host ::ng-deep .cart-btn {
-  width: 48px !important;
-  height: 48px !important;
-  min-width: 48px !important;
-  min-height: 48px !important;
-  position: relative;
-}
+@media (max-width: 480px) {
+  .brand-tagline {
+    display: none;
+  }
 
-:host ::ng-deep .cart-btn .p-button-icon {
-  font-size: 1.7rem !important;
-}
-
-.cart-badge {
-  z-index: 10;
-  top: 2px;
-  right: 2px;
+  ::ng-deep .p-menubar {
+    padding: 0.5rem 0.8rem;
+  }
 }
 
 .admin-sidebar {
@@ -228,3 +259,95 @@
 ::ng-deep .p-menubar {
   z-index: 1000 !important;
 }
+
+.p-menu {
+  background: #fff;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 32px rgba(25, 118, 210, 0.10) !important;
+  padding: 0.5rem 0.2rem !important;
+  min-width: 220px;
+  border: 1.5px solid #e3f2fd !important;
+  margin-top: 8px !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.p-menu::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 6px;
+  background: linear-gradient(180deg, #1976D2 0%, #43A047 100%);
+  border-radius: 14px 0 0 14px;
+  z-index: 1;
+}
+
+.p-menu .p-menuitem-link {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem 1.3rem 1rem 1.1rem !important;
+  border-radius: 10px !important;
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: var(--text-dark) !important;
+  transition: background 0.18s, color 0.18s;
+  position: relative;
+  z-index: 2;
+}
+
+.p-menu .p-menuitem-link .p-menuitem-icon {
+  font-size: 1.25rem !important;
+  color: #1976D2 !important;
+  min-width: 2.2rem;
+  min-height: 2.2rem;
+  background: #e3f2fd;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+}
+
+.p-menu .p-menuitem-link:hover {
+  background: #e3f2fd !important;
+  color: #1976D2 !important;
+}
+
+.p-menu .p-menuitem-link:hover .p-menuitem-icon {
+  background: #1976D2;
+  color: #fff !important;
+  transform: scale(1.13) rotate(-6deg);
+}
+
+.p-menu .p-menuitem-link.logout, .p-menu .p-menuitem-link[ng-reflect-router-link='/auth/logout'] {
+  color: #fff !important;
+  background: linear-gradient(90deg, #ff4081 0%, #1976D2 100%) !important;
+}
+
+.p-menu .p-menuitem-link.logout .p-menuitem-icon, .p-menu .p-menuitem-link[ng-reflect-router-link='/auth/logout'] .p-menuitem-icon {
+  background: #ff4081 !important;
+  color: #fff !important;
+}
+
+.p-menu .p-menuitem-separator {
+  margin: 0.2rem 0;
+  border-top: 1.5px solid #f0f4fa;
+}
+
+@media (max-width: 480px) {
+  .p-menu {
+    min-width: 160px;
+    padding: 0.2rem 0.1rem !important;
+  }
+  .p-menu .p-menuitem-link {
+    padding: 0.7rem 0.7rem 0.7rem 0.5rem !important;
+    font-size: 0.98rem;
+  }
+  .p-menu .p-menuitem-icon {
+    font-size: 1.1rem !important;
+    min-width: 1.5rem;
+    min-height: 1.5rem;
+  }
+}
+
