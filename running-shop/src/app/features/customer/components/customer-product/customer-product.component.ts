@@ -107,6 +107,21 @@ export class CustomerProductComponent implements OnInit {
   // Thơì gian count down
   flashSaleEndTime = '2025-05-22T23:59:59';
 
+  heroImages = [
+    {
+      src: 'assets/images/hero-ui/hero-ui-50percent.jpg',
+      alt: 'Flash Sale 50%'
+    },
+    {
+      src: 'assets/images/hero-ui/strava-discount.jpg',
+      alt: 'Flash Sale 2'
+    },
+    {
+      src: 'assets/images/hero-ui/37percent_2_9.jpg',
+      alt: 'Flash Sale 3'
+    },
+  ];
+
   constructor(
     private apiService: ApiService,
     private messageService: MessageService,
