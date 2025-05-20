@@ -24,6 +24,7 @@ import {FooterComponent} from "../../../../shared/footer/footer.component";
 import {SharedModule} from "../../../../shared/shared.module";
 import { CartService } from '../../services/cart.servcie';
 import { CartItem } from '../../../../shared/models/CartItem.model';
+import { CartEventService } from 'src/app/core/services/cart-event.service';
 
 interface PageResponse<T> {
   content: T[];
@@ -113,7 +114,8 @@ export class CustomerProductComponent implements OnInit {
     private messageService: MessageService,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private cartService: CartService
+    private cartService: CartService,
+    private cartEventService: CartEventService
   ) {}
 
   ngOnInit(): void {
@@ -318,6 +320,7 @@ export class CustomerProductComponent implements OnInit {
     this.cartService.addToCart(cartItem).subscribe({
       next: () => {
         this.showSuccess(`Đã thêm ${product.name} vào giỏ hàng`);
+        this.cartEventService.notifyCartChanged();
         // Thêm hiệu ứng animation
         const button = document.querySelector(`[data-product-id="${product.id}"]`) as HTMLElement;
         if (button) {

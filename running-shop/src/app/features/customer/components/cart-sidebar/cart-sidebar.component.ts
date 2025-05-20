@@ -11,6 +11,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { AuthService } from '../../../../core/services/auth.service';
 import {CartService} from "../../services/cart.servcie";
 import {ProductImage} from "../../../../shared/models/product.model";
+import { CartEventService } from 'src/app/core/services/cart-event.service';
 
 @Component({
   selector: 'app-cart-sidebar',
@@ -40,11 +41,15 @@ export class CartSidebarComponent implements OnInit {
     private cartService: CartService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private authService: AuthService
+    private authService: AuthService,
+    private cartEventService: CartEventService
   ) {}
 
   ngOnInit(): void {
     this.loadCart();
+    this.cartEventService.cartChanged$.subscribe(() => {
+      this.loadCart();
+    });
   }
 
   loadCart(): void {
