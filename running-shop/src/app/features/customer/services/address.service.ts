@@ -53,6 +53,17 @@ export class AddressService {
     return this.http.delete<void>(`${this.apiUrl}/${id}?userId=${currentUserId}`).pipe(catchError(this.handleError));
   }
 
+  setDefaultAddress(addressId: number, userId?: number): Observable<Address> {
+    const currentUserId = userId || this.authService.getUserId();
+    if (!currentUserId) {
+      return throwError(() => new Error('User not authenticated'));
+    }
+    return this.http.patch<Address>(
+      `${this.apiUrl}/${addressId}/set-default?userId=${currentUserId}`,
+      null
+    ).pipe(catchError(this.handleError));
+  }
+
   private handleError(error: HttpErrorResponse): Observable<never> {
     let errorMessage = 'An error occurred';
     if (error.status === 400 && error.error.error) {

@@ -8,13 +8,14 @@ app-sidebar {
   top: 70px;
   left: 0;
   height: calc(100vh - 70px);
-  z-index: 100;
-  transition: width 0.3s;
+  z-index: 200;
+  transition: width 0.3s ease;
   width: 250px;
+  box-sizing: border-box;
 }
 
 app-sidebar.collapsed {
-  width: 60px !important;
+  width: 60px;
 }
 
 .content {
@@ -23,12 +24,13 @@ app-sidebar.collapsed {
   width: calc(100% - 250px);
   padding: 20px;
   background-color: #f7fafc;
-  transition: margin-left 0.3s, width 0.3s;
+  transition: margin-left 0.3s ease, width 0.3s ease;
   position: relative;
-  z-index: 200;
+  z-index: 50;
+  box-sizing: border-box;
 }
 
 .content-collapsed {
-  margin-left: 60px !important;
-  width: calc(100% - 60px) !important;
+  margin-left: 60px;
+  width: calc(100% - 60px);
 }

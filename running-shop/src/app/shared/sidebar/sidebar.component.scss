@@ -9,6 +9,7 @@ $text-medium: #4a4e69;
 $text-light: #8e9aaf;
 $bg-light: #f8f9fa;
 $border-color: #e9ecef;
+
 /* ===== Sidebar Base ===== */
 .admin-sidebar {
   position: fixed;
@@ -21,7 +22,7 @@ $border-color: #e9ecef;
   display: flex;
   flex-direction: column;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1000;
+  z-index: 200; /* Giảm xuống 200 để nhất quán với app.component.scss */
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.03);
 
   &.collapsed {

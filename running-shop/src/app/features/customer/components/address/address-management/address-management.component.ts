@@ -7,6 +7,8 @@ import {MessagesModule} from "primeng/messages";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {TableModule} from "primeng/table";
 import {AddressFormComponent} from "../address-form/address-form.component";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {SplitButtonModule} from "primeng/splitbutton";
 
 @Component({
   selector: 'app-address-management',
@@ -16,7 +18,11 @@ import {AddressFormComponent} from "../address-form/address-form.component";
     MessagesModule,
     ConfirmDialogModule,
     TableModule,
-    AddressFormComponent
+    AddressFormComponent,
+    NgForOf,
+    NgClass,
+    NgIf,
+    SplitButtonModule
   ],
   templateUrl: './address-management.component.html',
   styleUrl: './address-management.component.scss'
@@ -48,7 +54,6 @@ export class AddressManagementComponent implements OnInit {
     this.addressService.getAddresses().subscribe({
       next: (addresses) => {
         this.addresses = addresses;
-        console.log('Loaded addresses:', addresses);
       },
       error: (error) => this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message })
     });
@@ -94,17 +99,55 @@ export class AddressManagementComponent implements OnInit {
       return;
     }
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete this address?',
+      message: 'Bạn có chắc chắn muốn xóa địa chỉ này?',
+      acceptLabel: 'Xóa',
+      rejectLabel: 'Hủy',
+      acceptButtonStyleClass: 'p-button-danger',
       accept: () => {
         this.addressService.deleteAddress(id).subscribe({
           next: () => {
             this.addresses = this.addresses.filter(a => a.id !== id);
-            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Address deleted' });
+            this.messageService.add({ severity: 'success', summary: 'Thành công', detail: 'Đã xóa địa chỉ' });
           },
-          error: (error) => this.messageService.add({ severity: 'error', summary: 'Error', detail: error.message })
+          error: (error) => this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: error.message })
         });
       }
     });
+  }
+
+  setDefault(address: Address): void {
+    if (!address.id) return;
+    this.addressService.setDefaultAddress(address.id).subscribe({
+      next: () => {
+        this.addresses = this.addresses.map(a => ({
+          ...a,
+          isDefault: a.id === address.id
+        }));
+        this.messageService.add({ severity: 'success', summary: 'Thành công', detail: 'Đã đặt làm mặc định' });
+      },
+      error: (error: any) => this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: error.message })
+    });
+  }
+
+  getMenuItems(address: Address) {
+    return [
+      {
+        label: 'Xem chi tiết',
+        icon: 'pi pi-eye',
+        command: () => this.showDialog('view', address)
+      },
+      {
+        label: 'Chỉnh sửa',
+        icon: 'pi pi-pencil',
+        command: () => this.showDialog('edit', address)
+      },
+      {
+        label: 'Xóa',
+        icon: 'pi pi-trash',
+        command: () => address.id && this.deleteAddress(address.id),
+        styleClass: 'p-button-danger'
+      }
+    ];
   }
 
   closeDialog(): void {
