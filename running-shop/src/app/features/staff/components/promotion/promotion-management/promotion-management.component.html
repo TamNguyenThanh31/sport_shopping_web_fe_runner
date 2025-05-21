@@ -1,0 +1,67 @@
+<p-toast position="top-right"></p-toast>
+<p-confirmDialog></p-confirmDialog>
+<p-dialog header="{{ dialogMode === 'create' ? 'Thêm' : dialogMode === 'edit' ? 'Sửa' : 'Xem' }} mã giảm giá" [(visible)]="displayDialog" [modal]="true" [closable]="true">
+  <app-form-promotion [mode]="dialogMode" [promotion]="selectedPromotion" (saved)="onFormSaved()" (closed)="displayDialog = false"></app-form-promotion>
+</p-dialog>
+
+<div class="card">
+  <div class="p-grid p-formgrid">
+    <div class="p-col-12 p-md-3">
+      <label for="code">Mã giảm giá</label>
+      <input pInputText id="code" [(ngModel)]="searchParams.code" />
+    </div>
+    <div class="p-col-12 p-md-3">
+      <label for="isActive">Trạng thái</label>
+      <p-dropdown id="isActive" [(ngModel)]="searchParams.isActive" [options]="[{label: 'Tất cả', value: null}, {label: 'Hoạt động', value: true}, {label: 'Không hoạt động', value: false}]" />
+    </div>
+    <div class="p-col-12 p-md-3">
+      <label for="dateFrom">Thời gian từ</label>
+      <p-calendar id="dateFrom" [(ngModel)]="searchParams.dateFrom" dateFormat="yy-mm-dd" [showTime]="true" />
+    </div>
+    <div class="p-col-12 p-md-3">
+      <label for="dateTo">Thời gian đến</label>
+      <p-calendar id="dateTo" [(ngModel)]="searchParams.dateTo" dateFormat="yy-mm-dd" [showTime]="true" />
+    </div>
+    <div class="p-col-12 p-md-3" style="margin-top: 1.5rem;">
+      <button pButton label="Tìm kiếm" icon="pi pi-search" (click)="onSearch()" style="width: 100%;"></button>
+    </div>
+  </div>
+
+  <p-table [value]="promotions" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords" (onPage)="onPageChange($event)">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Mã</th>
+        <th>Phần trăm giảm</th>
+        <th>Đơn tối thiểu</th>
+        <th>Số lần dùng</th>
+        <th>Ngày bắt đầu</th>
+        <th>Ngày kết thúc</th>
+        <th>Trạng thái</th>
+        <th>Thao tác</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-promotion>
+      <tr>
+        <td>{{ promotion.code }}</td>
+        <td>{{ promotion.discountPercentage }}%</td>
+        <td>{{ promotion.minimumOrderValue | number }}</td>
+        <td>{{ promotion.maxUsage || 'Không giới hạn' }}</td>
+        <td>{{ promotion.startDate | date:'yyyy-MM-dd HH:mm' }}</td>
+        <td>{{ promotion.endDate | date:'yyyy-MM-dd HH:mm' }}</td>
+        <td>{{ promotion.isActive ? 'Hoạt động' : 'Không hoạt động' }}</td>
+        <td>
+          <button pButton icon="pi pi-eye" class="p-button-text" (click)="openDialog('view', promotion)"></button>
+          <button pButton icon="pi pi-pencil" class="p-button-text" (click)="openDialog('edit', promotion)"></button>
+          <button pButton icon="pi pi-trash" class="p-button-text p-button-danger" (click)="deletePromotion(promotion.id!)"></button>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <tr>
+        <td colspan="8">
+          <button pButton label="Thêm mới" icon="pi pi-plus" (click)="openDialog('create')"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
