@@ -1,10 +1,10 @@
-<p-messages></p-messages>
+<p-toast position="top-right"></p-toast>
 <p-confirmDialog></p-confirmDialog>
 
 <div class="address-header">
   <div>
-    <h2>Địa Chỉ Của Tôi</h2>
-    <p>Quản lý địa chỉ giao hàng cho đơn hàng của bạn</p>
+    <h2 class="gradient-title">Địa Chỉ Của Tôi</h2>
+    <p class="desc">Quản lý địa chỉ giao hàng cho đơn hàng của bạn</p>
   </div>
   <button pButton class="add-btn" (click)="showDialog('create')">
     <i class="pi pi-plus"></i> Thêm Địa Chỉ Mới
@@ -13,7 +13,13 @@
 <hr class="blue-line" />
 
 <div class="address-list">
-  <div class="address-card" *ngFor="let address of addresses" [ngClass]="{'default': address.isDefault}">
+  <div
+    class="address-card"
+    *ngFor="let address of addresses; let i = index"
+    [ngClass]="{'default': address.isDefault}"
+    [@fadeInStagger]="i"
+  >
+    <div class="card-top-bar" [ngClass]="{'default': address.isDefault}"></div>
     <div class="card-header">
       <div>
         <div class="name">{{ address.fullName }}</div>
@@ -30,12 +36,12 @@
     </div>
     <div class="card-footer">
       <button *ngIf="!address.isDefault" pButton class="set-default-btn" (click)="setDefault(address)">
-        Đặt làm mặc định
+        <i class="pi pi-check"></i> Đặt làm mặc định
       </button>
       <span *ngIf="address.isDefault" class="default-text">
         <i class="pi pi-map-marker"></i> Địa chỉ giao hàng mặc định
       </span>
-      <p-splitButton label="Tùy chọn" icon="pi pi-angle-down" [model]="getMenuItems(address)"></p-splitButton>
+      <button pButton type="button" icon="pi pi-ellipsis-v" class="menu-btn" (click)="openMenu($event, address)"></button>
     </div>
   </div>
 </div>
@@ -48,3 +54,5 @@
   (save)="onSave($event)"
   (cancel)="closeDialog()"
 ></app-address-form>
+
+<p-menu #menu [popup]="true" [model]="selectedMenuItems"></p-menu>
