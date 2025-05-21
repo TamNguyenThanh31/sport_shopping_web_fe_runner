@@ -1,0 +1,44 @@
+<p-dialog
+  [header]="isViewMode ? 'View Address' : (address?.id ? 'Edit Address' : 'Add Address')"
+  [(visible)]="display"
+  [modal]="true"
+  [style]="{width: '30rem'}"
+  (onHide)="closeDialog()"
+>
+  <form [formGroup]="addressForm" (ngSubmit)="onSubmit()">
+    <div class="p-field">
+      <label for="fullNameInput">Full Name</label>
+      <input pInputText id="fullNameInput" formControlName="fullName" class="w-full">
+      <small *ngIf="addressForm.get('fullName')?.invalid && addressForm.get('fullName')?.touched" class="p-error">Full name is required</small>
+    </div>
+    <div class="p-field">
+      <label for="phoneInput">Phone</label>
+      <input pInputText id="phoneInput" formControlName="phone" class="w-full">
+      <small *ngIf="addressForm.get('phone')?.invalid && addressForm.get('phone')?.touched" class="p-error">
+        {{ addressForm.get('phone')?.errors?.['required'] ? 'Phone is required' : 'Invalid phone number' }}
+      </small>
+    </div>
+    <div class="p-field">
+      <label for="addressLineInput">Address Line</label>
+      <input pInputText id="addressLineInput" formControlName="addressLine" class="w-full">
+      <small *ngIf="addressForm.get('addressLine')?.invalid && addressForm.get('addressLine')?.touched" class="p-error">Address line is required</small>
+    </div>
+    <div class="p-field">
+      <label for="cityInput">City</label>
+      <input pInputText id="cityInput" formControlName="city" class="w-full">
+      <small *ngIf="addressForm.get('city')?.invalid && addressForm.get('city')?.touched" class="p-error">City is required</small>
+    </div>
+    <div class="p-field">
+      <label for="countryInput">Country</label>
+      <input pInputText id="countryInput" formControlName="country" class="w-full">
+      <small *ngIf="addressForm.get('country')?.invalid && addressForm.get('country')?.touched" class="p-error">Country is required</small>
+    </div>
+    <div class="p-field-checkbox">
+      <p-checkbox id="isDefaultInput" formControlName="isDefault" [binary]="true" label="Set as default"></p-checkbox>
+    </div>
+    <div class="p-field" *ngIf="!isViewMode">
+      <p-button label="Save" icon="pi pi-check" type="submit" [disabled]="addressForm.invalid"></p-button>
+      <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-text" (click)="closeDialog()"></p-button>
+    </div>
+  </form>
+</p-dialog>

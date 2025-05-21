@@ -6,6 +6,9 @@ import {ProfileComponent} from "./shared/profile/profile.component";
 import {CustomerProductComponent} from "./features/customer/components/customer-product/customer-product.component";
 import {AddProductComponent} from "./common/product/add-product/add-product.component";
 import { ProductDetailComponent } from './features/customer/components/product-detail/product-detail.component';
+import {
+  AddressManagementComponent
+} from "./features/customer/components/address/address-management/address-management.component";
 
 const routes: Routes = [
   {
@@ -38,6 +41,7 @@ const routes: Routes = [
   { path: 'profile', component: ProfileComponent },
   { path: 'products', component: CustomerProductComponent },
   { path: 'products/detail-product/:id', component: ProductDetailComponent },
+  { path: 'addresses', component: AddressManagementComponent },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

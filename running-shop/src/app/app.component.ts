@@ -17,6 +17,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.sidebarService.isCollapsed$.subscribe(isCollapsed => {
       this.isSidebarCollapsed = isCollapsed;
+      console.log('Sidebar collapsed:', isCollapsed);
     });
   }
 

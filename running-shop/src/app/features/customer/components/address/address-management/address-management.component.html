@@ -1,0 +1,58 @@
+<p-toast position="top-right"></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="address-header">
+  <div>
+    <h2 class="gradient-title">Địa Chỉ Của Tôi</h2>
+    <p class="desc">Quản lý địa chỉ giao hàng cho đơn hàng của bạn</p>
+  </div>
+  <button pButton class="add-btn" (click)="showDialog('create')">
+    <i class="pi pi-plus"></i> Thêm Địa Chỉ Mới
+  </button>
+</div>
+<hr class="blue-line" />
+
+<div class="address-list">
+  <div
+    class="address-card"
+    *ngFor="let address of addresses; let i = index"
+    [ngClass]="{'default': address.isDefault}"
+    [@fadeInStagger]="i"
+  >
+    <div class="card-top-bar" [ngClass]="{'default': address.isDefault}"></div>
+    <div class="card-header">
+      <div>
+        <div class="name">{{ address.fullName }}</div>
+      </div>
+      <button *ngIf="address.isDefault" class="default-badge">
+        <i class="pi pi-star-fill"></i> Mặc định
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="info-row"><span>Số điện thoại:</span> <b>{{ address.phone }}</b></div>
+      <div class="info-row"><span>Địa chỉ:</span> <b>{{ address.addressLine }}</b></div>
+      <div class="info-row"><span>Thành phố:</span> <b>{{ address.city }}</b></div>
+      <div class="info-row"><span>Quốc gia:</span> <b>{{ address.country }}</b></div>
+    </div>
+    <div class="card-footer">
+      <button *ngIf="!address.isDefault" pButton class="set-default-btn" (click)="setDefault(address)">
+        <i class="pi pi-check"></i> Đặt làm mặc định
+      </button>
+      <span *ngIf="address.isDefault" class="default-text">
+        <i class="pi pi-map-marker"></i> Địa chỉ giao hàng mặc định
+      </span>
+      <button pButton type="button" icon="pi pi-ellipsis-v" class="menu-btn" (click)="openMenu($event, address)"></button>
+    </div>
+  </div>
+</div>
+
+<app-address-form
+  [display]="displayDialog"
+  [mode]="mode"
+  [address]="selectedAddress"
+  (displayChange)="displayDialog = $event"
+  (save)="onSave($event)"
+  (cancel)="closeDialog()"
+></app-address-form>
+
+<p-menu #menu [popup]="true" [model]="selectedMenuItems"></p-menu>

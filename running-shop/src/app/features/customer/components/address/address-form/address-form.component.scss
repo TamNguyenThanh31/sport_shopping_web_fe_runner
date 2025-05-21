@@ -1,0 +1,75 @@
+.p-field {
+  margin-bottom: 1.5rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 500;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+
+    &:focus {
+      outline: none;
+      border-color: #2196F3;
+      box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+    }
+  }
+}
+
+.p-error {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.p-field-checkbox {
+  margin-bottom: 1.5rem;
+}
+
+::ng-deep {
+  .p-dialog {
+    .p-dialog-header {
+      background: #2196F3;
+      color: white;
+      padding: 1.5rem;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+
+      .p-dialog-title {
+        font-weight: 600;
+      }
+    }
+
+    .p-dialog-content {
+      padding: 2rem;
+    }
+
+    .p-button {
+      &.p-button-text {
+        color: #6c757d;
+        &:hover {
+          background: rgba(108, 117, 125, 0.1);
+        }
+      }
+    }
+  }
+
+  .p-checkbox {
+    .p-checkbox-box {
+      border-radius: 4px;
+      &.p-highlight {
+        background: #2196F3;
+        border-color: #2196F3;
+      }
+    }
+  }
+}
