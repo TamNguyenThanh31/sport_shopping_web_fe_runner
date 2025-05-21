@@ -108,7 +108,7 @@ export class NavbarComponent implements OnInit {
         },
         {
           label: 'Address',
-          icon: 'pi pi-box',
+          icon: 'pi pi-map-marker',
           routerLink: ['/addresses'],
           styleClass: 'user-menu-item'
         },
