@@ -1,0 +1,45 @@
+<p-messages></p-messages>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="header-container">
+  <h2>Manage Addresses</h2>
+  <p-button label="Add Address" icon="pi pi-plus" (click)="showDialog('create')" class="add-button"></p-button>
+</div>
+
+<p-table [value]="addresses" [tableStyle]="{'min-width': '50rem'}">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Full Name</th>
+      <th>Phone</th>
+      <th>Address</th>
+      <th>City</th>
+      <th>Country</th>
+      <th>Default</th>
+      <th>Actions</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-address>
+    <tr>
+      <td>{{ address.fullName }}</td>
+      <td>{{ address.phone }}</td>
+      <td>{{ address.addressLine }}</td>
+      <td>{{ address.city }}</td>
+      <td>{{ address.country }}</td>
+      <td>{{ address.isDefault ? 'Yes' : 'No' }}</td>
+      <td>
+        <p-button icon="pi pi-eye" styleClass="p-button-text" (click)="showDialog('view', address)"></p-button>
+        <p-button icon="pi pi-pencil" styleClass="p-button-text" (click)="showDialog('edit', address)"></p-button>
+        <p-button icon="pi pi-trash" styleClass="p-button-text p-button-danger" (click)="deleteAddress(address.id)"></p-button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<app-address-form
+  [display]="displayDialog"
+  [mode]="mode"
+  [address]="selectedAddress"
+  (displayChange)="displayDialog = $event"
+  (save)="onSave($event)"
+  (cancel)="closeDialog()"
+></app-address-form>

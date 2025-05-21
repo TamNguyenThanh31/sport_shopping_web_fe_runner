@@ -107,6 +107,12 @@ export class NavbarComponent implements OnInit {
           styleClass: 'user-menu-item'
         },
         {
+          label: 'Address',
+          icon: 'pi pi-box',
+          routerLink: ['/addresses'],
+          styleClass: 'user-menu-item'
+        },
+        {
           label: 'Wishlist',
           icon: 'pi pi-heart',
           routerLink: ['/wishlist'],
