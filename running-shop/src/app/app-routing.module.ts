@@ -9,6 +9,10 @@ import { ProductDetailComponent } from './features/customer/components/product-d
 import {
   AddressManagementComponent
 } from "./features/customer/components/address/address-management/address-management.component";
+import {
+  PromotionManagementComponent
+} from "./features/staff/components/promotion/promotion-management/promotion-management.component";
+import {FormPromotionComponent} from "./features/staff/components/promotion/form-promotion/form-promotion.component";
 
 const routes: Routes = [
   {
@@ -42,6 +46,12 @@ const routes: Routes = [
   { path: 'products', component: CustomerProductComponent },
   { path: 'products/detail-product/:id', component: ProductDetailComponent },
   { path: 'addresses', component: AddressManagementComponent },
+
+  { path: 'promotions', component: PromotionManagementComponent, canActivate: [AuthGuard] },
+  { path: 'promotions/create', component: FormPromotionComponent, canActivate: [AuthGuard] },
+  { path: 'promotions/edit/:id', component: FormPromotionComponent, canActivate: [AuthGuard] },
+  { path: 'promotions/view/:id', component: FormPromotionComponent, canActivate: [AuthGuard] },
+  { path: '', redirectTo: '/promotions', pathMatch: 'full' }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

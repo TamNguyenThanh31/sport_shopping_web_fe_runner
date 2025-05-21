@@ -1,0 +1,154 @@
+<div class="form-container">
+  <form [formGroup]="form" (ngSubmit)="save()" *ngIf="form">
+    <div class="form-grid">
+      <!-- Mã giảm giá -->
+      <div class="form-group">
+        <label for="code">Mã giảm giá</label>
+        <div class="input-wrapper">
+          <i class="pi pi-tag"></i>
+          <input 
+            type="text" 
+            id="code" 
+            formControlName="code" 
+            placeholder="Nhập mã giảm giá"
+            [class.error]="form.get('code')?.invalid && form.get('code')?.touched"
+          />
+        </div>
+        <small *ngIf="form.get('code')?.hasError('required') && form.get('code')?.touched" class="error-message">
+          <i class="pi pi-exclamation-circle"></i>
+          Bắt buộc
+        </small>
+      </div>
+
+      <!-- Phần trăm giảm -->
+      <div class="form-group">
+        <label for="discountPercentage">Phần trăm giảm</label>
+        <div class="input-wrapper">
+          <i class="pi pi-percentage"></i>
+          <input 
+            type="number" 
+            id="discountPercentage" 
+            formControlName="discountPercentage" 
+            placeholder="Nhập phần trăm giảm"
+            [class.error]="form.get('discountPercentage')?.invalid && form.get('discountPercentage')?.touched"
+          />
+        </div>
+        <small *ngIf="form.get('discountPercentage')?.hasError('required') && form.get('discountPercentage')?.touched" class="error-message">
+          <i class="pi pi-exclamation-circle"></i>
+          Bắt buộc
+        </small>
+        <small *ngIf="form.get('discountPercentage')?.hasError('min') && form.get('discountPercentage')?.touched" class="error-message">
+          <i class="pi pi-exclamation-circle"></i>
+          Tối thiểu 0%
+        </small>
+        <small *ngIf="form.get('discountPercentage')?.hasError('max') && form.get('discountPercentage')?.touched" class="error-message">
+          <i class="pi pi-exclamation-circle"></i>
+          Tối đa 100%
+        </small>
+      </div>
+
+      <!-- Đơn tối thiểu -->
+      <div class="form-group">
+        <label for="minimumOrderValue">Đơn tối thiểu</label>
+        <div class="input-wrapper">
+          <i class="pi pi-money-bill"></i>
+          <input 
+            type="number" 
+            id="minimumOrderValue" 
+            formControlName="minimumOrderValue" 
+            placeholder="Nhập đơn tối thiểu"
+            [class.error]="form.get('minimumOrderValue')?.invalid && form.get('minimumOrderValue')?.touched"
+          />
+        </div>
+        <small *ngIf="form.get('minimumOrderValue')?.hasError('min') && form.get('minimumOrderValue')?.touched" class="error-message">
+          <i class="pi pi-exclamation-circle"></i>
+          Tối thiểu 0đ
+        </small>
+      </div>
+
+      <!-- Số lần dùng -->
+      <div class="form-group">
+        <label for="maxUsage">Số lần dùng</label>
+        <div class="input-wrapper">
+          <i class="pi pi-sort-numeric-up"></i>
+          <input 
+            type="number" 
+            id="maxUsage" 
+            formControlName="maxUsage" 
+            placeholder="Nhập số lần dùng"
+            [class.error]="form.get('maxUsage')?.invalid && form.get('maxUsage')?.touched"
+          />
+        </div>
+        <small *ngIf="form.get('maxUsage')?.hasError('min') && form.get('maxUsage')?.touched" class="error-message">
+          <i class="pi pi-exclamation-circle"></i>
+          Tối thiểu 0
+        </small>
+      </div>
+
+      <!-- Ngày bắt đầu -->
+      <div class="form-group">
+        <label for="startDate">Ngày bắt đầu</label>
+        <div class="input-wrapper">
+          <i class="pi pi-calendar"></i>
+          <input 
+            type="datetime-local" 
+            id="startDate" 
+            formControlName="startDate"
+            [class.error]="form.get('startDate')?.invalid && form.get('startDate')?.touched"
+          />
+        </div>
+      </div>
+
+      <!-- Ngày kết thúc -->
+      <div class="form-group">
+        <label for="endDate">Ngày kết thúc</label>
+        <div class="input-wrapper">
+          <i class="pi pi-calendar"></i>
+          <input 
+            type="datetime-local" 
+            id="endDate" 
+            formControlName="endDate"
+            [class.error]="form.get('endDate')?.invalid && form.get('endDate')?.touched"
+          />
+        </div>
+        <small *ngIf="form.hasError('invalidDates') && form.touched" class="error-message">
+          <i class="pi pi-exclamation-circle"></i>
+          Ngày kết thúc phải sau ngày bắt đầu
+        </small>
+      </div>
+
+      <!-- Trạng thái -->
+      <div class="form-group">
+        <label for="isActive">Trạng thái</label>
+        <div class="toggle-wrapper">
+          <label class="switch">
+            <input type="checkbox" id="isActive" formControlName="isActive">
+            <span class="slider"></span>
+          </label>
+          <span class="toggle-label">{{ form.get('isActive')?.value ? 'Hoạt động' : 'Không hoạt động' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="form-actions" *ngIf="mode !== 'view'">
+      <button 
+        type="submit" 
+        class="btn-submit" 
+        [disabled]="form.invalid"
+        [class.loading]="isSubmitting"
+      >
+        <i class="pi pi-check"></i>
+        <span>Lưu</span>
+      </button>
+      <button 
+        type="button" 
+        class="btn-cancel" 
+        (click)="close()"
+      >
+        <i class="pi pi-times"></i>
+        <span>Hủy</span>
+      </button>
+    </div>
+  </form>
+</div>

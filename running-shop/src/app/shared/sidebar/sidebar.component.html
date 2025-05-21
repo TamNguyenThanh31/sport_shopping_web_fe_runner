@@ -39,10 +39,15 @@
         <span class="menu-text" *ngIf="!isCollapsed">Sản phẩm</span>
       </a>
       <a class="menu-item" routerLink="/admin/categories" routerLinkActive="active"
-      pTooltip="Danh mục" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
-     <i class="pi pi-objects-column menu-icon"></i>
-     <span class="menu-text" *ngIf="!isCollapsed">Danh mục</span>
-   </a>
+         pTooltip="Danh mục" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
+        <i class="pi pi-objects-column menu-icon"></i>
+        <span class="menu-text" *ngIf="!isCollapsed">Danh mục</span>
+      </a>
+      <a class="menu-item" routerLink="/promotions" routerLinkActive="active"
+         pTooltip="Mã giảm giá" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
+        <i class="pi pi-ticket menu-icon"></i>
+        <span class="menu-text" *ngIf="!isCollapsed">Mã giảm giá</span>
+      </a>
       <a class="menu-item" routerLink="/admin/users" routerLinkActive="active"
          pTooltip="Users" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
         <i class="pi pi-users menu-icon"></i>
