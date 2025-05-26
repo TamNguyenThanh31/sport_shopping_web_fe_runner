@@ -73,9 +73,9 @@ export class NavbarComponent implements OnInit {
         styleClass: 'menu-item'
       },
       {
-        label: 'Running Gear',
+        label: 'Lịch sử mua hàng',
         icon: 'pi pi-bolt',
-        routerLink: ['/gear'],
+        routerLink: ['/orders'],
         styleClass: 'menu-item'
       },
       {

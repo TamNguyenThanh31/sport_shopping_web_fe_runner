@@ -7,6 +7,9 @@ import {CustomerProductComponent} from "./components/customer-product/customer-p
 import {AddProductComponent} from "../../common/product/add-product/add-product.component";
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import {CartSidebarComponent} from "./components/cart-sidebar/cart-sidebar.component";
+import {PaymentResultComponent} from "./components/payment-result/payment-result.component";
+import {CheckOutComponent} from "./components/check-out/check-out.component";
+import {OrderComponent} from "./components/order/order.component";
 
 const routes: Routes = [
   // { path: '', component: CustomerDashboardComponent },
@@ -14,6 +17,9 @@ const routes: Routes = [
   { path: 'edit-customer-profile', component: CustomerEditComponent, canActivate: [AuthGuard] },
   { path: 'detail-product/:id', component: ProductDetailComponent },
   { path: 'cart', component: CartSidebarComponent },
+  { path: 'checkout', component: CheckOutComponent },
+  { path: 'payment-result', component: PaymentResultComponent },
+  { path: 'orders', component: OrderComponent },
 ];
 
 @NgModule({

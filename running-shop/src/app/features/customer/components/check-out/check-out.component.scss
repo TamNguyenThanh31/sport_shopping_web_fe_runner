@@ -1,0 +1,18 @@
+.checkout-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.summary {
+  margin: 20px 0;
+  font-size: 1.1em;
+}
+
+.address, .promotion, .payment-method {
+  margin: 15px 0;
+}
+
+.payment-method p-radioButton {
+  margin-right: 15px;
+}
