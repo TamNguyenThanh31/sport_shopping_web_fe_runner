@@ -13,6 +13,9 @@ import {
   PromotionManagementComponent
 } from "./features/staff/components/promotion/promotion-management/promotion-management.component";
 import {FormPromotionComponent} from "./features/staff/components/promotion/form-promotion/form-promotion.component";
+import {CheckOutComponent} from "./features/customer/components/check-out/check-out.component";
+import {PaymentResultComponent} from "./features/customer/components/payment-result/payment-result.component";
+import {OrderComponent} from "./features/customer/components/order/order.component";
 
 const routes: Routes = [
   {
@@ -51,7 +54,10 @@ const routes: Routes = [
   { path: 'promotions/create', component: FormPromotionComponent, canActivate: [AuthGuard] },
   { path: 'promotions/edit/:id', component: FormPromotionComponent, canActivate: [AuthGuard] },
   { path: 'promotions/view/:id', component: FormPromotionComponent, canActivate: [AuthGuard] },
-  { path: '', redirectTo: '/promotions', pathMatch: 'full' }
+  { path: '', redirectTo: '/promotions', pathMatch: 'full' },
+  { path: 'checkout', component: CheckOutComponent },
+  { path: 'payment-result', component: PaymentResultComponent },
+  { path: 'orders', component: OrderComponent },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

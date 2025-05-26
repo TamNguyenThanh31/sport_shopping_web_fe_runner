@@ -1,0 +1,7 @@
+<div class="payment-result">
+  <h2>{{ status === 'success' ? 'Thanh toán thành công' : 'Thanh toán thất bại' }}</h2>
+  <p *ngIf="status === 'success'">Đơn hàng #{{ orderId }} đã được xác nhận.</p>
+  <p-button *ngIf="status === 'failed'" label="Thử lại" (click)="retryPayment()" />
+  <p-button label="Xem đơn hàng" (click)="viewOrders()" />
+</div>
+<p-toast />

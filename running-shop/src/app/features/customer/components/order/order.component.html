@@ -1,0 +1,69 @@
+<div class="orders-container">
+  <h2>Lịch sử đơn hàng</h2>
+  <p-table [value]="orders" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Mã đơn hàng</th>
+        <th>Ngày đặt</th>
+        <th>Tổng tiền</th>
+        <th>Trạng thái</th>
+        <th>Thanh toán</th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-order>
+      <tr>
+        <td>{{ order.id }}</td>
+        <td>{{ order.createdAt | date:'short' }}</td>
+        <td>{{ order.totalPrice | currency:'VND' }}</td>
+        <td>{{ order.status }}</td>
+        <td>{{ order.paymentStatus }}</td>
+        <td><p-button label="Chi tiết" (click)="viewDetails(order.id!)" /></td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-dialog header="Chi tiết đơn hàng" [(visible)]="showDetailsDialog" [modal]="true" [style]="{ 'width': '50vw' }">
+    <div *ngIf="selectedOrder">
+      <p><strong>Mã đơn hàng:</strong> {{ selectedOrder.id }}</p>
+      <p><strong>Ngày đặt:</strong> {{ selectedOrder.createdAt | date:'short' }}</p>
+      <p><strong>Tổng tiền:</strong> {{ selectedOrder.totalPrice | currency:'VND' }}</p>
+      <p><strong>Trạng thái:</strong> {{ selectedOrder.status }}</p>
+      <p><strong>Thanh toán:</strong> {{ selectedOrder.paymentStatus }}</p>
+      <p><strong>Phương thức:</strong> {{ selectedOrder.paymentMethod === 'VNPAY' ? 'VnPay' : 'Thanh toán khi nhận hàng' }}</p>
+      <p><strong>Mã giảm giá:</strong> {{ selectedOrder.promotionCode || 'Không' }}</p>
+      <p><strong>Địa chỉ giao hàng:</strong>
+        {{ selectedOrder.addressDetails ?
+          selectedOrder.addressDetails.fullName + ', ' +
+          selectedOrder.addressDetails.addressLine + ', ' +
+          selectedOrder.addressDetails.city
+          : 'Không có' }}
+      </p>
+      <h3>Sản phẩm</h3>
+      <p-table [value]="selectedOrder.orderDetails || []">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Sản phẩm</th>
+            <th>Kích thước</th>
+            <th>Màu sắc</th>
+            <th>Số lượng</th>
+            <th>Giá</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-detail>
+          <tr>
+            <td>
+              <img [src]="detail.imageUrl ? 'http://localhost:8080' + detail.imageUrl : 'assets/images/placeholder-product.png'" width="50" alt="Sản phẩm" />
+              {{ detail.productName || 'N/A' }}
+            </td>
+            <td>{{ detail.size || 'N/A' }}</td>
+            <td>{{ detail.color || 'N/A' }}</td>
+            <td>{{ detail.quantity }}</td>
+            <td>{{ detail.priceAtTime * detail.quantity | currency:'VND' }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </p-dialog>
+</div>
+<p-toast />
