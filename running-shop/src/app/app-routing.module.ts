@@ -16,6 +16,8 @@ import {FormPromotionComponent} from "./features/staff/components/promotion/form
 import {CheckOutComponent} from "./features/customer/components/check-out/check-out.component";
 import {PaymentResultComponent} from "./features/customer/components/payment-result/payment-result.component";
 import {OrderComponent} from "./features/customer/components/order/order.component";
+import {StaffChatComponent} from "./common/chat-support/staff-chat/staff-chat.component";
+import {CustomerChatComponent} from "./common/chat-support/customer-chat/customer-chat.component";
 
 const routes: Routes = [
   {
@@ -54,10 +56,15 @@ const routes: Routes = [
   { path: 'promotions/create', component: FormPromotionComponent, canActivate: [AuthGuard] },
   { path: 'promotions/edit/:id', component: FormPromotionComponent, canActivate: [AuthGuard] },
   { path: 'promotions/view/:id', component: FormPromotionComponent, canActivate: [AuthGuard] },
-  { path: '', redirectTo: '/promotions', pathMatch: 'full' },
   { path: 'checkout', component: CheckOutComponent },
   { path: 'payment-result', component: PaymentResultComponent },
   { path: 'orders', component: OrderComponent },
+
+  { path: 'chat', component: CustomerChatComponent},
+  { path: 'staff-chat', component: StaffChatComponent},
+//   { path: 'waiting-list', component: WaitingListComponent, canActivate: [AuthGuard], data: { role: 'STAFF' } },
+//   { path: 'chat', component: StaffChatComponent, canActivate: [AuthGuard], data: { role: 'STAFF' } },
+//   { path: 'chat-customer', component: ChatComponent}
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -1,0 +1,98 @@
+/* src/app/features/staff-chat/staff-chat.component.scss */
+.staff-chat-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.sidebar {
+  width: 25%;
+}
+
+.session-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.session-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+.session-item:hover {
+  background-color: #f5f5f5;
+}
+
+.session-id {
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+.session-preview {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 0.5rem;
+}
+.session-time {
+  color: #999;
+  font-size: 0.75rem;
+}
+
+.chat-area {
+  width: 75%;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.chat-window {
+  background: #f9f9f9;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  overflow-y: auto;
+}
+
+.message-staff {
+  text-align: right;
+  margin: 0.5rem 0;
+}
+.message-customer {
+  text-align: left;
+  margin: 0.5rem 0;
+}
+
+.msg-content {
+  display: inline-block;
+  max-width: 70%;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: #e8f5e9; /* Xanh nhạt */
+}
+.message-staff .msg-content {
+  background: #c5cae9; /* Xanh tím nhạt */
+}
+
+.timestamp {
+  display: block;
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 0.2rem;
+}
+
+.chat-input {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.chat-input textarea {
+  flex: 1;
+  resize: none;
+}

@@ -87,7 +87,7 @@ export class NavbarComponent implements OnInit {
       {
         label: 'Community',
         icon: 'pi pi-users',
-        routerLink: ['/community'],
+        routerLink: ['/chat'],
         styleClass: 'menu-item'
       }
     ];

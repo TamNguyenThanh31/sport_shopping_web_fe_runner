@@ -1,0 +1,54 @@
+/* src/app/features/customer-chat/customer-chat.component.scss */
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.chat-window {
+  background: #f9f9f9;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  overflow-y: auto;
+}
+
+.message-customer {
+  text-align: right;
+  margin: 0.5rem 0;
+}
+
+.message-staff {
+  text-align: left;
+  margin: 0.5rem 0;
+}
+
+.msg-content {
+  display: inline-block;
+  max-width: 70%;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: #e0f7fa;
+}
+
+.message-customer .msg-content {
+  background: #c8e6c9;
+}
+
+.timestamp {
+  display: block;
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 0.2rem;
+}
+
+.chat-input {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.chat-input textarea {
+  flex: 1;
+  resize: none;
+}

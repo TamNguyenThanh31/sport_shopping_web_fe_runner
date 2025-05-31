@@ -1,0 +1,25 @@
+<p-card header="Hỗ trợ khách hàng">
+  <ng-container *ngIf="session">
+    <div class="chat-header">
+      <span *ngIf="!session.staffId">Đang chờ nhân viên nhận …</span>
+      <span *ngIf="session.staffId">Bạn đang được hỗ trợ bởi nhân viên ID: {{ session.staffId }}</span>
+      <button pButton type="button" label="Đóng Chat" icon="pi pi-times" class="p-button-danger" (click)="closeChat()"></button>
+    </div>
+    <p-scrollPanel id="messageList" [style]="{'height':'400px'}" styleClass="chat-window">
+      <div *ngFor="let msg of messages"
+           [ngClass]="{'message-customer': msg.senderId === session.customerId, 'message-staff': msg.senderId !== session.customerId}">
+        <div class="msg-content">
+          <p>{{ msg.content }}</p>
+          <small class="timestamp">{{ msg.timestamp | date:'shortTime' }}</small>
+        </div>
+      </div>
+    </p-scrollPanel>
+    <div class="chat-input">
+      <textarea pInputTextarea rows="3" [(ngModel)]="newMessageContent" placeholder="Nhập tin nhắn..."></textarea>
+      <button pButton label="Gửi" icon="pi pi-send" (click)="sendMessage()" [disabled]="!newMessageContent.trim()"></button>
+    </div>
+  </ng-container>
+  <ng-template #loading>
+    <p>Đang khởi tạo kết nối…</p>
+  </ng-template>
+</p-card>

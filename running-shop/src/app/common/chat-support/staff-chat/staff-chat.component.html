@@ -1,0 +1,53 @@
+<!-- src/app/features/staff-chat/staff-chat.component.html -->
+<div class="staff-chat-container">
+  <div class="sidebar">
+    <p-panel header="Session Chờ">
+      <ul class="session-list">
+        <li *ngFor="let sess of waitingSessions" (click)="selectSession(sess, true)">
+          <div class="session-item">
+            <span class="session-id">#{{ sess.id }}</span>
+            <span class="session-preview">{{ sess.lastMessage || 'Không có tin nhắn' }}</span>
+            <span class="session-time">{{ sess.lastActivity | date:'short' }}</span>
+          </div>
+        </li>
+      </ul>
+    </p-panel>
+    <p-panel header="Session Của Tôi">
+      <ul class="session-list">
+        <li *ngFor="let sess of mySessions" (click)="selectSession(sess, false)">
+          <div class="session-item">
+            <span class="session-id">#{{ sess.id }}</span>
+            <span class="session-preview">{{ sess.lastMessage || 'Không có tin nhắn' }}</span>
+            <span class="session-time">{{ sess.lastActivity | date:'short' }}</span>
+          </div>
+        </li>
+      </ul>
+    </p-panel>
+  </div>
+
+  <div class="chat-area" *ngIf="selectedSession; else noSessionTpl">
+    <p-card [header]="'Chat Session #' + selectedSession.id">
+      <div class="chat-header">
+        <span>Khách hàng ID: {{ selectedSession.customerId }}</span>
+        <button pButton type="button" label="Đóng Session" icon="pi pi-times" class="p-button-danger" (click)="closeChat()"></button>
+      </div>
+      <p-scrollPanel id="messageListStaff" [style]="{'height':'400px'}" styleClass="chat-window">
+        <div *ngFor="let msg of messages"
+             [ngClass]="{'message-staff': msg.senderId === selectedSession.staffId, 'message-customer': msg.senderId !== selectedSession.staffId}">
+          <div class="msg-content">
+            <p>{{ msg.content }}</p>
+            <small class="timestamp">{{ msg.timestamp | date:'shortTime' }}</small>
+          </div>
+        </div>
+      </p-scrollPanel>
+      <div class="chat-input">
+        <textarea pInputTextarea rows="3" [(ngModel)]="newMessageContent" placeholder="Nhập tin nhắn..."></textarea>
+        <button pButton label="Gửi" icon="pi pi-send" (click)="sendMessage()" [disabled]="!newMessageContent.trim()"></button>
+      </div>
+    </p-card>
+  </div>
+
+  <ng-template #noSessionTpl>
+    <p>Vui lòng chọn một session để bắt đầu trò chuyện.</p>
+  </ng-template>
+</div>
