@@ -104,8 +104,8 @@ export class CustomerProductComponent implements OnInit {
     { breakpoint: '600px', numVisible: 1, numScroll: 1 }
   ];
 
-  // Thơì gian count down
-  flashSaleEndTime = '2025-05-22T23:59:59';
+  // Thời gian count down
+  flashSaleEndTime = '2025-09-22T23:59:59';
 
   heroImages = [
     {
