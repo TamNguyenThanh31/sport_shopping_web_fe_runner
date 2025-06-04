@@ -84,15 +84,15 @@
       <div class="section payment-section">
         <h3>Phương thức thanh toán</h3>
         <div class="payment-options">
-          <div class="payment-option" [class.selected]="paymentMethod === 'VNPAY'">
-            <p-radioButton name="paymentMethod" value="VNPAY" [(ngModel)]="paymentMethod" />
+          <div class="payment-option" [class.selected]="paymentMethod === PaymentMethod.VNPAY">
+            <p-radioButton name="paymentMethod" [value]="PaymentMethod.VNPAY" [(ngModel)]="paymentMethod" />
             <div class="payment-info">
               <i class="pi pi-credit-card"></i>
               <span>Thanh toán qua VNPay</span>
             </div>
           </div>
-          <div class="payment-option" [class.selected]="paymentMethod === 'CASH_ON_DELIVERY'">
-            <p-radioButton name="paymentMethod" value="CASH_ON_DELIVERY" [(ngModel)]="paymentMethod" />
+          <div class="payment-option" [class.selected]="paymentMethod === PaymentMethod.CASH_ON_DELIVERY">
+            <p-radioButton name="paymentMethod" [value]="PaymentMethod.CASH_ON_DELIVERY" [(ngModel)]="paymentMethod" />
             <div class="payment-info">
               <i class="pi pi-money-bill"></i>
               <span>Thanh toán khi nhận hàng</span>

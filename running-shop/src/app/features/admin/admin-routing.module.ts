@@ -10,6 +10,7 @@ import {AddProductComponent} from "../../common/product/add-product/add-product.
 import {AddCategoryComponent} from "../../common/category/add-category/add-category.component";
 import {CategoryManagementComponent} from "../../common/category/category-management/category-management.component";
 import {ReportDashboardComponent} from "./components/report-dashboard/report-dashboard.component";
+import {OrderManagementComponent} from "./components/order-management/order-management.component";
 
 const routes: Routes = [
   // { path: '', component: AdminDashboardComponent },
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'add-product', component: AddProductComponent },
   { path: 'add-product/:id', component: AddProductComponent },
   { path: 'report', component: ReportDashboardComponent,  data: { type: 'report' }, canActivate: [AuthGuard] },
+  { path: 'orders-management', component: OrderManagementComponent, data: { type: 'orders-management' }, canActivate: [AuthGuard] },
 
   { path: 'categories', component: CategoryManagementComponent },
   { path: 'categories/add', component: AddCategoryComponent, data: { mode: 'add' } },

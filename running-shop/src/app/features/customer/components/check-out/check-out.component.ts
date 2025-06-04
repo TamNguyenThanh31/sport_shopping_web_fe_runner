@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {CartItem} from "../../../../shared/models/CartItem.model";
 import {Address} from "../../../../shared/models/address.model";
 import {Promotion} from "../../../../shared/models/promotion.model";
-import {Order as OrderModel} from "../../../../shared/models/order.model";
+import {Order as OrderModel, PaymentMethod} from "../../../../shared/models/order.model";
 import {CartService} from "../../services/cart.servcie";
 import {OrderService} from "../../services/order.service";
 import {AddressService} from "../../services/address.service";
@@ -42,7 +42,7 @@ export class CheckOutComponent implements OnInit {
   promotions: Promotion[] = [];
   selectedAddress: Address | null = null;
   selectedPromotion: Promotion | null = null;
-  paymentMethod = 'CASH_ON_DELIVERY';
+  paymentMethod: PaymentMethod = PaymentMethod.CASH_ON_DELIVERY;
   showAddressDialog = false;
   showPromotionDialog = false;
   userId: number | null = null;
@@ -174,4 +174,6 @@ export class CheckOutComponent implements OnInit {
     }
     return 'assets/images/placeholder-product.png';
   }
+
+  protected readonly PaymentMethod = PaymentMethod;
 }

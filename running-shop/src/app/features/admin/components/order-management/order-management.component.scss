@@ -1,0 +1,456 @@
+// Variables
+$primary-color: #007AFF;
+$secondary-color: #5856D6;
+$success-color: #34C759;
+$warning-color: #FF9500;
+$danger-color: #FF3B30;
+$background-color: #F2F2F7;
+$card-background: #FFFFFF;
+$text-primary: #000000;
+$text-secondary: #8E8E93;
+$border-radius: 12px;
+$shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+// Container
+.order-management-container {
+  padding: 2rem;
+  background-color: $background-color;
+  min-height: 100vh;
+
+  .header-section {
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: $text-primary;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: $text-secondary;
+      font-size: 1rem;
+    }
+  }
+}
+
+// Filter Section
+.filter-section {
+  background-color: $card-background;
+  border-radius: $border-radius;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: $shadow;
+
+  .filter-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-end;
+    justify-content: flex-start;
+  }
+
+  .filter-item {
+    flex: 1 1 220px;
+    min-width: 220px;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: relative;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: $text-secondary;
+      font-size: 0.9rem;
+    }
+  }
+
+  .p-input-icon-left, .p-input-icon-right {
+    width: 100%;
+    .p-inputtext {
+      width: 100%;
+      padding-left: 2.2rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #E5E5EA;
+      height: 2.5rem;
+      background: #fff;
+      color: $text-primary;
+      transition: border 0.2s;
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba($primary-color, 0.08);
+      }
+    }
+    i {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $primary-color;
+      font-size: 1.1rem;
+      pointer-events: none;
+    }
+  }
+
+  .date-range {
+    .date-inputs {
+      display: flex;
+      gap: 1rem;
+      .p-input-icon-right {
+        width: 100%;
+        position: relative;
+        .p-calendar {
+          width: 100%;
+          .p-inputtext {
+            padding-left: 1rem;
+            padding-right: 2.2rem;
+            border-radius: 8px;
+            height: 2.5rem;
+            font-size: 1rem;
+            background: #fff;
+            border: 1px solid #E5E5EA;
+            box-shadow: none;
+          }
+        }
+        i {
+          position: absolute;
+          right: 0.9rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: #fff;
+          background: $primary-color;
+          border-radius: 6px;
+          padding: 0.3rem 0.4rem;
+          font-size: 1.1rem;
+          pointer-events: none;
+        }
+      }
+    }
+  }
+
+  .custom-dropdown {
+    .p-dropdown {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #E5E5EA;
+      height: 2.5rem;
+      font-size: 1rem;
+      background: #fff;
+      color: $text-primary;
+      transition: border 0.2s;
+      &:hover, &.p-focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 2px rgba($primary-color, 0.08);
+      }
+      .p-dropdown-label {
+        color: $text-primary;
+      }
+    }
+  }
+}
+
+// Table Section
+.table-section {
+  background-color: $card-background;
+  border-radius: $border-radius;
+  padding: 1.5rem;
+  box-shadow: $shadow;
+
+  .custom-table {
+    .p-datatable-header {
+      background: transparent;
+      border: none;
+      padding: 0;
+    }
+
+    .p-datatable-thead > tr > th {
+      background: #F2F2F7;
+      color: $text-secondary;
+      font-weight: 600;
+      padding: 1rem;
+      border: none;
+    }
+
+    .p-datatable-tbody > tr {
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #F2F2F7;
+      }
+
+      > td {
+        padding: 1rem;
+        border: none;
+        border-bottom: 1px solid #E5E5EA;
+      }
+    }
+
+    .expand-button {
+      background: transparent;
+      border: none;
+      color: $primary-color;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: rgba($primary-color, 0.1);
+      }
+    }
+
+    .status-badge, .payment-badge {
+      padding: 0.5rem 1.5rem;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      display: inline-block;
+      min-width: 120px;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    .status-pending {
+      background-color: rgba($warning-color, 0.1);
+      color: $warning-color;
+    }
+
+    .status-processing {
+      background-color: rgba($primary-color, 0.1);
+      color: $primary-color;
+    }
+
+    .status-confirmed {
+      background-color: rgba($secondary-color, 0.12);
+      color: $secondary-color;
+    }
+
+    .status-completed {
+      background-color: #e6f9ed !important;
+      color: $success-color !important;
+      border: 1px solid #b2f2d7;
+      font-weight: 600;
+      box-shadow: 0 2px 8px 0 rgba($success-color, 0.08);
+    }
+
+    .status-cancelled {
+      background-color: rgba($danger-color, 0.1);
+      color: $danger-color;
+    }
+
+    .payment-paid {
+      background-color: rgba($success-color, 0.1);
+      color: $success-color;
+    }
+
+    .payment-pending {
+      background-color: rgba($warning-color, 0.1);
+      color: $warning-color;
+    }
+
+    .update-button {
+      background-color: $primary-color;
+      border: none;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+
+    .p-datatable-thead > tr > th:nth-child(5),
+    .p-datatable-tbody > tr > td:nth-child(5) {
+      min-width: 140px;
+      width: 150px;
+    }
+  }
+}
+
+// Expanded Content
+.expanded-content {
+  background-color: #F2F2F7;
+  padding: 1.5rem !important;
+
+  .expanded-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .expanded-card {
+    background-color: $card-background;
+    border-radius: $border-radius;
+    overflow: hidden;
+    box-shadow: $shadow;
+
+    .card-header {
+      background-color: #F2F2F7;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      i {
+        color: $primary-color;
+      }
+
+      h3 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+    }
+
+    .card-body {
+      padding: 1rem;
+
+      p {
+        margin: 0.5rem 0;
+        color: $text-secondary;
+      }
+    }
+  }
+
+  .order-details-table {
+    overflow-x: auto;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th, td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #E5E5EA;
+      }
+
+      th {
+        color: $text-secondary;
+        font-weight: 600;
+      }
+
+      .color-dot {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+      }
+    }
+  }
+}
+
+// Dialog
+
+.p-dialog .p-dialog-content {
+  background: #ffffff;
+  color: #212529;
+  padding: 1rem;
+  height: 300px !important;
+}
+
+.custom-dialog {
+  min-width: 340px;
+  max-width: 95vw;
+  min-height: 320px;
+  border-radius: 20px !important;
+  overflow: visible !important;
+  .p-dialog-content {
+    overflow: visible !important;
+    min-height: 180px;
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    border-radius: 20px;
+    background: #fff;
+  }
+  .p-dialog-header {
+    border-radius: 20px 20px 0 0;
+    background: #f7faff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
+    border-bottom: 1px solid #e5e5ea;
+  }
+  .p-dialog-footer {
+    border-radius: 0 0 20px 20px;
+    background: #f7faff;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e5e5ea;
+  }
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.12);
+  .custom-dropdown, .p-dropdown {
+    min-width: 220px !important;
+    max-width: 100%;
+    width: 100% !important;
+    .p-dropdown-panel {
+      max-height: 320px !important;
+      border-radius: 16px !important;
+      box-shadow: 0 8px 32px 0 rgba(0,0,0,0.10);
+      border: 1.5px solid #e5e5ea;
+      padding: 0.25rem 0;
+      background: #fff;
+    }
+    .p-dropdown-items {
+      border-radius: 16px;
+      overflow-y: auto;
+      padding: 0.25rem 0;
+    }
+    .p-dropdown-item {
+      border-radius: 10px;
+      margin: 0 0.5rem;
+      padding: 0.75rem 1.25rem;
+      font-size: 1rem;
+      transition: background 0.2s;
+      &:hover, &.p-highlight {
+        background: $primary-color;
+        color: #fff;
+      }
+    }
+  }
+  .p-dropdown {
+    border-radius: 12px !important;
+    border: 1.5px solid #e5e5ea;
+    min-height: 48px;
+    font-size: 1rem;
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.04);
+    .p-dropdown-label {
+      padding: 0.5rem 1rem;
+    }
+  }
+}
+
+// Responsive Design
+@media screen and (max-width: 768px) {
+  .order-management-container {
+    padding: 1rem;
+  }
+
+  .filter-section {
+    .filter-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .date-inputs {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .expanded-content {
+    .expanded-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// Toast Customization
+::ng-deep .p-toast {
+  .p-toast-message {
+    border-radius: $border-radius;
+    box-shadow: $shadow;
+  }
+}

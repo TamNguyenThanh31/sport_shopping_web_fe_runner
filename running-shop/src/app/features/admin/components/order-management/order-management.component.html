@@ -1,0 +1,250 @@
+<!-- src/app/pages/admin/order-management/order-management.component.html -->
+<div class="order-management-container">
+  <!-- Header Section -->
+  <div class="header-section">
+    <h1>Quản lý đơn hàng</h1>
+    <p class="subtitle">Theo dõi và quản lý tất cả đơn hàng của khách hàng</p>
+  </div>
+
+  <!-- Filter Section -->
+  <div class="filter-section">
+    <div class="filter-grid">
+      <!-- Status Filter -->
+      <div class="filter-item">
+        <label for="statusFilter">Trạng thái</label>
+        <p-dropdown
+          id="statusFilter"
+          [options]="statusOptions"
+          [(ngModel)]="filterStatus"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Tất cả"
+          showClear="true"
+          class="custom-dropdown"
+          (onChange)="onFilterChange()">
+        </p-dropdown>
+      </div>
+
+      <!-- User ID Filter -->
+      <div class="filter-item">
+        <label for="userFilter">User ID</label>
+        <span class="p-input-icon-left">
+          <i class="pi pi-user"></i>
+          <input
+            id="userFilter"
+            type="number"
+            pInputText
+            [(ngModel)]="filterUserId"
+            (ngModelChange)="onFilterChange()"
+            placeholder="Nhập User ID"
+            class="custom-input">
+        </span>
+      </div>
+
+      <!-- Date Range Filter -->
+      <div class="filter-item date-range">
+        <label>Khoảng ngày</label>
+        <div class="date-inputs">
+          <span class="p-input-icon-right">
+            <i class="pi pi-calendar"></i>
+            <p-calendar
+              [(ngModel)]="filterStartDate"
+              (onSelect)="onFilterChange()"
+              dateFormat="yy-mm-dd"
+              placeholder="Từ ngày"
+              [showIcon]="true"
+              appendTo="body"
+              class="custom-calendar">
+            </p-calendar>
+          </span>
+          <span class="p-input-icon-right">
+            <i class="pi pi-calendar"></i>
+            <p-calendar
+              [(ngModel)]="filterEndDate"
+              (onSelect)="onFilterChange()"
+              dateFormat="yy-mm-dd"
+              placeholder="Đến ngày"
+              [showIcon]="true"
+              appendTo="body"
+              class="custom-calendar">
+            </p-calendar>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="table-section">
+    <p-table
+      [value]="orders"
+      [lazy]="true"
+      [paginator]="true"
+      [rows]="pageSize"
+      [totalRecords]="totalRecords"
+      [loading]="loading"
+      (onLazyLoad)="loadOrders($event)"
+      [first]="currentPage * pageSize"
+      dataKey="id"
+      responsiveLayout="scroll"
+      class="custom-table"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Hiển thị {first} đến {last} của {totalRecords} đơn hàng"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 3rem"></th>
+          <th>ID</th>
+          <th>User ID</th>
+          <th>Tổng tiền</th>
+          <th>Trạng thái</th>
+          <th>Payment Status</th>
+          <th>Ngày tạo</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-order>
+        <tr>
+          <td>
+            <button type="button" class="expand-button" (click)="order.expanded = !order.expanded">
+              <i class="pi" [ngClass]="order.expanded ? 'pi-chevron-down' : 'pi-chevron-right'"></i>
+            </button>
+          </td>
+          <td>{{ order.id }}</td>
+          <td>{{ order.userId }}</td>
+          <td>{{ order.totalPrice | currency:'VND':'symbol':'1.0-0' }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="'status-' + order.status.toLowerCase()">
+              {{ order.status }}
+            </span>
+          </td>
+          <td>
+            <span class="payment-badge" [ngClass]="'payment-' + order.paymentStatus.toLowerCase()">
+              {{ order.paymentStatus }}
+            </span>
+          </td>
+          <td>{{ order.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+          <td>
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              label="Cập nhật"
+              class="p-button-sm update-button"
+              (click)="openStatusDialog(order)">
+            </button>
+          </td>
+        </tr>
+
+        <!-- Expanded Row Content -->
+        <tr *ngIf="order.expanded">
+          <td colspan="8" class="expanded-content">
+            <div class="expanded-grid">
+              <!-- Shipping Address -->
+              <div class="expanded-card">
+                <div class="card-header">
+                  <i class="pi pi-map-marker"></i>
+                  <h3>Địa chỉ giao hàng</h3>
+                </div>
+                <div class="card-body">
+                  <p><strong>Họ & Tên:</strong> {{ order.addressDetails?.fullName }}</p>
+                  <p><strong>Điện thoại:</strong> {{ order.addressDetails?.phone }}</p>
+                  <p><strong>Địa chỉ:</strong> {{ order.addressDetails?.addressLine }}, {{ order.addressDetails?.city }}, {{ order.addressDetails?.country }}</p>
+                </div>
+              </div>
+
+              <!-- Order Details -->
+              <div class="expanded-card">
+                <div class="card-header">
+                  <i class="pi pi-shopping-cart"></i>
+                  <h3>Chi tiết đơn hàng</h3>
+                </div>
+                <div class="card-body">
+                  <div class="order-details-table">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Sản phẩm</th>
+                          <th>Số lượng</th>
+                          <th>Giá</th>
+                          <th>Size</th>
+                          <th>Màu sắc</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let detail of order.orderDetails">
+                          <td>{{ detail.productName }}</td>
+                          <td>{{ detail.quantity }}</td>
+                          <td>{{ detail.priceAtTime | currency:'VND':'symbol':'1.0-0' }}</td>
+                          <td>{{ detail.size }}</td>
+                          <td>
+                            <span class="color-dot" [style.background-color]="detail.color"></span>
+                            {{ detail.color }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<!-- Status Update Dialog -->
+<p-dialog
+  header="Cập nhật trạng thái đơn hàng"
+  [(visible)]="displayStatusDialog"
+  modal="true"
+  styleClass="custom-dialog"
+  [closable]="false"
+  [resizable]="false"
+  [draggable]="false"
+>
+  <div *ngIf="selectedOrder" class="dialog-content">
+    <div class="order-info">
+      <i class="pi pi-info-circle"></i>
+      <span>Order ID: <strong>{{ selectedOrder.id }}</strong></span>
+    </div>
+    <div class="status-update-form">
+      <label for="newStatus">Chọn trạng thái mới</label>
+      <p-dropdown
+        id="newStatus"
+        [options]="statusOptions"
+        [(ngModel)]="newStatus"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Chọn trạng thái"
+        class="custom-dropdown">
+      </p-dropdown>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="dialog-footer">
+      <button
+        pButton
+        type="button"
+        label="Hủy"
+        icon="pi pi-times"
+        class="p-button-text cancel-button"
+        (click)="displayStatusDialog = false">
+      </button>
+      <button
+        pButton
+        type="button"
+        label="Cập nhật"
+        icon="pi pi-check"
+        class="update-button"
+        (click)="updateStatus()"
+        [disabled]="!newStatus">
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>
