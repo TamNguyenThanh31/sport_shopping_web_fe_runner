@@ -1,23 +1,31 @@
 <!-- src/app/features/staff-chat/staff-chat.component.html -->
 <div class="staff-chat-container">
   <div class="sidebar">
-    <p-panel header="Session Chờ">
+    <p-panel header="Session Chờ" styleClass="session-panel">
       <ul class="session-list">
-        <li *ngFor="let sess of waitingSessions" (click)="selectSession(sess, true)">
+        <li *ngFor="let sess of waitingSessions" 
+            (click)="selectSession(sess, true)"
+            [class.active]="selectedSession?.id === sess.id">
           <div class="session-item">
-            <span class="session-id">#{{ sess.id }}</span>
-            <span class="session-preview">{{ sess.lastMessage || 'Không có tin nhắn' }}</span>
+            <div class="session-info">
+              <span class="session-id">#{{ sess.id }}</span>
+              <span class="session-preview">{{ sess.lastMessage || 'Không có tin nhắn' }}</span>
+            </div>
             <span class="session-time">{{ sess.lastActivity | date:'short' }}</span>
           </div>
         </li>
       </ul>
     </p-panel>
-    <p-panel header="Session Của Tôi">
+    <p-panel header="Session Của Tôi" styleClass="session-panel">
       <ul class="session-list">
-        <li *ngFor="let sess of mySessions" (click)="selectSession(sess, false)">
+        <li *ngFor="let sess of mySessions" 
+            (click)="selectSession(sess, false)"
+            [class.active]="selectedSession?.id === sess.id">
           <div class="session-item">
-            <span class="session-id">#{{ sess.id }}</span>
-            <span class="session-preview">{{ sess.lastMessage || 'Không có tin nhắn' }}</span>
+            <div class="session-info">
+              <span class="session-id">#{{ sess.id }}</span>
+              <span class="session-preview">{{ sess.lastMessage || 'Không có tin nhắn' }}</span>
+            </div>
             <span class="session-time">{{ sess.lastActivity | date:'short' }}</span>
           </div>
         </li>
@@ -26,28 +34,55 @@
   </div>
 
   <div class="chat-area" *ngIf="selectedSession; else noSessionTpl">
-    <p-card [header]="'Chat Session #' + selectedSession.id">
+    <p-card [header]="'Chat Session #' + selectedSession.id" styleClass="chat-card">
       <div class="chat-header">
-        <span>Khách hàng ID: {{ selectedSession.customerId }}</span>
-        <button type="button" label="Đóng Session" icon="pi pi-times" class="p-button-danger" (click)="closeChat()"></button>
+        <div class="header-content">
+          <i class="pi pi-user header-icon"></i>
+          <div class="header-text">
+            <span class="customer-id">Khách hàng ID: {{ selectedSession.customerId }}</span>
+            <span class="session-time">Bắt đầu: {{ selectedSession.startedAt | date:'short' }}</span>
+          </div>
+        </div>
+        <button pButton type="button" icon="pi pi-times" 
+                class="p-button-rounded p-button-text p-button-danger close-button" 
+                (click)="closeChat()"></button>
       </div>
       <p-scrollPanel id="messageListStaff" [style]="{'height':'400px'}" styleClass="chat-window">
-        <div *ngFor="let msg of messages"
-             [ngClass]="{'message-staff': msg.senderId === selectedSession.staffId, 'message-customer': msg.senderId !== selectedSession.staffId}">
-          <div class="msg-content">
-            <p>{{ msg.content }}</p>
-            <small class="timestamp">{{ msg.timestamp | date:'shortTime' }}</small>
+        <div class="messages-container">
+          <div *ngFor="let msg of messages"
+               [ngClass]="{'message-staff': msg.senderId === selectedSession.staffId, 'message-customer': msg.senderId !== selectedSession.staffId}">
+            <div class="msg-content">
+              <p class="message-text">{{ msg.content }}</p>
+              <small class="timestamp">{{ msg.timestamp | date:'shortTime' }}</small>
+            </div>
           </div>
         </div>
       </p-scrollPanel>
       <div class="chat-input">
-        <textarea pInputTextarea rows="3" [(ngModel)]="newMessageContent" placeholder="Nhập tin nhắn..."></textarea>
-        <button pButton label="Gửi" icon="pi pi-send" (click)="sendMessage()" [disabled]="!newMessageContent.trim()"></button>
+        <textarea #messageInput pInputTextarea rows="1" 
+                  [(ngModel)]="newMessageContent" 
+                  placeholder="Nhập tin nhắn..." 
+                  class="message-input"
+                  (input)="adjustTextareaHeight($event)"></textarea>
+        <button class="send-button" (click)="sendMessage()" [disabled]="!newMessageContent.trim()">
+          <div class="svg-wrapper-1">
+            <div class="svg-wrapper">
+              <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z" fill="currentColor"></path>
+              </svg>
+            </div>
+          </div>
+          <span>Gửi</span>
+        </button>
       </div>
     </p-card>
   </div>
 
   <ng-template #noSessionTpl>
-    <p>Vui lòng chọn một session để bắt đầu trò chuyện.</p>
+    <div class="no-session">
+      <i class="pi pi-comments" style="font-size: 3rem; color: #007AFF;"></i>
+      <p>Vui lòng chọn một session để bắt đầu trò chuyện.</p>
+    </div>
   </ng-template>
 </div>

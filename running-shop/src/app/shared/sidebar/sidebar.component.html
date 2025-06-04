@@ -58,6 +58,11 @@
         <i class="pi pi-chart-line menu-icon"></i>
         <span class="menu-text" *ngIf="!isCollapsed">Thống kê</span>
       </a>
+      <a class="menu-item" routerLink="/admin/orders-management" routerLinkActive="active"
+         pTooltip="Quản lý đơn hàng" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
+        <i class="pi pi-shopping-cart menu-icon"></i>
+        <span class="menu-text" *ngIf="!isCollapsed">Quản lý đơn hàng</span>
+      </a>
       <a class="menu-item" routerLink="/admin/users" routerLinkActive="active"
          pTooltip="Users" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
         <i class="pi pi-users menu-icon"></i>

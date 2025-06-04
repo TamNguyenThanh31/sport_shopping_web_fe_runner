@@ -1,10 +1,177 @@
 .payment-result {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  text-align: center;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  padding: 2rem;
+
+  .result-container {
+    max-width: 600px;
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+
+    .result-header {
+      background: #1a73e8;
+      padding: 1.5rem;
+      color: white;
+
+      .steps {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+
+        .step {
+          position: relative;
+          padding: 0.5rem 1rem;
+          color: rgba(255, 255, 255, 0.7);
+          font-weight: 500;
+
+          &.completed {
+            color: white;
+            &::after {
+              content: '';
+              position: absolute;
+              bottom: -5px;
+              left: 0;
+              width: 100%;
+              height: 2px;
+              background: white;
+            }
+          }
+
+          &.active {
+            color: white;
+            font-weight: 600;
+            &::after {
+              content: '';
+              position: absolute;
+              bottom: -5px;
+              left: 0;
+              width: 100%;
+              height: 2px;
+              background: white;
+            }
+          }
+        }
+      }
+    }
+
+    .result-content {
+      padding: 3rem 2rem;
+      text-align: center;
+
+      &.success {
+        .status-icon {
+          color: #34a853;
+        }
+      }
+
+      &.failed {
+        .status-icon {
+          color: #dc3545;
+        }
+      }
+
+      .status-icon {
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+
+        i {
+          font-size: inherit;
+        }
+      }
+
+      h2 {
+        color: #202124;
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .order-info {
+        margin-bottom: 2rem;
+
+        .order-number {
+          font-size: 1.2rem;
+          color: #1a73e8;
+          font-weight: 500;
+          margin-bottom: 1rem;
+        }
+
+        .thank-you {
+          color: #202124;
+          font-size: 1.1rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .order-status {
+          color: #5f6368;
+        }
+      }
+
+      .error-info {
+        margin-bottom: 2rem;
+
+        .error-message {
+          color: #dc3545;
+          font-size: 1.1rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .suggestion {
+          color: #5f6368;
+        }
+      }
+
+      .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+
+        .p-button {
+          min-width: 150px;
+          padding: 0.75rem 1.5rem;
+        }
+      }
+    }
+  }
 }
 
-p-button {
-  margin: 10px;
+// Responsive styles
+@media (max-width: 768px) {
+  .payment-result {
+    padding: 1rem;
+
+    .result-container {
+      .result-header {
+        .steps {
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+
+          .step {
+            &::after {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .result-content {
+        padding: 2rem 1rem;
+
+        .action-buttons {
+          flex-direction: column;
+          gap: 0.5rem;
+
+          .p-button {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
 }

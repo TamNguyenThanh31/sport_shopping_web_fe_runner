@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {CartItem} from "../../../../shared/models/CartItem.model";
 import {Address} from "../../../../shared/models/address.model";
 import {Promotion} from "../../../../shared/models/promotion.model";
-import {Order as OrderModel} from "../../../../shared/models/order.model";
+import {Order as OrderModel, PaymentMethod} from "../../../../shared/models/order.model";
 import {CartService} from "../../services/cart.servcie";
 import {OrderService} from "../../services/order.service";
 import {AddressService} from "../../services/address.service";
@@ -11,7 +11,7 @@ import {AuthService} from "../../../../core/services/auth.service";
 import {MessageService} from "primeng/api";
 import {Router} from "@angular/router";
 import {TableModule} from "primeng/table";
-import {CurrencyPipe, DatePipe} from "@angular/common";
+import {CurrencyPipe, DatePipe, NgForOf, NgIf} from "@angular/common";
 import {Button} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {RadioButtonModule} from "primeng/radiobutton";
@@ -29,7 +29,9 @@ import {ToastModule} from "primeng/toast";
     DatePipe,
     RadioButtonModule,
     FormsModule,
-    ToastModule
+    ToastModule,
+    NgForOf,
+    NgIf
   ],
   templateUrl: './check-out.component.html',
   styleUrl: './check-out.component.scss'
@@ -40,7 +42,7 @@ export class CheckOutComponent implements OnInit {
   promotions: Promotion[] = [];
   selectedAddress: Address | null = null;
   selectedPromotion: Promotion | null = null;
-  paymentMethod = 'CASH_ON_DELIVERY';
+  paymentMethod: PaymentMethod = PaymentMethod.CASH_ON_DELIVERY;
   showAddressDialog = false;
   showPromotionDialog = false;
   userId: number | null = null;
@@ -126,6 +128,11 @@ export class CheckOutComponent implements OnInit {
     this.calculateTotal();
   }
 
+  removePromotion(): void {
+    this.selectedPromotion = null;
+    this.calculateTotal();
+  }
+
   placeOrder(): void {
     if (!this.selectedAddress) {
       this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Vui lòng chọn địa chỉ' });
@@ -160,4 +167,13 @@ export class CheckOutComponent implements OnInit {
       error: () => this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Không thể tạo đơn hàng' })
     });
   }
+
+  getImageUrl(imageUrl: string): string {
+    if (imageUrl) {
+      return `http://localhost:8080${imageUrl}`;
+    }
+    return 'assets/images/placeholder-product.png';
+  }
+
+  protected readonly PaymentMethod = PaymentMethod;
 }
