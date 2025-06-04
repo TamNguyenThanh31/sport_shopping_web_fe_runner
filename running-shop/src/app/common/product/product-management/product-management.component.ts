@@ -168,6 +168,15 @@ export class ProductManagementComponent implements OnInit {
     return variant?.price || 0;
   }
 
+  getCostPrice(product: Product): number {
+    const variant = product.id !== undefined ? this.selectedVariants[product.id] : undefined;
+    return variant?.costPrice || 0;
+  }
+
+  getTotalStock(product: Product): number {
+    return product.variants.reduce((total, variant) => total + variant.stock, 0);
+  }
+
   formatPrice(price: number): string {
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',

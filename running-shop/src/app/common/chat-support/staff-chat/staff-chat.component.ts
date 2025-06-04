@@ -12,6 +12,8 @@ import {ChatService} from "../../service/chat.service";
 import {WebSocketService} from "../../../core/services/websocket.service";
 import {CardModule} from "primeng/card";
 import {ScrollPanelModule} from "primeng/scrollpanel";
+import {ButtonDirective} from "primeng/button";
+import {InputTextareaModule} from "primeng/inputtextarea";
 
 @Component({
   selector: 'app-staff-chat',
@@ -25,7 +27,8 @@ import {ScrollPanelModule} from "primeng/scrollpanel";
     CardModule,
     ScrollPanelModule,
     NgClass,
-    DatePipe
+    DatePipe,
+    InputTextareaModule
   ],
   templateUrl: './staff-chat.component.html',
   styleUrl: './staff-chat.component.scss'
@@ -152,11 +155,7 @@ export class StaffChatComponent implements OnInit, OnDestroy {
       content: content
     };
     this.wsService.sendMessage(msg);
-    msg.timestamp = new Date().toISOString();
-    msg.readStatus = false;
-    this.messages.push(msg);
     this.newMessageContent = '';
-    this.scrollToBottom();
   }
 
   closeChat(): void {

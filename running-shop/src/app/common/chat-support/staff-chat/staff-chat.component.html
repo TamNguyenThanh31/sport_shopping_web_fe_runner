@@ -29,7 +29,7 @@
     <p-card [header]="'Chat Session #' + selectedSession.id">
       <div class="chat-header">
         <span>Khách hàng ID: {{ selectedSession.customerId }}</span>
-        <button pButton type="button" label="Đóng Session" icon="pi pi-times" class="p-button-danger" (click)="closeChat()"></button>
+        <button type="button" label="Đóng Session" icon="pi pi-times" class="p-button-danger" (click)="closeChat()"></button>
       </div>
       <p-scrollPanel id="messageListStaff" [style]="{'height':'400px'}" styleClass="chat-window">
         <div *ngFor="let msg of messages"

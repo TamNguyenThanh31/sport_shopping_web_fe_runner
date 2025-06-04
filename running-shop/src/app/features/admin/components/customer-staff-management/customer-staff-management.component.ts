@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserDTO } from '../../../../shared/models/userDTO.model';
-import { AdminService } from '../../admin.service';
+import { AdminService } from '../../service/admin.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService, ConfirmationService } from 'primeng/api';
 

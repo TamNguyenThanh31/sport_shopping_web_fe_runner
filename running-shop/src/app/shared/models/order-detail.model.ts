@@ -3,6 +3,7 @@ export interface OrderDetail {
   variantId: number;
   quantity: number;
   priceAtTime: number;
+  costAtTime: number;
   productName?: string;
   size?: string;
   color?: string;

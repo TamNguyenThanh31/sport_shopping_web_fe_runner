@@ -99,13 +99,7 @@ export class CustomerChatComponent implements OnInit, OnDestroy {
       content: content
     };
     this.wsService.sendMessage(msg);
-
-    // Tạm push vào list để hiển thị ngay
-    msg.timestamp = new Date().toISOString();
-    msg.readStatus = false;
-    this.messages.push(msg);
     this.newMessageContent = '';
-    this.scrollToBottom();
   }
 
   closeChat(): void {

@@ -1,0 +1,184 @@
+<div class="dashboard-container">
+  <!-- Summary Cards -->
+  <div class="summary-cards">
+    <div class="card">
+      <div class="card-icon"><i class="pi pi-shopping-cart"></i></div>
+      <div class="card-content">
+        <h3>Tổng đơn hôm nay</h3>
+        <p class="number">{{ totalOrdersToday }}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="pi pi-chart-line"></i></div>
+      <div class="card-content">
+        <h3>Doanh thu hôm nay</h3>
+        <p class="number">{{ revenueToday | currency:'VND' }}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="pi pi-wallet"></i></div>
+      <div class="card-content">
+        <h3>Lợi nhuận hôm nay</h3>
+        <p class="number">{{ profitToday | currency:'VND' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="charts-container">
+    <div class="chart-wrapper half-width">
+      <h3>Doanh thu theo giờ hôm nay</h3>
+      <p-chart type="bar" [data]="barData" [options]="barOptions"></p-chart>
+    </div>
+    <div class="chart-wrapper half-width pie-chart">
+      <h3>Phân bố đơn hàng theo trạng thái</h3>
+      <p-chart type="pie" [data]="pieData" [options]="pieOptions"></p-chart>
+    </div>
+  </div>
+
+  <!-- Extra Summary Cards -->
+  <div class="extra-summaries">
+    <div class="card">
+      <div class="card-icon"><i class="pi pi-calendar"></i></div>
+      <div class="card-content">
+        <h3>Doanh thu tuần này</h3>
+        <p class="number">{{ revenueThisWeek | currency:'VND' }}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="pi pi-chart-bar"></i></div>
+      <div class="card-content">
+        <h3>Lợi nhuận tuần này</h3>
+        <p class="number">{{ profitThisWeek | currency:'VND' }}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="pi pi-calendar-times"></i></div>
+      <div class="card-content">
+        <h3>Doanh thu tháng này</h3>
+        <p class="number">{{ revenueThisMonth | currency:'VND' }}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon"><i class="pi pi-money-bill"></i></div>
+      <div class="card-content">
+        <h3>Lợi nhuận tháng này</h3>
+        <p class="number">{{ profitThisMonth | currency:'VND' }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Weekly and Monthly Charts -->
+  <div class="charts-container">
+    <div class="chart-wrapper full-width">
+      <h3>Doanh thu theo ngày trong tuần</h3>
+      <p-chart type="bar" [data]="weeklyBarData" [options]="weeklyBarOptions"></p-chart>
+    </div>
+    <div class="chart-wrapper full-width">
+      <h3>Doanh thu theo ngày trong tháng</h3>
+      <p-chart type="bar" [data]="monthlyBarData" [options]="monthlyBarOptions"></p-chart>
+    </div>
+  </div>
+
+  <!-- Stock Summary -->
+  <div class="stock-summary">
+    <div class="stock-header">
+      <h2>Tồn kho hiện tại</h2>
+      <div>
+        <p-button icon="pi pi-refresh"
+                  styleClass="p-button-rounded p-button-text"
+                  (onClick)="loadReports()">
+        </p-button>
+        <p-button icon="pi pi-sort-amount-down"
+                  label="Sắp xếp tồn kho"
+                  styleClass="p-button-rounded p-button-text p-ml-2"
+                  (onClick)="sortByStock()">
+        </p-button>
+      </div>
+    </div>
+
+    <p-table #dt
+             [value]="stockData"
+             dataKey="name"
+             [paginator]="true"
+             [rows]="10"
+             styleClass="p-datatable-sm"
+             [showCurrentPageReport]="true"
+             currentPageReportTemplate="Hiển thị {first} đến {last} của {totalRecords} sản phẩm"
+             [rowsPerPageOptions]="[10,25,50]"
+             expandableRows>
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 3em"></th>
+          <th>Tên sản phẩm</th>
+          <th>Số lượng</th>
+          <th>Trạng thái</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-rowData>
+        <tr>
+          <td>
+            <a href="#" (click)="dt.toggleRow(rowData); $event.preventDefault()">
+              <i class="pi"
+                 [ngClass]="{
+                   'pi-chevron-down': dt.isRowExpanded(rowData),
+                   'pi-chevron-right': !dt.isRowExpanded(rowData)
+                 }"></i>
+            </a>
+          </td>
+          <td>{{ rowData.name }}</td>
+          <td>{{ rowData.quantity }}</td>
+          <td>
+            <span class="status-badge"
+                  [ngClass]="{
+                    'status-empty': rowData.status === 'Hết hàng',
+                    'status-low': rowData.status === 'Sắp hết',
+                    'status-medium': rowData.status === 'Còn ít',
+                    'status-good': rowData.status === 'Đủ hàng'
+                  }">
+              {{ rowData.status }}
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="rowexpansion" let-rowData>
+        <tr>
+          <td colspan="4" class="p-0">
+            <div class="p-ml-4 p-mt-2">
+              <h5>Biến thể của "{{ rowData.name }}"</h5>
+              <table class="p-datatable p-datatable-sm">
+                <thead>
+                <tr>
+                  <th>Tên biến thể</th>
+                  <th>Số lượng</th>
+                  <th>Trạng thái</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let v of rowData.variants">
+                  <td>{{ v.sku }}</td>
+                  <td>{{ v.stock }}</td>
+                  <td>
+                      <span class="status-badge"
+                            [ngClass]="{
+                              'status-empty': v.status === 'Hết hàng',
+                              'status-low': v.status === 'Sắp hết',
+                              'status-medium': v.status === 'Còn ít',
+                              'status-good': v.status === 'Đủ hàng'
+                            }">
+                        {{ v.status }}
+                      </span>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

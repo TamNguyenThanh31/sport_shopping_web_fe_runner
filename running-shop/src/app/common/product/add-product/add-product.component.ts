@@ -1,5 +1,5 @@
 import {Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, ViewEncapsulation} from '@angular/core';
-import {FormBuilder, FormGroup, FormArray, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, FormArray, Validators, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MessageService, ConfirmationService} from 'primeng/api';
 import {Product, ProductImage, ProductVariant} from '../../../shared/models/product.model';
@@ -7,7 +7,6 @@ import {Category} from '../../../shared/models/category.model';
 import {ApiService} from '../../../core/services/api.service';
 import {AuthService} from '../../../core/services/auth.service';
 import {CommonModule} from '@angular/common';
-import {ReactiveFormsModule} from '@angular/forms';
 import {ButtonModule} from 'primeng/button';
 import {InputTextModule} from 'primeng/inputtext';
 import {DropdownModule} from 'primeng/dropdown';
@@ -19,9 +18,10 @@ import {FileUploadModule} from 'primeng/fileupload';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {Observable, of, switchMap} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {InputNumber, InputNumberModule} from "primeng/inputnumber";
-import {Tooltip, TooltipModule} from "primeng/tooltip";
-import {InputTextarea, InputTextareaModule} from 'primeng/inputtextarea';
+import {InputNumberModule} from "primeng/inputnumber";
+import {TooltipModule} from "primeng/tooltip";
+import {InputTextareaModule} from 'primeng/inputtextarea';
+import {trigger, transition, style, animate} from '@angular/animations';
 
 @Component({
   selector: 'app-add-product',
@@ -32,6 +32,7 @@ import {InputTextarea, InputTextareaModule} from 'primeng/inputtextarea';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     ButtonModule,
     InputTextModule,
     DropdownModule,
@@ -46,7 +47,18 @@ import {InputTextarea, InputTextareaModule} from 'primeng/inputtextarea';
     InputTextareaModule
   ],
   providers: [MessageService, ConfirmationService],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms ease-in', style({ opacity: 1 }))
+      ]),
+      transition(':leave', [
+        animate('300ms ease-out', style({ opacity: 0 }))
+      ])
+    ])
+  ]
 })
 export class AddProductComponent implements OnInit {
   productForm: FormGroup;
@@ -106,9 +118,10 @@ export class AddProductComponent implements OnInit {
         if (product) {
           this.loadProductData(product);
         }
-        this.productForm.enable();
         if (this.mode === 'view') {
           this.productForm.disable();
+        } else {
+          this.productForm.enable();
         }
         this.cdr.detectChanges();
       },
@@ -161,10 +174,14 @@ export class AddProductComponent implements OnInit {
         productId: variant.productId,
         size: variant.size,
         color: variant.color,
-        stock: variant.stock,
-        price: variant.price,
+        stock: Number(variant.stock) || 0,
+        price: Number(variant.price) || 0,
+        costPrice: Number(variant.costPrice) || 0,
         sku: variant.sku
       });
+      if (this.mode === 'view') {
+        variantForm.disable();
+      }
       console.log('Biến thể:', variantForm.value);
       this.variants.push(variantForm);
     });
@@ -177,6 +194,9 @@ export class AddProductComponent implements OnInit {
         imageUrl: image.imageUrl,
         primary: image.primary ?? false
       });
+      if (this.mode === 'view') {
+        imageForm.disable();
+      }
       console.log('Hình ảnh:', imageForm.value);
       this.images.push(imageForm);
       this.existingImages.push({
@@ -207,6 +227,7 @@ export class AddProductComponent implements OnInit {
       color: [variant?.color || '', Validators.required],
       stock: [variant?.stock || 0, [Validators.required, Validators.min(0)]],
       price: [variant?.price || 0, [Validators.required, Validators.min(0)]],
+      costPrice: [variant?.costPrice || 0, [Validators.required, Validators.min(0)]],
       sku: [variant?.sku || '', Validators.required]
     });
   }
