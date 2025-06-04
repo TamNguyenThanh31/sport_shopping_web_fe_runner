@@ -67,7 +67,9 @@
             <th>Tên sản phẩm</th>
             <th>Thương hiệu</th>
             <th>Danh mục</th>
-            <th>Giá</th>
+            <th>Giá nhập</th>
+            <th>Giá bán</th>
+            <th>Tồn kho</th>
             <th>Trạng thái</th>
             <th>Thêm bởi</th>
             <th>Hành động</th>
@@ -81,7 +83,9 @@
             <td data-label="Tên sản phẩm">{{ product.name }}</td>
             <td data-label="Thương hiệu">{{ product.brand }}</td>
             <td data-label="Danh mục">{{ getCategoryName(product.categoryId) }}</td>
-            <td data-label="Giá">{{ formatPrice(getCurrentPrice(product)) }}</td>
+            <td data-label="Giá nhập">{{ formatPrice(getCostPrice(product)) }}</td>
+            <td data-label="Giá bán">{{ formatPrice(getCurrentPrice(product)) }}</td>
+            <td data-label="Tồn kho">{{ getTotalStock(product) }}</td>
             <td data-label="Trạng thái">{{ product.active ? 'Kích hoạt' : 'Không kích hoạt' }}</td>
             <td data-label="Thêm bởi">{{ product.addedById }}</td>
             <td data-label="Hành động">
@@ -141,7 +145,9 @@
               <h3>{{ product.name }}</h3>
               <p><strong>Thương hiệu:</strong> {{ product.brand }}</p>
               <p><strong>Danh mục:</strong> {{ getCategoryName(product.categoryId) }}</p>
-              <p><strong>Giá:</strong> {{ formatPrice(getCurrentPrice(product)) }}</p>
+              <p><strong>Giá nhập:</strong> {{ formatPrice(getCostPrice(product)) }}</p>
+              <p><strong>Giá bán:</strong> {{ formatPrice(getCurrentPrice(product)) }}</p>
+              <p><strong>Tồn kho:</strong> {{ getTotalStock(product) }}</p>
               <p><strong>Trạng thái:</strong> {{ product.active ? 'Kích hoạt' : 'Không kích hoạt' }}</p>
             </div>
             <div class="action-buttons">

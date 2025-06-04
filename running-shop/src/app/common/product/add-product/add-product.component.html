@@ -49,6 +49,7 @@
               <label for="brand">Thương hiệu</label>
               <input
                 id="brand"
+                type="text"
                 pInputText
                 formControlName="brand"
                 [class.p-invalid]="productForm.get('brand')?.invalid && productForm.get('brand')?.touched"
@@ -120,11 +121,11 @@
                   <label [for]="'size-' + i">Kích thước</label>
                   <input
                     [id]="'size-' + i"
+                    type="text"
                     pInputText
                     formControlName="size"
                     [class.p-invalid]="variant.get('size')?.invalid && variant.get('size')?.touched"
                     class="p-inputtext-lg"
-                    [disabled]="mode === 'view'"
                   />
                   <small
                     *ngIf="variant.get('size')?.invalid && variant.get('size')?.touched"
@@ -139,11 +140,11 @@
                   <label [for]="'color-' + i">Màu sắc</label>
                   <input
                     [id]="'color-' + i"
+                    type="text"
                     pInputText
                     formControlName="color"
                     [class.p-invalid]="variant.get('color')?.invalid && variant.get('color')?.touched"
                     class="p-inputtext-lg"
-                    [disabled]="mode === 'view'"
                   />
                   <small
                     *ngIf="variant.get('color')?.invalid && variant.get('color')?.touched"
@@ -156,9 +157,11 @@
                 <!-- Tồn kho -->
                 <div class="field">
                   <label [for]="'stock-' + i">Tồn kho</label>
-                  <p-inputnumber
+                  <p-inputNumber
                     [id]="'stock-' + i"
                     formControlName="stock"
+                    [min]="0"
+                    [showButtons]="true"
                     buttonLayout="horizontal"
                     spinnerMode="horizontal"
                     decrementButtonClass="p-button-secondary"
@@ -167,8 +170,7 @@
                     decrementButtonIcon="pi pi-minus"
                     [class.p-invalid]="variant.get('stock')?.invalid && variant.get('stock')?.touched"
                     class="p-inputtext-lg"
-                    [disabled]="mode === 'view'"
-                  ></p-inputnumber>
+                  ></p-inputNumber>
                   <small
                     *ngIf="variant.get('stock')?.invalid && variant.get('stock')?.touched"
                     class="p-error"
@@ -179,22 +181,43 @@
 
                 <!-- Giá -->
                 <div class="field">
-                  <label [for]="'price-' + i">Giá</label>
-                  <p-inputnumber
+                  <label [for]="'price-' + i">Giá bán</label>
+                  <p-inputNumber
                     [id]="'price-' + i"
                     formControlName="price"
                     mode="currency"
                     currency="VND"
                     locale="vi-VN"
+                    [min]="0"
                     [class.p-invalid]="variant.get('price')?.invalid && variant.get('price')?.touched"
                     class="p-inputtext-lg"
-                    [disabled]="mode === 'view'"
-                  ></p-inputnumber>
+                  ></p-inputNumber>
                   <small
                     *ngIf="variant.get('price')?.invalid && variant.get('price')?.touched"
                     class="p-error"
                   >
                     Vui lòng nhập giá sản phẩm
+                  </small>
+                </div>
+
+                <!-- Giá nhập -->
+                <div class="field">
+                  <label [for]="'costPrice-' + i">Giá nhập</label>
+                  <p-inputNumber
+                    [id]="'costPrice-' + i"
+                    formControlName="costPrice"
+                    mode="currency"
+                    currency="VND"
+                    locale="vi-VN"
+                    [min]="0"
+                    [class.p-invalid]="variant.get('costPrice')?.invalid && variant.get('costPrice')?.touched"
+                    class="p-inputtext-lg"
+                  ></p-inputNumber>
+                  <small
+                    *ngIf="variant.get('costPrice')?.invalid && variant.get('costPrice')?.touched"
+                    class="p-error"
+                  >
+                    Vui lòng nhập giá nhập
                   </small>
                 </div>
 
@@ -207,7 +230,6 @@
                     formControlName="sku"
                     [class.p-invalid]="variant.get('sku')?.invalid && variant.get('sku')?.touched"
                     class="p-inputtext-lg"
-                    [disabled]="mode === 'view'"
                   />
                   <small
                     *ngIf="variant.get('sku')?.invalid && variant.get('sku')?.touched"
