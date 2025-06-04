@@ -16,9 +16,10 @@ import {ToastModule} from "primeng/toast";
   templateUrl: './payment-result.component.html',
   styleUrl: './payment-result.component.scss'
 })
-export class PaymentResultComponent implements OnInit{
+export class PaymentResultComponent implements OnInit {
   status = '';
   orderId: number | null = null;
+  errorMessage: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -30,12 +31,21 @@ export class PaymentResultComponent implements OnInit{
     this.route.queryParams.subscribe(params => {
       this.status = params['status'] || 'failed';
       this.orderId = params['orderId'] ? +params['orderId'] : null;
+      this.errorMessage = params['message'] || 'Đã có lỗi xảy ra trong quá trình thanh toán.';
 
-      this.messageService.add({
-        severity: this.status === 'success' ? 'success' : 'error',
-        summary: this.status === 'success' ? 'Thành công' : 'Thất bại',
-        detail: this.status === 'success' ? `Đơn hàng #${this.orderId} đã được tạo` : params['message'] || 'Thanh toán thất bại'
-      });
+      if (this.status === 'success') {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Thành công',
+          detail: `Đơn hàng #${this.orderId} đã được tạo thành công!`
+        });
+      } else {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Thất bại',
+          detail: this.errorMessage
+        });
+      }
     });
   }
 

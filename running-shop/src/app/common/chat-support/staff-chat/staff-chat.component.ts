@@ -28,7 +28,8 @@ import {InputTextareaModule} from "primeng/inputtextarea";
     ScrollPanelModule,
     NgClass,
     DatePipe,
-    InputTextareaModule
+    InputTextareaModule,
+    ButtonDirective
   ],
   templateUrl: './staff-chat.component.html',
   styleUrl: './staff-chat.component.scss'
@@ -178,6 +179,12 @@ export class StaffChatComponent implements OnInit, OnDestroy {
     if (el) {
       setTimeout(() => el.scrollTop = el.scrollHeight, 50);
     }
+  }
+
+  adjustTextareaHeight(event: Event): void {
+    const textarea = event.target as HTMLTextAreaElement;
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
   }
 
   ngOnDestroy(): void {

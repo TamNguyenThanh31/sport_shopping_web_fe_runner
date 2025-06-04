@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild, ElementRef} from '@angular/core';
 import {SupportSession} from "../../../shared/models/support-session.model";
 import {Subscription} from "rxjs";
 import {Message} from "../../../shared/models/message.model";
@@ -11,6 +11,7 @@ import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {ScrollPanelModule} from "primeng/scrollpanel";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {FormsModule} from "@angular/forms";
+import {ButtonDirective} from "primeng/button";
 
 @Component({
   selector: 'app-customer-chat',
@@ -23,7 +24,8 @@ import {FormsModule} from "@angular/forms";
     NgClass,
     InputTextareaModule,
     FormsModule,
-    DatePipe
+    DatePipe,
+    ButtonDirective
   ],
   templateUrl: './customer-chat.component.html',
   styleUrl: './customer-chat.component.scss'
@@ -35,6 +37,8 @@ export class CustomerChatComponent implements OnInit, OnDestroy {
 
   private msgSub!: Subscription;
   private notifSub!: Subscription;
+
+  @ViewChild('messageInput') messageInput: ElementRef | undefined;
 
   constructor(
     private chatService: ChatService,
@@ -118,6 +122,12 @@ export class CustomerChatComponent implements OnInit, OnDestroy {
     if (el) {
       setTimeout(() => el.scrollTop = el.scrollHeight, 50);
     }
+  }
+
+  adjustTextareaHeight(event: Event): void {
+    const textarea = event.target as HTMLTextAreaElement;
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
   }
 
   ngOnDestroy(): void {

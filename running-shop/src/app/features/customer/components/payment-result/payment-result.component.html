@@ -1,7 +1,42 @@
 <div class="payment-result">
-  <h2>{{ status === 'success' ? 'Thanh toán thành công' : 'Thanh toán thất bại' }}</h2>
-  <p *ngIf="status === 'success'">Đơn hàng #{{ orderId }} đã được xác nhận.</p>
-  <p-button *ngIf="status === 'failed'" label="Thử lại" (click)="retryPayment()" />
-  <p-button label="Xem đơn hàng" (click)="viewOrders()" />
+  <div class="result-container">
+    <div class="result-header">
+      <div class="steps">
+        <div class="step completed">Giỏ hàng</div>
+        <div class="step completed">Thanh toán</div>
+        <div class="step active">Hoàn tất</div>
+      </div>
+    </div>
+
+    <div class="result-content" [class.success]="status === 'success'" [class.failed]="status === 'failed'">
+      <div class="status-icon">
+        <i class="pi" [class.pi-check-circle]="status === 'success'" [class.pi-times-circle]="status === 'failed'"></i>
+      </div>
+      
+      <h2>{{ status === 'success' ? 'Đặt hàng thành công!' : 'Đặt hàng thất bại' }}</h2>
+      
+      <div class="order-info" *ngIf="status === 'success'">
+        <p class="order-number">Mã đơn hàng: #{{ orderId }}</p>
+        <p class="thank-you">Cảm ơn bạn đã đặt hàng tại Runner Shop!</p>
+        <p class="order-status">Chúng tôi sẽ xử lý đơn hàng của bạn trong thời gian sớm nhất.</p>
+      </div>
+
+      <div class="error-info" *ngIf="status === 'failed'">
+        <p class="error-message">{{ errorMessage || 'Đã có lỗi xảy ra trong quá trình thanh toán.' }}</p>
+        <p class="suggestion">Vui lòng thử lại hoặc liên hệ với chúng tôi để được hỗ trợ.</p>
+      </div>
+
+      <div class="action-buttons">
+        <p-button *ngIf="status === 'failed'" 
+                  label="Thử lại" 
+                  (click)="retryPayment()" 
+                  severity="secondary" 
+                  styleClass="mr-2" />
+        <p-button label="Xem đơn hàng" 
+                  (click)="viewOrders()" 
+                  [severity]="status === 'success' ? 'primary' : 'secondary'" />
+      </div>
+    </div>
+  </div>
 </div>
 <p-toast />

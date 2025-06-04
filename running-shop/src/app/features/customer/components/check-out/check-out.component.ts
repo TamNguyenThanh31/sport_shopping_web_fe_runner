@@ -11,7 +11,7 @@ import {AuthService} from "../../../../core/services/auth.service";
 import {MessageService} from "primeng/api";
 import {Router} from "@angular/router";
 import {TableModule} from "primeng/table";
-import {CurrencyPipe, DatePipe} from "@angular/common";
+import {CurrencyPipe, DatePipe, NgForOf, NgIf} from "@angular/common";
 import {Button} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {RadioButtonModule} from "primeng/radiobutton";
@@ -29,7 +29,9 @@ import {ToastModule} from "primeng/toast";
     DatePipe,
     RadioButtonModule,
     FormsModule,
-    ToastModule
+    ToastModule,
+    NgForOf,
+    NgIf
   ],
   templateUrl: './check-out.component.html',
   styleUrl: './check-out.component.scss'
@@ -126,6 +128,11 @@ export class CheckOutComponent implements OnInit {
     this.calculateTotal();
   }
 
+  removePromotion(): void {
+    this.selectedPromotion = null;
+    this.calculateTotal();
+  }
+
   placeOrder(): void {
     if (!this.selectedAddress) {
       this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Vui lòng chọn địa chỉ' });
@@ -159,5 +166,12 @@ export class CheckOutComponent implements OnInit {
       },
       error: () => this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Không thể tạo đơn hàng' })
     });
+  }
+
+  getImageUrl(imageUrl: string): string {
+    if (imageUrl) {
+      return `http://localhost:8080${imageUrl}`;
+    }
+    return 'assets/images/placeholder-product.png';
   }
 }

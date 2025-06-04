@@ -1,25 +1,47 @@
-<p-card header="Hỗ trợ khách hàng">
+<p-card header="Hỗ trợ khách hàng" styleClass="chat-card">
   <ng-container *ngIf="session">
     <div class="chat-header">
-      <span *ngIf="!session.staffId">Đang chờ nhân viên nhận …</span>
-      <span *ngIf="session.staffId">Bạn đang được hỗ trợ bởi nhân viên ID: {{ session.staffId }}</span>
-      <button pButton type="button" label="Đóng Chat" icon="pi pi-times" class="p-button-danger" (click)="closeChat()"></button>
+      <div class="header-content">
+        <i class="pi pi-headset header-icon"></i>
+        <div class="header-text">
+          <span *ngIf="!session.staffId" class="waiting-text">Đang chờ nhân viên nhận...</span>
+          <span *ngIf="session.staffId" class="staff-text">Bạn đang được hỗ trợ bởi nhân viên ID: {{ session.staffId }}</span>
+        </div>
+      </div>
+      <button pButton type="button" icon="pi pi-times" class="p-button-rounded p-button-text p-button-danger close-button" (click)="closeChat()"></button>
     </div>
     <p-scrollPanel id="messageList" [style]="{'height':'400px'}" styleClass="chat-window">
-      <div *ngFor="let msg of messages"
-           [ngClass]="{'message-customer': msg.senderId === session.customerId, 'message-staff': msg.senderId !== session.customerId}">
-        <div class="msg-content">
-          <p>{{ msg.content }}</p>
-          <small class="timestamp">{{ msg.timestamp | date:'shortTime' }}</small>
+      <div class="messages-container">
+        <div *ngFor="let msg of messages"
+             [ngClass]="{'message-customer': msg.senderId === session.customerId, 'message-staff': msg.senderId !== session.customerId}">
+          <div class="msg-content">
+            <p class="message-text">{{ msg.content }}</p>
+            <small class="timestamp">{{ msg.timestamp | date:'shortTime' }}</small>
+          </div>
         </div>
       </div>
     </p-scrollPanel>
     <div class="chat-input">
-      <textarea pInputTextarea rows="3" [(ngModel)]="newMessageContent" placeholder="Nhập tin nhắn..."></textarea>
-      <button pButton label="Gửi" icon="pi pi-send" (click)="sendMessage()" [disabled]="!newMessageContent.trim()"></button>
+      <textarea #messageInput pInputTextarea rows="1" [(ngModel)]="newMessageContent" 
+                placeholder="Nhập tin nhắn..." class="message-input"
+                (input)="adjustTextareaHeight($event)"></textarea>
+      <button class="send-button" (click)="sendMessage()" [disabled]="!newMessageContent.trim()">
+        <div class="svg-wrapper-1">
+          <div class="svg-wrapper">
+            <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 0h24v24H0z" fill="none"></path>
+              <path d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z" fill="currentColor"></path>
+            </svg>
+          </div>
+        </div>
+        <span>Gửi</span>
+      </button>
     </div>
   </ng-container>
   <ng-template #loading>
-    <p>Đang khởi tạo kết nối…</p>
+    <div class="loading-container">
+      <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+      <p>Đang khởi tạo kết nối…</p>
+    </div>
   </ng-template>
 </p-card>
