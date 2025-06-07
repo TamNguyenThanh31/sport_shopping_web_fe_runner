@@ -74,7 +74,21 @@
             </li>
           </ul>
         </div>
-        <!-- Có thể thêm filter giá ở đây nếu muốn -->
+        <!-- Thêm bộ lọc giá -->
+        <div class="price-filter-ui">
+          <div class="sidebar-title">Lọc theo giá</div>
+          <p-slider
+            [(ngModel)]="priceRange"
+            [range]="true"
+            [min]="0"
+            [max]="10000000"
+            (onChange)="filterByPrice()"
+            styleClass="price-slider"
+          ></p-slider>
+          <div class="price-range-display">
+            <span>{{ formatPrice(priceRange[0]) }} - {{ formatPrice(priceRange[1]) }}</span>
+          </div>
+        </div>
       </aside>
 
       <!-- Product List -->
@@ -87,7 +101,6 @@
             </h2>
           </div>
           <div class="toolbar-right-ui">
-            <p-dropdown [options]="sortOptions" [(ngModel)]="sortOption" (onChange)="onSortChange()" styleClass="custom-dropdown" placeholder="Sắp xếp theo"></p-dropdown>
             <div class="view-toggle-ui">
               <button pButton pRipple icon="pi pi-th-large" class="view-btn-ui" [ngClass]="{active: viewMode === 'grid'}" (click)="setViewMode('grid')"></button>
               <button pButton pRipple icon="pi pi-list" class="view-btn-ui" [ngClass]="{active: viewMode === 'list'}" (click)="setViewMode('list')"></button>

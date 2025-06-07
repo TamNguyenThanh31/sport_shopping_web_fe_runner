@@ -83,4 +83,14 @@ export class ApiService {
     }
     return this.http.get<PageResponse<Product>>(`${this.baseUrl}/products/search`, { headers: this.getAuthHeaders(), params });
   }
+
+  getProductsByCategory(categoryId: number, page: number = 0, size: number = 6): Observable<PageResponse<Product>> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<PageResponse<Product>>(
+      `${this.baseUrl}/products/category/${categoryId}`,
+      { headers: this.getAuthHeaders(), params }
+    );
+  }
 }
