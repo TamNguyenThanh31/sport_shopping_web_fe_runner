@@ -81,7 +81,7 @@ export class NavbarComponent implements OnInit {
       {
         label: 'Training Plans',
         icon: 'pi pi-map',
-        routerLink: ['/training'],
+        routerLink: ['/strava'],
         styleClass: 'menu-item'
       },
       {

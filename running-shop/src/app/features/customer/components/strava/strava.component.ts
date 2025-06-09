@@ -5,7 +5,7 @@ import { StravaStatus } from '../../../../shared/models/strava-status.model';
 import { Promotion } from '../../../../shared/models/promotion.model';
 
 import { CardModule } from 'primeng/card';
-import {CurrencyPipe, NgIf} from '@angular/common';
+import {CurrencyPipe, NgForOf, NgIf} from '@angular/common';
 import { Button } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
@@ -29,7 +29,8 @@ import { DecimalPipe } from '@angular/common';
     ToastModule,
     TableModule,
     DecimalPipe,
-    CurrencyPipe
+    CurrencyPipe,
+    NgForOf
   ],
   templateUrl: './strava.component.html',
   styleUrls: ['./strava.component.scss'],
