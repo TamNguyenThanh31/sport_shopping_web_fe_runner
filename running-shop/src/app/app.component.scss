@@ -20,13 +20,13 @@ app-sidebar.collapsed {
 
 .content {
   margin-top: 70px;
-  margin-left: 250px;
-  width: calc(100% - 250px);
+  //margin-left: 250px;
+  //width: calc(100% - 250px);
   padding: 20px;
   background-color: #f7fafc;
   transition: margin-left 0.3s ease, width 0.3s ease;
-  position: relative;
-  z-index: 50;
+  //position: relative;
+  //z-index: 50;
   box-sizing: border-box;
 }
 

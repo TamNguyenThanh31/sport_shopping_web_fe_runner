@@ -1,0 +1,115 @@
+<p-card header="Strava Sync" styleClass="p-m-4">
+  <!-- Chưa kết nối Strava -->
+  <ng-container *ngIf="!status">
+    <p-button
+      label="Kết nối Strava"
+      icon="pi pi-link"
+      (onClick)="connect()"
+      class="p-mt-2"
+    ></p-button>
+  </ng-container>
+
+  <!-- Đã kết nối mới hiện phần redeem và status -->
+  <ng-container *ngIf="status">
+    <!-- Input để user nhập số và chọn đơn vị -->
+    <div class="p-formgroup-inline p-my-3">
+      <input
+        type="number"
+        [(ngModel)]="redeemAmount"
+        min="0"
+        placeholder="Nhập số m hoặc km"
+      />
+      <p-dropdown
+        [options]="[
+          { label: 'm', value: 'm' },
+          { label: 'km', value: 'km' }
+        ]"
+        [(ngModel)]="redeemUnit"
+      >
+      </p-dropdown>
+      <p-button
+        label="Redeem"
+        icon="pi pi-ticket"
+        (onClick)="redeemCustom()"
+        [disabled]="!canRedeemCustom"
+      ></p-button>
+    </div>
+
+    <div class="p-grid p-ai-center p-my-3">
+      <div class="p-col-6 p-md-4">
+        <p-dropdown
+          [options]="daysOptions"
+          optionLabel="label"
+          optionValue="value"
+          [(ngModel)]="selectedDays"
+          (onChange)="sync()"
+          placeholder="Chọn khoảng thời gian"
+        ></p-dropdown>
+      </div>
+      <div class="p-col-6 p-md-2">
+        <p-button
+          icon="pi pi-sync"
+          (onClick)="sync()"
+          [disabled]="loading"
+        ></p-button>
+      </div>
+    </div>
+
+    <p-progressSpinner *ngIf="loading"></p-progressSpinner>
+
+    <p-panel header="Thông tin chạy bộ" *ngIf="!loading">
+      <div class="p-grid p-formgrid">
+        <div class="p-col-12 p-md-6">
+          <b>Tổng km:</b> {{ status.totalDistanceKm | number : '1.1-2' }} km
+        </div>
+        <div class="p-col-12 p-md-6">
+          <b>Pace TB:</b> {{ status.averagePace }}
+        </div>
+        <div class="p-col-12 p-md-6">
+          <b>M còn lại:</b> {{ status.availableKm }} m
+        </div>
+        <div class="p-col-12 p-md-6">
+          <b>Giảm giá:</b>
+          {{ status.currentDiscount | currency : 'VND' : 'symbol' : '1.0-0' }}
+        </div>
+      </div>
+      <div class="p-mt-3">
+        <p-button
+          label="Lấy mã nhanh"
+          icon="pi pi-ticket"
+          (onClick)="redeem()"
+          [disabled]="!canRedeem"
+        ></p-button>
+      </div>
+    </p-panel>
+
+    <!-- Danh sách coupons của user -->
+    <p-panel header="My Coupons" *ngIf="coupons.length > 0" class="p-mt-4">
+      <p-table [value]="coupons">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Code</th>
+            <th>Giảm</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-p>
+          <tr>
+            <td>{{ p.code }}</td>
+            <td>
+              <ng-container *ngIf="p.discountAmount && p.discountAmount > 0">
+                {{ p.discountAmount | currency : 'VND' : 'symbol' : '1.0-0' }}
+              </ng-container>
+              <ng-container
+                *ngIf="p.discountPercentage != null && p.discountPercentage > 0"
+              >
+                {{ p.discountPercentage }}%
+              </ng-container>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-panel>
+  </ng-container>
+
+  <p-toast></p-toast>
+</p-card>

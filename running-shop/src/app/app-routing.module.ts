@@ -19,6 +19,7 @@ import {OrderComponent} from "./features/customer/components/order/order.compone
 import {StaffChatComponent} from "./common/chat-support/staff-chat/staff-chat.component";
 import {CustomerChatComponent} from "./common/chat-support/customer-chat/customer-chat.component";
 import {ReportDashboardComponent} from "./features/admin/components/report-dashboard/report-dashboard.component";
+import {StravaComponent} from "./features/customer/components/strava/strava.component";
 
 const routes: Routes = [
   {
@@ -63,6 +64,8 @@ const routes: Routes = [
 
   { path: 'chat', component: CustomerChatComponent},
   { path: 'staff-chat', component: StaffChatComponent},
+
+  { path: 'strava', component: StravaComponent }
 //   { path: 'waiting-list', component: WaitingListComponent, canActivate: [AuthGuard], data: { role: 'STAFF' } },
 //   { path: 'chat', component: StaffChatComponent, canActivate: [AuthGuard], data: { role: 'STAFF' } },
 //   { path: 'chat-customer', component: ChatComponent}
