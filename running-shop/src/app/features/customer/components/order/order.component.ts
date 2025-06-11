@@ -5,7 +5,7 @@ import {AuthService} from "../../../../core/services/auth.service";
 import {MessageService} from "primeng/api";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TableModule} from "primeng/table";
-import {CurrencyPipe, DatePipe, NgClass, NgIf} from "@angular/common";
+import {CurrencyPipe, DatePipe, DecimalPipe, NgClass, NgIf} from "@angular/common";
 import {Button} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {ToastModule} from "primeng/toast";
@@ -13,16 +13,17 @@ import {ToastModule} from "primeng/toast";
 @Component({
   selector: 'app-order',
   standalone: true,
-  imports: [
-    TableModule,
-    DatePipe,
-    CurrencyPipe,
-    Button,
-    DialogModule,
-    NgIf,
-    ToastModule,
-    NgClass
-  ],
+    imports: [
+        TableModule,
+        DatePipe,
+        CurrencyPipe,
+        Button,
+        DialogModule,
+        NgIf,
+        ToastModule,
+        NgClass,
+        DecimalPipe
+    ],
   templateUrl: './order.component.html',
   styleUrl: './order.component.scss'
 })

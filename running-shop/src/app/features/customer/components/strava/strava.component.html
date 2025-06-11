@@ -58,7 +58,7 @@
         </div>
         <div class="stat-content">
           <h3>Giảm Giá Hiện Tại</h3>
-          <div class="stat-value">{{ status.currentDiscount | currency : 'VND' : 'symbol' : '1.0-0' }}</div>
+          <div class="stat-value">{{ status.currentDiscount || 0 | number : '1.0-0' }} VND</div>
         </div>
       </div>
     </div>

@@ -3,10 +3,11 @@
     <!-- Hero Section -->
     <div class="hero-section-ui">
       <div class="hero-img-ui">
-        <p-carousel [value]="heroImages" [numVisible]="1" [numScroll]="1" [circular]="true" [autoplayInterval]="5000" [showIndicators]="true" [showNavigators]="true" styleClass="hero-carousel-ui">
+        <p-carousel [value]="heroImages" [numVisible]="1" [numScroll]="1" [circular]="true" [autoplayInterval]="5000"
+                    [showIndicators]="true" [showNavigators]="true" styleClass="hero-carousel-ui">
           <ng-template pTemplate="item" let-image>
             <div class="hero-carousel-item">
-              <img [src]="image.src" [alt]="image.alt" />
+              <img [src]="image.src" [alt]="image.alt"/>
             </div>
           </ng-template>
         </p-carousel>
@@ -24,11 +25,12 @@
     <!-- Sản phẩm bán chạy Carousel -->
     <div class="hot-products-ui">
       <h3 class="hot-title-ui">Sản phẩm bán chạy</h3>
-      <p-carousel [value]="hotProducts" [numVisible]="4" [numScroll]="2" [circular]="false" [responsiveOptions]="hotCarouselResponsive" styleClass="hot-carousel-ui">
+      <p-carousel [value]="hotProducts" [numVisible]="4" [numScroll]="2" [circular]="false"
+                  [responsiveOptions]="hotCarouselResponsive" styleClass="hot-carousel-ui">
         <ng-template pTemplate="item" let-product>
           <div class="hot-card-ui">
             <div class="hot-img-box-ui">
-              <img [src]="getPrimaryImage(product.images)" [alt]="product.name" class="hot-img-ui" />
+              <img [src]="getPrimaryImage(product.images)" [alt]="product.name" class="hot-img-ui"/>
               <span class="hot-badge-ui" [ngClass]="{
                 'in-stock': hasStock(product),
                 'out-of-stock': !hasStock(product),
@@ -42,7 +44,8 @@
               <div class="hot-price-ui">{{ formatPrice(getCurrentPrice(product)) }}</div>
               <div class="hot-actions-ui">
                 <button pButton pRipple icon="pi pi-heart" class="hot-action-btn-ui" pTooltip="Yêu thích"></button>
-                <button pButton pRipple icon="pi pi-shopping-cart" class="hot-action-btn-ui" [disabled]="!hasStock(product)" (click)="addToCart(product)" pTooltip="Thêm vào giỏ"></button>
+                <button pButton pRipple icon="pi pi-shopping-cart" class="hot-action-btn-ui"
+                        [disabled]="!hasStock(product)" (click)="addToCart(product)" pTooltip="Thêm vào giỏ"></button>
               </div>
             </div>
           </div>
@@ -102,8 +105,10 @@
           </div>
           <div class="toolbar-right-ui">
             <div class="view-toggle-ui">
-              <button pButton pRipple icon="pi pi-th-large" class="view-btn-ui" [ngClass]="{active: viewMode === 'grid'}" (click)="setViewMode('grid')"></button>
-              <button pButton pRipple icon="pi pi-list" class="view-btn-ui" [ngClass]="{active: viewMode === 'list'}" (click)="setViewMode('list')"></button>
+              <button pButton pRipple icon="pi pi-th-large" class="view-btn-ui"
+                      [ngClass]="{active: viewMode === 'grid'}" (click)="setViewMode('grid')"></button>
+              <button pButton pRipple icon="pi pi-list" class="view-btn-ui" [ngClass]="{active: viewMode === 'list'}"
+                      (click)="setViewMode('list')"></button>
             </div>
           </div>
         </div>
@@ -115,12 +120,14 @@
               <div class="product-card-ui">
                 <div class="img-box-ui">
                   <img [src]="getPrimaryImage(product.images)" [alt]="product.name" class="img-ui">
-                  <span class="badge-ui" [ngClass]="{ 'in-stock': hasStock(product), 'out-of-stock': !hasStock(product) }">
+                  <span class="badge-ui"
+                        [ngClass]="{ 'in-stock': hasStock(product), 'out-of-stock': !hasStock(product) }">
                     {{ hasStock(product) ? 'Còn hàng' : 'Hết hàng' }}
                   </span>
                   <div class="quick-actions-ui">
                     <button pButton pRipple icon="pi pi-heart" class="action-btn-ui" pTooltip="Yêu thích"></button>
-                    <button pButton pRipple icon="pi pi-eye" class="action-btn-ui" (click)="openQuickView(product.id!)" pTooltip="Xem nhanh"></button>
+                    <button pButton pRipple icon="pi pi-eye" class="action-btn-ui" (click)="openQuickView(product.id!)"
+                            pTooltip="Xem nhanh"></button>
                   </div>
                 </div>
                 <div class="info-ui">
@@ -128,7 +135,9 @@
                   <h3 class="name-ui" (click)="navigateToDetail(product.id!)">{{ product.name }}</h3>
                   <div class="price-ui">{{ formatPrice(getCurrentPrice(product)) }}</div>
                   <div *ngIf="product.variants.length > 1" class="variant-ui">
-                    <p-dropdown [options]="product.variants" [(ngModel)]="selectedVariants[product.id!]" (onChange)="onVariantChange(product, $event.value)" optionLabel="sku" styleClass="w-full custom-variant-dropdown" placeholder="Chọn phân loại"></p-dropdown>
+                    <p-dropdown [options]="product.variants" [(ngModel)]="selectedVariants[product.id!]"
+                                (onChange)="onVariantChange(product, $event.value)" optionLabel="sku"
+                                styleClass="w-full custom-variant-dropdown" placeholder="Chọn phân loại"></p-dropdown>
                   </div>
                   <button pButton pRipple
                           icon="pi pi-shopping-cart"
@@ -137,7 +146,8 @@
                           [disabled]="!hasStock(product)"
                           class="add-cart-ui"
                           [attr.data-product-id]="product.id">
-                  </button>                </div>
+                  </button>
+                </div>
               </div>
             </ng-container>
           </div>
@@ -151,7 +161,9 @@
                   <div class="brand-ui">{{ product.brand }}</div>
                   <div class="price-ui">{{ formatPrice(getCurrentPrice(product)) }}</div>
                   <div *ngIf="product.variants.length > 1" class="variant-ui">
-                    <p-dropdown [options]="product.variants" [(ngModel)]="selectedVariants[product.id!]" (onChange)="onVariantChange(product, $event.value)" optionLabel="sku" styleClass="w-full custom-variant-dropdown" placeholder="Chọn phân loại"></p-dropdown>
+                    <p-dropdown [options]="product.variants" [(ngModel)]="selectedVariants[product.id!]"
+                                (onChange)="onVariantChange(product, $event.value)" optionLabel="sku"
+                                styleClass="w-full custom-variant-dropdown" placeholder="Chọn phân loại"></p-dropdown>
                   </div>
                   <button pButton pRipple
                           icon="pi pi-shopping-cart"
@@ -160,7 +172,8 @@
                           [disabled]="!hasStock(product)"
                           class="add-cart-ui"
                           [attr.data-product-id]="product.id">
-                  </button>                </div>
+                  </button>
+                </div>
               </div>
             </ng-container>
           </div>
@@ -175,7 +188,8 @@
         </div>
 
         <!-- Paginator -->
-        <p-paginator [rows]="size" [totalRecords]="totalElements" (onPageChange)="onPageChange($event)" styleClass="custom-paginator" [rowsPerPageOptions]="[12, 24, 36]"></p-paginator>
+        <p-paginator [rows]="size" [totalRecords]="totalElements" (onPageChange)="onPageChange($event)"
+                     styleClass="custom-paginator" [rowsPerPageOptions]="[12, 24, 36]"></p-paginator>
       </section>
     </div>
     <p-toast position="top-right" key="mainToast"></p-toast>

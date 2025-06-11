@@ -1,6 +1,6 @@
 export interface StravaStatus {
   totalDistanceKm: number;
-  averagePace: string;      // mm:ss
+  averagePace: string;      // min:km
   availableKm: number;
-  currentDiscount: number;  // %
+  currentDiscount: number;  // 1000 đ
 }
