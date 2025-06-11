@@ -31,8 +31,9 @@ export class PromotionService {
     return this.http.get<Promotion>(`${this.apiUrl}/${promotionId}`);
   }
 
-  getAllPromotions(): Observable<Promotion[]> {
-    return this.http.get<Promotion[]>(this.apiUrl);
+  getAllPromotionsForCustomer(customerId: number): Observable<Promotion[]> {
+    const url = `${this.apiUrl}/customer/${customerId}`;
+    return this.http.get<Promotion[]>(url);
   }
 
   searchPromotions(searchParams: {

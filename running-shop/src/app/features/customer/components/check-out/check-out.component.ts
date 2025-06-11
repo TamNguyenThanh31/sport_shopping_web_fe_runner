@@ -92,18 +92,30 @@ export class CheckOutComponent implements OnInit {
     });
   }
 
-  loadPromotions(): void {
-    this.promotionService.searchPromotions({ isActive: true }).subscribe({
-      next: (page) => {
-        this.promotions = page.content.filter(p =>
-          (!p.startDate || new Date(p.startDate) <= new Date()) &&
-          (!p.endDate || new Date(p.endDate) > new Date()) &&
-          (!p.maxUsage || p.maxUsage > 0)
-        );
-      },
-      error: () => this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Không thể tải mã giảm giá' })
-    });
+  private loadPromotions(): void {
+    if (!this.userId) { return; }
+
+    this.promotionService.getAllPromotionsForCustomer(this.userId)
+      .subscribe({
+        next: (promos) => {
+          const now = new Date();
+          this.promotions = promos.filter(p =>
+            (!p.startDate || new Date(p.startDate) <= now) &&
+            (!p.endDate   || new Date(p.endDate)   >  now) &&
+            (!p.maxUsage  || p.maxUsage > 0) &&
+            (p.isActive === undefined || p.isActive)
+          );
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Lỗi',
+            detail: 'Không thể tải mã giảm giá'
+          });
+        }
+      });
   }
+
 
   calculateTotal(): void {
     this.subtotal = this.cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
