@@ -1,0 +1,152 @@
+<div class="strava-container">
+  <div class="strava-header">
+    <div class="header-content">
+      <h1>Kết Nối Strava</h1>
+      <p class="subtitle">Theo dõi thành tích chạy và nhận phần thưởng</p>
+    </div>
+  </div>
+
+  <!-- Chưa kết nối Strava -->
+  <div class="connect-section" *ngIf="!status">
+    <div class="connect-card">
+      <div class="connect-icon">
+        <i class="pi pi-link"></i>
+      </div>
+      <h2>Kết Nối với Strava</h2>
+      <p>Đồng bộ dữ liệu chạy của bạn và mở khóa phần thưởng độc quyền</p>
+      <button class="connect-button" (click)="connect()">
+        <i class="pi pi-link"></i>
+        Kết Nối Strava
+      </button>
+    </div>
+  </div>
+
+  <!-- Đã kết nối -->
+  <div class="dashboard" *ngIf="status">
+    <!-- Thống kê tổng quan -->
+    <div class="stats-overview">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="pi pi-chart-line"></i>
+        </div>
+        <div class="stat-content">
+          <h3>Tổng Quãng Đường</h3>
+          <div class="stat-value">{{ status.totalDistanceKm | number : '1.1-2' }} km</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="pi pi-bolt"></i>
+        </div>
+        <div class="stat-content">
+          <h3>Tốc Độ Trung Bình</h3>
+          <div class="stat-value">{{ status.averagePace }}</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="pi pi-map-marker"></i>
+        </div>
+        <div class="stat-content">
+          <h3>Quãng Đường Còn Lại</h3>
+          <div class="stat-value">{{ status.availableKm }} m</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <i class="pi pi-tag"></i>
+        </div>
+        <div class="stat-content">
+          <h3>Giảm Giá Hiện Tại</h3>
+          <div class="stat-value">{{ status.currentDiscount | currency : 'VND' : 'symbol' : '1.0-0' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Đổi thưởng tùy chỉnh -->
+    <div class="redeem-section">
+      <div class="section-header">
+        <h2>Đổi Thưởng Tùy Chỉnh</h2>
+        <p>Chuyển đổi quãng đường chạy thành phần thưởng</p>
+      </div>
+      <div class="redeem-form">
+        <div class="input-group">
+          <input
+            type="number"
+            [(ngModel)]="redeemAmount"
+            min="0"
+            placeholder="Nhập quãng đường"
+          />
+          <p-dropdown
+            [options]="[
+              { label: 'm', value: 'm' },
+              { label: 'km', value: 'km' }
+            ]"
+            [(ngModel)]="redeemUnit"
+          >
+          </p-dropdown>
+          <button class="redeem-button" [disabled]="!canRedeemCustom" (click)="redeemCustom()">
+            <i class="pi pi-ticket"></i>
+            Đổi Thưởng
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Đồng bộ dữ liệu -->
+    <div class="sync-section">
+      <div class="section-header">
+        <h2>Đồng Bộ Dữ Liệu</h2>
+        <p>Chọn khoảng thời gian để đồng bộ hoạt động của bạn</p>
+      </div>
+      <div class="sync-controls">
+        <p-dropdown
+          [options]="daysOptions"
+          optionLabel="label"
+          optionValue="value"
+          [(ngModel)]="selectedDays"
+          (onChange)="sync()"
+          placeholder="Chọn khoảng thời gian"
+        ></p-dropdown>
+        <button class="sync-button" [disabled]="loading" (click)="sync()">
+          <i class="pi pi-sync" [class.pi-spin]="loading"></i>
+          {{ loading ? 'Đang Đồng Bộ...' : 'Đồng Bộ' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Đổi thưởng nhanh -->
+    <div class="quick-redeem">
+      <button class="quick-redeem-button" [disabled]="!canRedeem" (click)="redeem()">
+        <i class="pi pi-ticket"></i>
+        Đổi Thưởng Nhanh
+      </button>
+    </div>
+
+    <!-- Danh sách mã giảm giá -->
+    <div class="coupons-section" *ngIf="coupons.length > 0">
+      <div class="section-header">
+        <h2>Phần Thưởng Của Bạn</h2>
+        <p>Mã giảm giá có sẵn</p>
+      </div>
+      <div class="coupons-grid">
+        <div class="coupon-card" *ngFor="let coupon of coupons">
+          <div class="coupon-content">
+            <div class="coupon-code">{{ coupon.code }}</div>
+            <div class="coupon-discount">
+              <ng-container *ngIf="coupon.discountAmount && coupon.discountAmount > 0">
+                {{ coupon.discountAmount | currency : 'VND' : 'symbol' : '1.0-0' }}
+              </ng-container>
+              <ng-container *ngIf="coupon.discountPercentage != null && coupon.discountPercentage > 0">
+                {{ coupon.discountPercentage }}%
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p-progressSpinner *ngIf="loading"></p-progressSpinner>
+  <p-toast></p-toast>
+</div>

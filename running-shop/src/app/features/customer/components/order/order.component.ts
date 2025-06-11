@@ -5,7 +5,7 @@ import {AuthService} from "../../../../core/services/auth.service";
 import {MessageService} from "primeng/api";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TableModule} from "primeng/table";
-import {CurrencyPipe, DatePipe, NgIf} from "@angular/common";
+import {CurrencyPipe, DatePipe, NgClass, NgIf} from "@angular/common";
 import {Button} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {ToastModule} from "primeng/toast";
@@ -20,7 +20,8 @@ import {ToastModule} from "primeng/toast";
     Button,
     DialogModule,
     NgIf,
-    ToastModule
+    ToastModule,
+    NgClass
   ],
   templateUrl: './order.component.html',
   styleUrl: './order.component.scss'

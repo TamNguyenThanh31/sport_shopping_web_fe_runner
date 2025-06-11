@@ -1,0 +1,586 @@
+:host ::ng-deep {
+  // Variables
+  $primary-color: #1E88E5;
+  $secondary-color: #42A5F5;
+  $strava-orange: #FC4C02;
+  $strava-orange-light: #FF6B2B;
+  $strava-orange-dark: #E63E00;
+  $background-color: #F5F7FA;
+  $card-background: #FFFFFF;
+  $text-primary: #1A237E;
+  $text-secondary: #455A64;
+  $success-color: #00C853;
+  $border-radius: 16px;
+  $spacing: 24px;
+  $transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // Toast Styling
+  .p-toast {
+    .p-toast-message {
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: none;
+      margin: 0 0 1rem 0;
+      
+      &.p-toast-message-success {
+        background: #E8F5E9;
+        .p-toast-message-content {
+          padding: 1rem;
+          .p-toast-message-icon {
+            color: $success-color;
+          }
+          .p-toast-message-text {
+            color: #2E7D32;
+          }
+        }
+      }
+      
+      &.p-toast-message-error {
+        background: #FFEBEE;
+        .p-toast-message-content {
+          padding: 1rem;
+          .p-toast-message-icon {
+            color: #D32F2F;
+          }
+          .p-toast-message-text {
+            color: #C62828;
+          }
+        }
+      }
+    }
+  }
+
+  // Container
+  .strava-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: $spacing;
+    background: $background-color;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  // Loading Spinner
+  .p-progressSpinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2rem;
+    border-radius: 50%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(8px);
+
+    .p-progress-spinner-circle {
+      stroke: $strava-orange;
+      stroke-width: 3;
+    }
+  }
+
+  // Header
+  .strava-header {
+    text-align: center;
+    margin-bottom: $spacing * 2;
+    padding: $spacing * 2 0;
+    position: relative;
+    background: linear-gradient(135deg, rgba($primary-color, 0.08), rgba($strava-orange, 0.08));
+    border-radius: $border-radius;
+    border: 1px solid rgba($strava-orange, 0.1);
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 4px;
+      background: linear-gradient(90deg, $primary-color, $strava-orange);
+      border-radius: 2px;
+    }
+
+    .header-content {
+      h1 {
+        font-size: 42px;
+        font-weight: 700;
+        margin: 0;
+        letter-spacing: -0.5px;
+        background: linear-gradient(135deg, $primary-color, $strava-orange);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .subtitle {
+        font-size: 18px;
+        color: $text-secondary;
+        margin-top: 12px;
+        font-weight: 400;
+      }
+    }
+  }
+
+  // Connect Section
+  .connect-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+
+    .connect-card {
+      background: $card-background;
+      border-radius: $border-radius;
+      padding: $spacing * 2;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      max-width: 400px;
+      width: 100%;
+      border: 1px solid rgba($primary-color, 0.1);
+      transition: $transition;
+
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+      }
+
+      .connect-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, rgba($primary-color, 0.1), rgba($secondary-color, 0.1));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto $spacing;
+        transition: $transition;
+
+        &:hover {
+          transform: scale(1.1);
+          background: linear-gradient(135deg, rgba($primary-color, 0.15), rgba($secondary-color, 0.15));
+        }
+
+        i {
+          font-size: 32px;
+          color: $primary-color;
+        }
+      }
+
+      h2 {
+        font-size: 28px;
+        color: $text-primary;
+        margin: 0 0 12px;
+        font-weight: 600;
+      }
+
+      p {
+        color: $text-secondary;
+        margin-bottom: $spacing;
+        line-height: 1.6;
+      }
+
+      .connect-button {
+        background: linear-gradient(135deg, $strava-orange, $strava-orange-light);
+        color: white;
+        border: none;
+        padding: 16px 32px;
+        border-radius: 30px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: $transition;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba($strava-orange, 0.2);
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba($strava-orange, 0.3);
+        }
+
+        i {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+
+  // Dashboard
+  .dashboard {
+    .stats-overview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: $spacing;
+      margin-bottom: $spacing * 2;
+
+      .stat-card {
+        background: $card-background;
+        border-radius: $border-radius;
+        padding: $spacing;
+        display: flex;
+        align-items: center;
+        gap: $spacing;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        transition: $transition;
+        border: 1px solid rgba($strava-orange, 0.1);
+        position: relative;
+        overflow: hidden;
+
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 24px rgba($strava-orange, 0.1);
+
+          .stat-icon {
+            background: linear-gradient(135deg, rgba($strava-orange, 0.1), rgba($strava-orange-light, 0.1));
+            i {
+              color: $strava-orange;
+            }
+          }
+        }
+
+        .stat-icon {
+          width: 56px;
+          height: 56px;
+          background: rgba($primary-color, 0.08);
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: $transition;
+
+          i {
+            font-size: 24px;
+            color: $primary-color;
+          }
+        }
+
+        .stat-content {
+          h3 {
+            font-size: 14px;
+            color: $text-secondary;
+            margin: 0 0 4px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+
+          .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: $strava-orange;
+          }
+        }
+      }
+    }
+
+    // Section Headers
+    .section-header {
+      margin-bottom: $spacing;
+      
+      h2 {
+        font-size: 24px;
+        color: $text-primary;
+        margin: 0 0 8px;
+        font-weight: 600;
+      }
+
+      p {
+        color: $text-secondary;
+        margin: 0;
+        font-size: 14px;
+      }
+    }
+
+    // Redeem Section
+    .redeem-section {
+      background: $card-background;
+      border-radius: $border-radius;
+      padding: $spacing;
+      margin-bottom: $spacing * 2;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba($primary-color, 0.08);
+      transition: $transition;
+
+      &:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      }
+
+      .redeem-form {
+        .input-group {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+
+          input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 2px solid rgba($primary-color, 0.1);
+            border-radius: 12px;
+            font-size: 14px;
+            transition: $transition;
+            background: rgba($primary-color, 0.02);
+
+            &:focus {
+              border-color: $primary-color;
+              outline: none;
+              box-shadow: 0 0 0 4px rgba($primary-color, 0.1);
+              background: white;
+            }
+          }
+
+          .p-dropdown {
+            min-width: 100px;
+            border: 2px solid rgba($primary-color, 0.1);
+            border-radius: 12px;
+            background: rgba($primary-color, 0.02);
+
+            &:hover {
+              border-color: $primary-color;
+            }
+          }
+
+          .redeem-button {
+            background: linear-gradient(135deg, $primary-color, $secondary-color);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: $transition;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba($primary-color, 0.2);
+
+            &:hover:not(:disabled) {
+              transform: translateY(-2px);
+              box-shadow: 0 8px 24px rgba($primary-color, 0.3);
+            }
+
+            &:disabled {
+              opacity: 0.6;
+              cursor: not-allowed;
+            }
+          }
+        }
+      }
+    }
+
+    // Sync Section
+    .sync-section {
+      background: $card-background;
+      border-radius: $border-radius;
+      padding: $spacing * 1.5;
+      margin-bottom: $spacing * 2;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba($strava-orange, 0.1);
+
+      .section-header {
+        text-align: center;
+        margin-bottom: $spacing;
+
+        h2 {
+          font-size: 24px;
+          color: $text-primary;
+          margin: 0 0 8px;
+          font-weight: 600;
+        }
+
+        p {
+          color: $text-secondary;
+          margin: 0;
+        }
+      }
+
+      .sync-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: $spacing;
+        flex-wrap: wrap;
+
+        .p-dropdown {
+          min-width: 200px;
+          border: 1px solid rgba($strava-orange, 0.2);
+          border-radius: 8px;
+          
+          &:hover {
+            border-color: $strava-orange;
+          }
+        }
+
+        .sync-button {
+          background: linear-gradient(135deg, $strava-orange, $strava-orange-light);
+          color: white;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 8px;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: $transition;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          box-shadow: 0 4px 12px rgba($strava-orange, 0.2);
+
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba($strava-orange, 0.3);
+          }
+
+          &:disabled {
+            background: #E0E0E0;
+            cursor: not-allowed;
+            box-shadow: none;
+          }
+
+          i {
+            font-size: 18px;
+          }
+        }
+      }
+    }
+
+    // Quick Redeem
+    .quick-redeem {
+      text-align: center;
+      margin-bottom: $spacing * 2;
+
+      .quick-redeem-button {
+        background: linear-gradient(135deg, $strava-orange, $strava-orange-light);
+        color: white;
+        border: none;
+        padding: 16px 32px;
+        border-radius: 30px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: $transition;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba($strava-orange, 0.2);
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 24px rgba($strava-orange, 0.3);
+        }
+
+        &:disabled {
+          background: #E0E0E0;
+          cursor: not-allowed;
+          box-shadow: none;
+        }
+      }
+    }
+
+    // Coupons Section
+    .coupons-section {
+      .section-header {
+        text-align: center;
+        margin-bottom: $spacing;
+
+        h2 {
+          font-size: 24px;
+          color: $text-primary;
+          margin: 0 0 8px;
+          font-weight: 600;
+        }
+
+        p {
+          color: $text-secondary;
+          margin: 0;
+        }
+      }
+
+      .coupons-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: $spacing;
+
+        .coupon-card {
+          background: linear-gradient(135deg, rgba($strava-orange, 0.05), rgba($strava-orange-light, 0.05));
+          border-radius: $border-radius;
+          padding: $spacing;
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+          transition: $transition;
+          border: 1px solid rgba($strava-orange, 0.1);
+          position: relative;
+          overflow: hidden;
+
+          &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba($strava-orange, 0.1);
+          }
+
+          .coupon-content {
+            text-align: center;
+
+            .coupon-code {
+              font-size: 24px;
+              font-weight: 700;
+              color: $strava-orange;
+              margin-bottom: 8px;
+              letter-spacing: 1px;
+            }
+
+            .coupon-discount {
+              font-size: 18px;
+              color: $strava-orange-light;
+              font-weight: 600;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Responsive Design
+  @media screen and (max-width: 768px) {
+    .strava-container {
+      padding: $spacing/2;
+    }
+
+    .strava-header {
+      .header-content {
+        h1 {
+          font-size: 32px;
+        }
+
+        .subtitle {
+          font-size: 16px;
+        }
+      }
+    }
+
+    .dashboard {
+      .stats-overview {
+        grid-template-columns: 1fr;
+      }
+
+      .redeem-section,
+      .sync-section {
+        .input-group,
+        .sync-controls {
+          flex-direction: column;
+          
+          input,
+          .p-dropdown,
+          button {
+            width: 100%;
+          }
+        }
+      }
+
+      .coupons-section {
+        .coupons-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+  }
+}

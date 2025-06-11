@@ -4,6 +4,7 @@ import { forkJoin } from 'rxjs';
 import { Product, ProductImage, ProductVariant } from '../../../../shared/models/product.model';
 import { Category } from '../../../../shared/models/category.model';
 import { ApiService } from '../../../../core/services/api.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import {Toast, ToastModule} from 'primeng/toast';
 import {Paginator, PaginatorModule} from 'primeng/paginator';
 import {NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase} from '@angular/common';
@@ -84,7 +85,7 @@ export class CustomerProductComponent implements OnInit {
   totalPages: number = 0;
   quickViewVisible: boolean = false;
   quickViewProductId: number | null = null;
-  currentUserId: number = 1; // Thay bằng ID người dùng thực tế
+  currentUserId: number | null = null;
 
   selectedVariants: { [productId: number]: ProductVariant } = {};
 
@@ -123,8 +124,13 @@ export class CustomerProductComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private router: Router,
     private cartService: CartService,
-    private cartEventService: CartEventService
-  ) {}
+    private cartEventService: CartEventService,
+    private authService: AuthService
+  ) {
+    this.authService.getCurrentUser().subscribe(user => {
+      this.currentUserId = user?.id || null;
+    });
+  }
 
   ngOnInit(): void {
     this.loadData();
@@ -305,6 +311,12 @@ export class CustomerProductComponent implements OnInit {
   }
 
   addToCart(product: Product): void {
+    if (!this.currentUserId) {
+      this.showError('Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     if (!this.hasStock(product)) {
       this.showError('Sản phẩm đã hết hàng');
       return;

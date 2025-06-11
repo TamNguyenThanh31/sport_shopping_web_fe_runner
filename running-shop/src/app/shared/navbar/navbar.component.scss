@@ -20,7 +20,7 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1000 !important;
+    z-index: 50 !important;
     transition: all 0.3s ease;
     backdrop-filter: blur(4px);
   }
@@ -257,7 +257,7 @@
 }
 
 ::ng-deep .p-menubar {
-  z-index: 1000 !important;
+  z-index: 50 !important;
 }
 
 .p-menu {

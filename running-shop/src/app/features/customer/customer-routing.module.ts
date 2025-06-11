@@ -10,6 +10,7 @@ import {CartSidebarComponent} from "./components/cart-sidebar/cart-sidebar.compo
 import {PaymentResultComponent} from "./components/payment-result/payment-result.component";
 import {CheckOutComponent} from "./components/check-out/check-out.component";
 import {OrderComponent} from "./components/order/order.component";
+import {StravaComponent} from "./components/strava/strava.component";
 
 const routes: Routes = [
   // { path: '', component: CustomerDashboardComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'checkout', component: CheckOutComponent },
   { path: 'payment-result', component: PaymentResultComponent },
   { path: 'orders', component: OrderComponent },
+  { path: 'strava', component: StravaComponent }
 ];
 
 @NgModule({

@@ -92,30 +92,74 @@ export class CheckOutComponent implements OnInit {
     });
   }
 
-  loadPromotions(): void {
-    this.promotionService.searchPromotions({ isActive: true }).subscribe({
-      next: (page) => {
-        this.promotions = page.content.filter(p =>
-          (!p.startDate || new Date(p.startDate) <= new Date()) &&
-          (!p.endDate || new Date(p.endDate) > new Date()) &&
-          (!p.maxUsage || p.maxUsage > 0)
-        );
-      },
-      error: () => this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Không thể tải mã giảm giá' })
-    });
+  private loadPromotions(): void {
+    if (!this.userId) { return; }
+
+    this.promotionService.getAllPromotionsForCustomer(this.userId)
+      .subscribe({
+        next: (promos) => {
+          const now = new Date();
+          this.promotions = promos.filter(p =>
+            (!p.startDate || new Date(p.startDate) <= now) &&
+            (!p.endDate   || new Date(p.endDate)   >  now) &&
+            (!p.maxUsage  || p.maxUsage > 0) &&
+            (p.isActive === undefined || p.isActive)
+          );
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Lỗi',
+            detail: 'Không thể tải mã giảm giá'
+          });
+        }
+      });
   }
+
 
   calculateTotal(): void {
     this.subtotal = this.cartItems.reduce((sum, item) => sum + item.totalPrice, 0);
-    if (this.selectedPromotion && this.selectedPromotion.minimumOrderValue && this.subtotal < this.selectedPromotion.minimumOrderValue) {
-      this.messageService.add({ severity: 'warn', summary: 'Cảnh báo', detail: `Đơn hàng chưa đạt ${this.selectedPromotion.minimumOrderValue}đ` });
-      this.selectedPromotion = null;
-      this.discount = 0;
-    } else {
-      this.discount = this.selectedPromotion ? this.subtotal * (this.selectedPromotion.discountPercentage / 100) : 0;
+    this.discount = 0;
+
+    if (this.selectedPromotion) {
+      // Kiểm tra điều kiện minimumOrderValue
+      if (
+        this.selectedPromotion.minimumOrderValue != null &&
+        this.subtotal < this.selectedPromotion.minimumOrderValue
+      ) {
+        this.messageService.add({
+          severity: 'warn',
+          summary: 'Cảnh báo',
+          detail: `Đơn hàng chưa đạt ${this.selectedPromotion.minimumOrderValue} đ`
+        });
+        this.selectedPromotion = null;
+      } else {
+        // Ưu tiên discountAmount
+        if (
+          this.selectedPromotion.discountAmount != null &&
+          this.selectedPromotion.discountAmount > 0
+        ) {
+          this.discount = this.selectedPromotion.discountAmount;
+        }
+        // Nếu không có discountAmount thì dùng phần trăm
+        else if (
+          this.selectedPromotion.discountPercentage != null &&
+          this.selectedPromotion.discountPercentage > 0
+        ) {
+          this.discount =
+            this.subtotal *
+            (this.selectedPromotion.discountPercentage / 100);
+        }
+        // Không để discount vượt quá subtotal
+        if (this.discount > this.subtotal) {
+          this.discount = this.subtotal;
+        }
+      }
     }
+
     this.total = this.subtotal - this.discount;
   }
+
 
   selectAddress(address: Address): void {
     this.selectedAddress = address;
@@ -139,13 +183,18 @@ export class CheckOutComponent implements OnInit {
       return;
     }
 
+    if (!this.total || this.total <= 0) {
+      this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Tổng tiền không hợp lệ' });
+      return;
+    }
+
     const order: OrderModel = {
       userId: this.userId!,
       addressId: this.selectedAddress.id!,
       promotionId: this.selectedPromotion?.id,
       promotionCode: this.selectedPromotion?.code,
       paymentMethod: this.paymentMethod,
-      totalPrice: this.total
+      totalPrice: Number(this.total.toFixed(2)) // Đảm bảo giá trị là số và có 2 chữ số thập phân
     };
 
     this.orderService.placeOrder(order).subscribe({

@@ -14,7 +14,7 @@
       <div class="cart-items">
         <div class="cart-item" *ngFor="let item of cartItems">
           <div class="item-image">
-            <img [src]="getImageUrl(item.imageUrl)" [alt]="item.productName" />
+            <img [src]="getImageUrl(item.imageUrl)" [alt]="item.productName"/>
           </div>
           <div class="item-details">
             <h4>{{ item.productName }}</h4>
@@ -33,15 +33,17 @@
       <div class="order-total">
         <div class="total-row">
           <span>Tạm tính:</span>
-          <span>{{ subtotal | currency:'VND' }}</span>
+          <span>{{ subtotal | currency:'VND':'symbol':'1.0-0' }}</span>
         </div>
         <div class="total-row">
           <span>Giảm giá:</span>
-          <span class="discount">-{{ discount | currency:'VND' }}</span>
+          <span class="discount">
+      -{{ discount | currency:'VND':'symbol':'1.0-0' }}
+    </span>
         </div>
         <div class="total-row final">
           <span>Tổng cộng:</span>
-          <span>{{ total | currency:'VND' }}</span>
+          <span>{{ total | currency:'VND':'symbol':'1.0-0' }}</span>
         </div>
       </div>
     </div>
@@ -58,9 +60,9 @@
               <p class="phone">{{ selectedAddress.phone }}</p>
             </div>
           </div>
-          <p-button label="Thay đổi" (click)="showAddressDialog = true" severity="secondary" />
+          <p-button label="Thay đổi" (click)="showAddressDialog = true" severity="secondary"/>
         </div>
-        <p-button *ngIf="!selectedAddress" label="Chọn địa chỉ" (click)="showAddressDialog = true" />
+        <p-button *ngIf="!selectedAddress" label="Chọn địa chỉ" (click)="showAddressDialog = true"/>
       </div>
 
       <div class="section promotion-section">
@@ -70,29 +72,44 @@
             <i class="pi pi-tag"></i>
             <div>
               <p class="code">{{ selectedPromotion.code }}</p>
-              <p class="discount">Giảm {{ selectedPromotion.discountPercentage }}%</p>
+              <p class="discount">
+                <!-- ưu tiên discountAmount -->
+                <ng-container *ngIf="selectedPromotion.discountAmount">
+                  Giảm {{ selectedPromotion.discountAmount | currency:'VND':'symbol':'1.0-0' }}
+                </ng-container>
+                <ng-container *ngIf="!selectedPromotion.discountAmount">
+                  Giảm {{ selectedPromotion.discountPercentage }}%
+                </ng-container>
+              </p>
             </div>
           </div>
           <div class="promotion-actions">
-            <p-button icon="pi pi-times" (click)="removePromotion()" severity="danger" styleClass="p-button-rounded p-button-text" />
-            <p-button label="Thay đổi" (click)="showPromotionDialog = true" severity="secondary" />
+            <p-button icon="pi pi-times"
+                      (click)="removePromotion()"
+                      severity="danger"
+                      styleClass="p-button-rounded p-button-text"/>
+            <p-button label="Thay đổi"
+                      (click)="showPromotionDialog = true"
+                      severity="secondary"/>
           </div>
         </div>
-        <p-button *ngIf="!selectedPromotion" label="Chọn mã giảm giá" (click)="showPromotionDialog = true" />
+        <p-button *ngIf="!selectedPromotion"
+                  label="Chọn mã giảm giá"
+                  (click)="showPromotionDialog = true"/>
       </div>
 
       <div class="section payment-section">
         <h3>Phương thức thanh toán</h3>
         <div class="payment-options">
           <div class="payment-option" [class.selected]="paymentMethod === PaymentMethod.VNPAY">
-            <p-radioButton name="paymentMethod" [value]="PaymentMethod.VNPAY" [(ngModel)]="paymentMethod" />
+            <p-radioButton name="paymentMethod" [value]="PaymentMethod.VNPAY" [(ngModel)]="paymentMethod"/>
             <div class="payment-info">
               <i class="pi pi-credit-card"></i>
               <span>Thanh toán qua VNPay</span>
             </div>
           </div>
           <div class="payment-option" [class.selected]="paymentMethod === PaymentMethod.CASH_ON_DELIVERY">
-            <p-radioButton name="paymentMethod" [value]="PaymentMethod.CASH_ON_DELIVERY" [(ngModel)]="paymentMethod" />
+            <p-radioButton name="paymentMethod" [value]="PaymentMethod.CASH_ON_DELIVERY" [(ngModel)]="paymentMethod"/>
             <div class="payment-info">
               <i class="pi pi-money-bill"></i>
               <span>Thanh toán khi nhận hàng</span>
@@ -124,17 +141,33 @@
   </div>
 </p-dialog>
 
-<p-dialog header="Chọn mã giảm giá" [(visible)]="showPromotionDialog" [modal]="true" [style]="{ 'width': '50vw' }">
+<p-dialog header="Chọn mã giảm giá"
+          [(visible)]="showPromotionDialog"
+          [modal]="true"
+          [style]="{ 'width': '50vw' }">
   <div class="promotion-list">
-    <div class="promotion-card" *ngFor="let promo of promotions" (click)="applyPromotion(promo)">
+    <div class="promotion-card"
+         *ngFor="let promo of promotions"
+         (click)="applyPromotion(promo)">
       <div class="promo-content">
         <h4>{{ promo.code }}</h4>
-        <p>Giảm {{ promo.discountPercentage }}%</p>
-        <p *ngIf="promo.minimumOrderValue">Đơn hàng tối thiểu: {{ promo.minimumOrderValue | currency:'VND' }}</p>
-        <p *ngIf="promo.endDate">Hết hạn: {{ promo.endDate | date }}</p>
+        <p class="discount">
+          <ng-container *ngIf="promo.discountAmount">
+            Giảm {{ promo.discountAmount | currency:'VND':'symbol':'1.0-0' }}
+          </ng-container>
+          <ng-container *ngIf="!promo.discountAmount">
+            Giảm {{ promo.discountPercentage }}%
+          </ng-container>
+        </p>
+        <p *ngIf="promo.minimumOrderValue">
+          Đơn hàng tối thiểu: {{ promo.minimumOrderValue | currency:'VND':'symbol':'1.0-0' }}
+        </p>
+        <p *ngIf="promo.endDate">
+          Hết hạn: {{ promo.endDate | date:'dd/MM/yyyy' }}
+        </p>
       </div>
     </div>
   </div>
 </p-dialog>
 
-<p-toast />
+<p-toast/>

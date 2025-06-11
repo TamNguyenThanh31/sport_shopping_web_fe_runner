@@ -1,68 +1,142 @@
 <div class="orders-container">
   <h2>Lịch sử đơn hàng</h2>
-  <p-table [value]="orders" [tableStyle]="{ 'min-width': '50rem' }">
+
+  <p-table [value]="orders" [tableStyle]="{ 'min-width': '50rem' }" [scrollable]="true" scrollHeight="400px">
     <ng-template pTemplate="header">
       <tr>
-        <th>Mã đơn hàng</th>
-        <th>Ngày đặt</th>
-        <th>Tổng tiền</th>
-        <th>Trạng thái</th>
-        <th>Thanh toán</th>
-        <th></th>
+        <th style="width: 15%">Mã đơn hàng</th>
+        <th style="width: 20%">Ngày đặt</th>
+        <th style="width: 20%">Tổng tiền</th>
+        <th style="width: 15%">Trạng thái</th>
+        <th style="width: 15%">Thanh toán</th>
+        <th style="width: 15%"></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-order>
       <tr>
-        <td>{{ order.id }}</td>
+        <td>
+          <span class="order-id">#{{ order.id }}</span>
+        </td>
         <td>{{ order.createdAt | date:'short' }}</td>
-        <td>{{ order.totalPrice | currency:'VND' }}</td>
-        <td>{{ order.status }}</td>
-        <td>{{ order.paymentStatus }}</td>
-        <td><p-button label="Chi tiết" (click)="viewDetails(order.id!)" /></td>
+        <td>
+          <span class="price">{{ order.totalPrice | currency:'VND' }}</span>
+        </td>
+        <td>
+          <span class="status-badge" [ngClass]="order.status.toLowerCase()">
+            {{ order.status }}
+          </span>
+        </td>
+        <td>
+          <span class="payment-badge" [ngClass]="order.paymentStatus.toLowerCase()">
+            {{ order.paymentStatus }}
+          </span>
+        </td>
+        <td>
+          <p-button
+            icon="pi pi-eye"
+            label="Chi tiết"
+            (click)="viewDetails(order.id!)"
+            styleClass="p-button-rounded p-button-outlined" />
+        </td>
       </tr>
     </ng-template>
   </p-table>
 
-  <p-dialog header="Chi tiết đơn hàng" [(visible)]="showDetailsDialog" [modal]="true" [style]="{ 'width': '50vw' }">
-    <div *ngIf="selectedOrder">
-      <p><strong>Mã đơn hàng:</strong> {{ selectedOrder.id }}</p>
-      <p><strong>Ngày đặt:</strong> {{ selectedOrder.createdAt | date:'short' }}</p>
-      <p><strong>Tổng tiền:</strong> {{ selectedOrder.totalPrice | currency:'VND' }}</p>
-      <p><strong>Trạng thái:</strong> {{ selectedOrder.status }}</p>
-      <p><strong>Thanh toán:</strong> {{ selectedOrder.paymentStatus }}</p>
-      <p><strong>Phương thức:</strong> {{ selectedOrder.paymentMethod === 'VNPAY' ? 'VnPay' : 'Thanh toán khi nhận hàng' }}</p>
-      <p><strong>Mã giảm giá:</strong> {{ selectedOrder.promotionCode || 'Không' }}</p>
-      <p><strong>Địa chỉ giao hàng:</strong>
-        {{ selectedOrder.addressDetails ?
-          selectedOrder.addressDetails.fullName + ', ' +
-          selectedOrder.addressDetails.addressLine + ', ' +
-          selectedOrder.addressDetails.city
-          : 'Không có' }}
-      </p>
-      <h3>Sản phẩm</h3>
-      <p-table [value]="selectedOrder.orderDetails || []">
-        <ng-template pTemplate="header">
-          <tr>
-            <th>Sản phẩm</th>
-            <th>Kích thước</th>
-            <th>Màu sắc</th>
-            <th>Số lượng</th>
-            <th>Giá</th>
-          </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-detail>
-          <tr>
-            <td>
-              <img [src]="detail.imageUrl ? 'http://localhost:8080' + detail.imageUrl : 'assets/images/placeholder-product.png'" width="50" alt="Sản phẩm" />
-              {{ detail.productName || 'N/A' }}
-            </td>
-            <td>{{ detail.size || 'N/A' }}</td>
-            <td>{{ detail.color || 'N/A' }}</td>
-            <td>{{ detail.quantity }}</td>
-            <td>{{ detail.priceAtTime * detail.quantity | currency:'VND' }}</td>
-          </tr>
-        </ng-template>
-      </p-table>
+  <p-dialog
+    header="Chi tiết đơn hàng"
+    [(visible)]="showDetailsDialog"
+    [modal]="true"
+    [style]="{ 'width': '50vw' }"
+    [draggable]="false"
+    [resizable]="false">
+    <div *ngIf="selectedOrder" class="order-details">
+      <div class="order-info">
+        <div class="info-section">
+          <h3>Thông tin đơn hàng</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <label>Mã đơn hàng</label>
+              <span>#{{ selectedOrder.id }}</span>
+            </div>
+            <div class="info-item">
+              <label>Ngày đặt</label>
+              <span>{{ selectedOrder.createdAt | date:'short' }}</span>
+            </div>
+            <div class="info-item">
+              <label>Tổng tiền</label>
+              <span class="price">{{ selectedOrder.totalPrice | currency:'VND' }}</span>
+            </div>
+            <div class="info-item">
+              <label>Trạng thái</label>
+              <span class="status-badge" [ngClass]="selectedOrder.status?.toLowerCase()">
+                {{ selectedOrder.status }}
+              </span>
+            </div>
+            <div class="info-item">
+              <label>Thanh toán</label>
+              <span class="payment-badge" [ngClass]="selectedOrder.paymentStatus?.toLowerCase()">
+                {{ selectedOrder.paymentStatus }}
+              </span>
+            </div>
+            <div class="info-item">
+              <label>Phương thức</label>
+              <span>{{ selectedOrder.paymentMethod === 'VNPAY' ? 'VnPay' : 'Thanh toán khi nhận hàng' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-section">
+          <h3>Thông tin giao hàng</h3>
+          <div class="info-grid">
+            <div class="info-item full-width">
+              <label>Địa chỉ</label>
+              <span>
+                {{ selectedOrder.addressDetails ?
+                  selectedOrder.addressDetails.fullName + ', ' +
+                  selectedOrder.addressDetails.addressLine + ', ' +
+                  selectedOrder.addressDetails.city
+                  : 'Không có' }}
+              </span>
+            </div>
+            <div class="info-item">
+              <label>Mã giảm giá</label>
+              <span>{{ selectedOrder.promotionCode || 'Không' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="products-section">
+        <h3>Sản phẩm</h3>
+        <p-table [value]="selectedOrder.orderDetails || []" [scrollable]="true" scrollHeight="300px">
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 40%">Sản phẩm</th>
+              <th style="width: 15%">Kích thước</th>
+              <th style="width: 15%">Màu sắc</th>
+              <th style="width: 15%">Số lượng</th>
+              <th style="width: 15%">Giá</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-detail>
+            <tr>
+              <td>
+                <div class="product-info">
+                  <img
+                    [src]="detail.imageUrl ? 'http://localhost:8080' + detail.imageUrl : 'assets/images/placeholder-product.png'"
+                    [alt]="detail.productName"
+                    class="product-image" />
+                  <span class="product-name">{{ detail.productName || 'N/A' }}</span>
+                </div>
+              </td>
+              <td>{{ detail.size || 'N/A' }}</td>
+              <td>{{ detail.color || 'N/A' }}</td>
+              <td>{{ detail.quantity }}</td>
+              <td>{{ detail.priceAtTime * detail.quantity | currency:'VND' }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
     </div>
   </p-dialog>
 </div>

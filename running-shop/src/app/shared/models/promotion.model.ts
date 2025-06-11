@@ -1,7 +1,8 @@
 export interface Promotion {
   id?: number;
   code: string;
-  discountPercentage: number;
+  discountPercentage?: number;
+  discountAmount?: number;
   minimumOrderValue?: number;
   maxUsage?: number;
   startDate?: string;

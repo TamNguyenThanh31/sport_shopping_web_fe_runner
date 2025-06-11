@@ -1,7 +1,10 @@
 <app-navbar></app-navbar>
 <div class="main-layout">
-  <app-sidebar [ngClass]="{'collapsed': isSidebarCollapsed}"></app-sidebar>
-  <div class="content" [ngClass]="{'content-collapsed': isSidebarCollapsed}">
+  <app-sidebar *ngIf="isAdminOrStaff"
+               style="z-index: 20"
+                [ngClass]="{'collapsed': isSidebarCollapsed}"></app-sidebar>
+  <div class="content" [style.margin-left.px]="isAdminOrStaff ? (isSidebarCollapsed ? 50 : 250) : 0"
+               [style.width]="isAdminOrStaff ? (isSidebarCollapsed ? 'calc(100% - 50px)' : 'calc(100% - 250px)') : '100%'" [ngClass]="{'content-collapsed': isSidebarCollapsed}">
     <router-outlet></router-outlet>
   </div>
 </div>
