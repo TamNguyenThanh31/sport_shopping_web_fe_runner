@@ -5,26 +5,25 @@ import { Product, ProductImage, ProductVariant } from '../../../../shared/models
 import { Category } from '../../../../shared/models/category.model';
 import { ApiService } from '../../../../core/services/api.service';
 import { AuthService } from '../../../../core/services/auth.service';
-import {Toast, ToastModule} from 'primeng/toast';
-import {Paginator, PaginatorModule} from 'primeng/paginator';
+import {ToastModule} from 'primeng/toast';
+import {PaginatorModule} from 'primeng/paginator';
 import {NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase} from '@angular/common';
 import { ButtonDirective } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { Router, RouterLink } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
-import {Listbox, ListboxModule} from 'primeng/listbox';
-import {ProgressSpinner, ProgressSpinnerModule} from 'primeng/progressspinner';
-import {InputText, InputTextModule} from 'primeng/inputtext';
-import {Card, CardModule} from 'primeng/card';
-import {Tooltip, TooltipModule} from 'primeng/tooltip';
-import {Carousel, CarouselModule} from 'primeng/carousel';
-import {Slider, SliderModule} from 'primeng/slider';
+import {ListboxModule} from 'primeng/listbox';
+import {ProgressSpinnerModule} from 'primeng/progressspinner';
+import {InputTextModule} from 'primeng/inputtext';
+import {CardModule} from 'primeng/card';
+import {TooltipModule} from 'primeng/tooltip';
+import {CarouselModule} from 'primeng/carousel';
+import {SliderModule} from 'primeng/slider';
 import {QuickViewComponent} from "../quick-view/quick-view.component";
 import {FooterComponent} from "../../../../shared/footer/footer.component";
 import {SharedModule} from "../../../../shared/shared.module";
 import { CartService } from '../../services/cart.servcie';
-import { CartItem } from '../../../../shared/models/CartItem.model';
 import { CartEventService } from 'src/app/core/services/cart-event.service';
 import { CountdownTimerComponent } from 'src/app/shared/countdown-timer/countdown-timer.component';
 
@@ -45,7 +44,6 @@ interface PageResponse<T> {
     PaginatorModule,
     ButtonDirective,
     Ripple,
-    RouterLink,
     DropdownModule,
     FormsModule,
     NgClass,

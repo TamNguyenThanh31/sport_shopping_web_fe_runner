@@ -19,7 +19,7 @@
         </td>
         <td>{{ order.createdAt | date:'short' }}</td>
         <td>
-          <span class="price">{{ order.totalPrice | currency:'VND' }}</span>
+          <span class="price">{{ order.totalPrice || 0 | number : '1.0-0' }} VND</span>
         </td>
         <td>
           <span class="status-badge" [ngClass]="order.status.toLowerCase()">
