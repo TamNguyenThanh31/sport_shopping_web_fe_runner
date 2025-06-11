@@ -109,8 +109,8 @@
           placeholder="Chọn khoảng thời gian"
         ></p-dropdown>
         <button class="sync-button" [disabled]="loading" (click)="sync()">
-          <i class="pi pi-sync"></i>
-          Đồng Bộ
+          <i class="pi pi-sync" [class.pi-spin]="loading"></i>
+          {{ loading ? 'Đang Đồng Bộ...' : 'Đồng Bộ' }}
         </button>
       </div>
     </div>
