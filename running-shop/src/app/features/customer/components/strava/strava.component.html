@@ -147,6 +147,18 @@
     </div>
   </div>
 
-  <p-progressSpinner *ngIf="loading"></p-progressSpinner>
+  <div class="loading-overlay" *ngIf="loading">
+    <div class="spinnerContainer">
+      <div class="spinner"></div>
+      <div class="loader">
+        <span>Đang tải</span>
+        <div class="words">
+          <span class="word">dữ liệu</span>
+          <span class="word">hoạt động</span>
+          <span class="word">thành tích</span>
+        </div>
+      </div>
+    </div>
+  </div>
   <p-toast></p-toast>
 </div>
