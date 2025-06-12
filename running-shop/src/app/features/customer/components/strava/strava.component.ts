@@ -42,6 +42,7 @@ export class StravaComponent implements OnInit {
   loading = false;
 
   daysOptions = [
+    { label: '1 ngày', value: 1 },
     { label: '7 ngày', value: 7 },
     { label: '30 ngày', value: 30 }
   ];

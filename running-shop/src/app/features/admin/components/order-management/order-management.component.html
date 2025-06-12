@@ -99,6 +99,7 @@
           <th>Tổng tiền</th>
           <th>Trạng thái</th>
           <th>Payment Status</th>
+          <th>Payment Method</th>
           <th>Ngày tạo</th>
           <th>Actions</th>
         </tr>
@@ -122,6 +123,11 @@
           <td>
             <span class="payment-badge" [ngClass]="'payment-' + order.paymentStatus.toLowerCase()">
               {{ order.paymentStatus }}
+            </span>
+          </td>
+          <td>
+            <span class="payment-badge" [ngClass]="'payment-' + order.PaymentMethod">
+              {{ order.paymentMethod }}
             </span>
           </td>
           <td>{{ order.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>

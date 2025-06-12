@@ -1,80 +1,122 @@
-import { Component } from '@angular/core';
-import {Order} from "../../../../shared/models/order.model";
-import {OrderService} from "../../services/order.service";
-import {AuthService} from "../../../../core/services/auth.service";
-import {MessageService} from "primeng/api";
-import {ActivatedRoute, Router} from "@angular/router";
-import {TableModule} from "primeng/table";
-import {CurrencyPipe, DatePipe, DecimalPipe, NgClass, NgIf} from "@angular/common";
-import {Button} from "primeng/button";
-import {DialogModule} from "primeng/dialog";
-import {ToastModule} from "primeng/toast";
+import { Component, OnInit } from '@angular/core';
+import { OrderService } from '../../services/order.service';
+import { Order, OrderStatus, PaymentStatus, PaymentMethod } from '../../../../shared/models/order.model';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { ToastModule } from 'primeng/toast';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-order',
-  standalone: true,
-    imports: [
-        TableModule,
-        DatePipe,
-        CurrencyPipe,
-        Button,
-        DialogModule,
-        NgIf,
-        ToastModule,
-        NgClass,
-        DecimalPipe
-    ],
   templateUrl: './order.component.html',
-  styleUrl: './order.component.scss'
+  styleUrls: ['./order.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ButtonModule,
+    DialogModule,
+    ToastModule
+  ]
 })
-export class OrderComponent {
+export class OrderComponent implements OnInit {
   orders: Order[] = [];
   selectedOrder: Order | null = null;
   showDetailsDialog = false;
   userId: number | null = null;
+  
+  // Thêm các enum để sử dụng trong template
+  OrderStatus = OrderStatus;
+  PaymentStatus = PaymentStatus;
+  PaymentMethod = PaymentMethod;
 
   constructor(
     private orderService: OrderService,
-    private authService: AuthService,
-    private messageService: MessageService,
-    private router: Router,
-    private route: ActivatedRoute
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.userId = this.authService.getUserId();
-    if (!this.userId) {
-      this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Vui lòng đăng nhập' });
-      this.router.navigate(['/login']);
-      return;
+    if (this.userId) {
+      this.loadOrders();
     }
-    this.route.queryParams.subscribe(params => {
-      if (params['status'] === 'success' && params['orderId']) {
-        this.messageService.add({ severity: 'success', summary: 'Thành công', detail: 'Thanh toán hoàn tất' });
-        this.viewDetails(+params['orderId']);
-      } else if (params['status'] === 'failed') {
-        this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Thanh toán thất bại' });
-        this.loadOrders();
-      } else {
-        this.loadOrders();
+  }
+
+  loadOrders(): void {
+    if (!this.userId) return;
+    
+    this.orderService.getOrders(this.userId).subscribe({
+      next: (orders) => {
+        this.orders = orders;
+      },
+      error: (error) => {
+        console.error('Error loading orders:', error);
       }
     });
   }
 
-  loadOrders(): void {
-    this.orderService.getOrders(this.userId!).subscribe({
-      next: (orders) => this.orders = orders,
-      error: () => this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Không thể tải đơn hàng' })
-    });
-  }
-
   viewDetails(orderId: number): void {
-    this.orderService.getOrderById(orderId, this.userId!).subscribe({
+    if (!this.userId) return;
+    
+    this.orderService.getOrderById(orderId, this.userId).subscribe({
       next: (order) => {
         this.selectedOrder = order;
         this.showDetailsDialog = true;
       },
-      error: () => this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Không thể tải chi tiết đơn hàng' })
+      error: (error) => {
+        console.error('Error loading order details:', error);
+      }
     });
+  }
+
+  getStatusText(status: OrderStatus | undefined): string {
+    if (!status) return '';
+    
+    switch (status) {
+      case OrderStatus.CONFIRMED:
+        return 'Đã xác nhận';
+      case OrderStatus.SHIPPED:
+        return 'Đang giao hàng';
+      case OrderStatus.DELIVERED:
+        return 'Đã giao hàng';
+      case OrderStatus.PENDING:
+        return 'Đang chờ xác nhận';
+      case OrderStatus.CANCELLED:
+        return 'Đã hủy';
+      default:
+        return '';
+    }
+  }
+
+  getPaymentStatusText(status: PaymentStatus | undefined): string {
+    if (!status) return '';
+    
+    switch (status) {
+      case PaymentStatus.COMPLETED:
+        return 'Đã thanh toán';
+      case PaymentStatus.PENDING:
+        return 'Chờ thanh toán';
+      case PaymentStatus.FAILED:
+        return 'Thanh toán thất bại';
+      case PaymentStatus.CANCELLED:
+        return 'Đã hủy thanh toán';
+      case PaymentStatus.REFUNDED:
+        return 'Đã hoàn tiền';
+      default:
+        return '';
+    }
+  }
+
+  getPaymentMethodText(method: PaymentMethod | undefined): string {
+    if (!method) return '';
+    
+    switch (method) {
+      case PaymentMethod.VNPAY:
+        return 'VnPay';
+      case PaymentMethod.CASH_ON_DELIVERY:
+        return 'Thanh toán khi nhận hàng';
+      default:
+        return '';
+    }
   }
 }
