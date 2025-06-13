@@ -3,7 +3,7 @@
   <div class="sidebar">
     <p-panel header="Session Chờ" styleClass="session-panel">
       <ul class="session-list">
-        <li *ngFor="let sess of waitingSessions" 
+        <li *ngFor="let sess of waitingSessions"
             (click)="selectSession(sess, true)"
             [class.active]="selectedSession?.id === sess.id">
           <div class="session-item">
@@ -18,7 +18,7 @@
     </p-panel>
     <p-panel header="Session Của Tôi" styleClass="session-panel">
       <ul class="session-list">
-        <li *ngFor="let sess of mySessions" 
+        <li *ngFor="let sess of mySessions"
             (click)="selectSession(sess, false)"
             [class.active]="selectedSession?.id === sess.id">
           <div class="session-item">
@@ -34,36 +34,65 @@
   </div>
 
   <div class="chat-area" *ngIf="selectedSession; else noSessionTpl">
-    <p-card [header]="'Chat Session #' + selectedSession.id" styleClass="chat-card">
-      <div class="chat-header">
-        <div class="header-content">
-          <i class="pi pi-user header-icon"></i>
-          <div class="header-text">
+    <div class="chat-header">
+      <div class="header-content">
+        <div class="customer-avatar">
+          <img src="assets/images/customer-avatar.png" alt="Customer Avatar" />
+          <span class="status-indicator online"></span>
+        </div>
+        <div class="header-text">
+          <div class="customer-text">
             <span class="customer-id">Khách hàng ID: {{ selectedSession.customerId }}</span>
             <span class="session-time">Bắt đầu: {{ selectedSession.startedAt | date:'short' }}</span>
           </div>
         </div>
-        <button pButton type="button" icon="pi pi-times" 
-                class="p-button-rounded p-button-text p-button-danger close-button" 
-                (click)="closeChat()"></button>
       </div>
-      <p-scrollPanel id="messageListStaff" [style]="{'height':'400px'}" styleClass="chat-window">
-        <div class="messages-container">
-          <div *ngFor="let msg of messages"
-               [ngClass]="{'message-staff': msg.senderId === selectedSession.staffId, 'message-customer': msg.senderId !== selectedSession.staffId}">
-            <div class="msg-content">
-              <p class="message-text">{{ msg.content }}</p>
-              <small class="timestamp">{{ msg.timestamp | date:'shortTime' }}</small>
+      <button pButton type="button" icon="pi pi-times"
+              class="p-button-rounded p-button-text p-button-danger close-button"
+              (click)="closeChat()"></button>
+    </div>
+    <div class="chat-window">
+      <div class="messages-container">
+        <ng-container *ngIf="messagesWithDate.length; else emptyMsg">
+          <ng-container *ngFor="let item of messagesWithDate">
+            <div *ngIf="item.isDate" class="date-label">
+              <span>{{ item.date | date:'EEEE, dd/MM/yyyy' }}</span>
+            </div>
+            <div *ngIf="!item.isDate"
+                 [ngClass]="{'message-customer': item.msg.senderId !== selectedSession.staffId, 'message-staff': item.msg.senderId === selectedSession.staffId}">
+              <div class="message-wrapper">
+                <div class="avatar">
+                  <img [src]="item.msg.senderId === selectedSession.staffId ? 'assets/images/staff-avatar.png' : 'assets/images/customer-avatar.png'" alt="Avatar" />
+                </div>
+                <div class="msg-content">
+                  <div class="message-header">
+                    <span class="sender-name">{{ item.msg.senderId === selectedSession.staffId ? 'Bạn' : 'Khách hàng' }}</span>
+                    <span class="timestamp">{{ item.msg.timestamp | date:'shortTime' }}</span>
+                  </div>
+                  <p class="message-text">{{ item.msg.content }}</p>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+        <ng-template #emptyMsg>
+          <div class="empty-message">
+            <i class="pi pi-comments" style="font-size: 2rem; margin-right: 8px"></i>
+            <div class="empty-text">
+              <h3>Chưa có tin nhắn nào</h3>
+              <p>Hãy bắt đầu cuộc trò chuyện với khách hàng!</p>
             </div>
           </div>
-        </div>
-      </p-scrollPanel>
+        </ng-template>
+      </div>
       <div class="chat-input">
-        <textarea #messageInput pInputTextarea rows="1" 
-                  [(ngModel)]="newMessageContent" 
-                  placeholder="Nhập tin nhắn..." 
-                  class="message-input"
-                  (input)="adjustTextareaHeight($event)"></textarea>
+        <div class="input-wrapper">
+          <textarea #messageInput pInputTextarea rows="1"
+                    [(ngModel)]="newMessageContent"
+                    placeholder="Nhập tin nhắn..."
+                    class="message-input"
+                    (input)="adjustTextareaHeight($event)"></textarea>
+        </div>
         <button class="send-button" (click)="sendMessage()" [disabled]="!newMessageContent.trim()">
           <div class="svg-wrapper-1">
             <div class="svg-wrapper">
@@ -76,7 +105,7 @@
           <span>Gửi</span>
         </button>
       </div>
-    </p-card>
+    </div>
   </div>
 
   <ng-template #noSessionTpl>
