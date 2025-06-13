@@ -40,6 +40,7 @@ export class StaffChatComponent implements OnInit, OnDestroy {
   selectedSession?: SupportSession;
   messages: Message[] = [];
   newMessageContent = '';
+  messagesWithDate: any[] = [];
 
   private msgSub!: Subscription;
   private notifSub!: Subscription;
@@ -70,6 +71,7 @@ export class StaffChatComponent implements OnInit, OnDestroy {
       this.msgSub = this.wsService.onMessage().subscribe(msg => {
         if (this.selectedSession && msg.sessionId === this.selectedSession.id) {
           this.messages.push(msg);
+          this.messagesWithDate = this.addDateLabels(this.messages);
           setTimeout(() => this.scrollToBottom(), 100);
         }
       });
@@ -139,6 +141,7 @@ export class StaffChatComponent implements OnInit, OnDestroy {
     this.chatService.getMessages(sessionId).subscribe({
       next: msgs => {
         this.messages = msgs;
+        this.messagesWithDate = this.addDateLabels(this.messages);
         setTimeout(() => this.scrollToBottom(), 100);
       },
       error: err => console.error('Load messages error', err)
@@ -191,5 +194,21 @@ export class StaffChatComponent implements OnInit, OnDestroy {
     if (this.msgSub) this.msgSub.unsubscribe();
     if (this.notifSub) this.notifSub.unsubscribe();
     this.wsService.disconnect();
+  }
+
+  addDateLabels(messages: Message[]): any[] {
+    if (!messages.length) return [];
+    const result: any[] = [];
+    let lastDate = '';
+    for (let i = 0; i < messages.length; i++) {
+      const msg = messages[i];
+      const msgDate = msg.timestamp ? new Date(msg.timestamp).toLocaleDateString() : '';
+      if (msgDate && msgDate !== lastDate) {
+        result.push({ isDate: true, date: msg.timestamp });
+        lastDate = msgDate;
+      }
+      result.push({ isDate: false, msg });
+    }
+    return result;
   }
 }
