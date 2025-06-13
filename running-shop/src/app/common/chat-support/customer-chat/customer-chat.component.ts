@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild, ElementRef} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild, ElementRef, AfterViewChecked} from '@angular/core';
 import {SupportSession} from "../../../shared/models/support-session.model";
 import {Subscription} from "rxjs";
 import {Message} from "../../../shared/models/message.model";
@@ -30,15 +30,18 @@ import {ButtonDirective} from "primeng/button";
   templateUrl: './customer-chat.component.html',
   styleUrl: './customer-chat.component.scss'
 })
-export class CustomerChatComponent implements OnInit, OnDestroy {
+export class CustomerChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   session!: SupportSession;
   messages: Message[] = [];
   newMessageContent = '';
+  messagesWithDate: any[] = [];
 
   private msgSub!: Subscription;
   private notifSub!: Subscription;
 
   @ViewChild('messageInput') messageInput: ElementRef | undefined;
+  @ViewChild('messageList') messageList!: ElementRef;
+  @ViewChild('scrollPanel') scrollPanel: any;
 
   constructor(
     private chatService: ChatService,
@@ -68,6 +71,7 @@ export class CustomerChatComponent implements OnInit, OnDestroy {
           this.chatService.getMessages(this.session.id).subscribe({
             next: msgs => {
               this.messages = msgs;
+              this.messagesWithDate = this.addDateLabels(this.messages);
               this.scrollToBottom();
             },
             error: err => console.error('Load message history error', err)
@@ -77,6 +81,7 @@ export class CustomerChatComponent implements OnInit, OnDestroy {
           this.msgSub = this.wsService.onMessage().subscribe(msg => {
             if (msg.sessionId === this.session.id) {
               this.messages.push(msg);
+              this.messagesWithDate = this.addDateLabels(this.messages);
               this.scrollToBottom();
             }
           });
@@ -118,10 +123,12 @@ export class CustomerChatComponent implements OnInit, OnDestroy {
   }
 
   private scrollToBottom(): void {
-    const el = document.getElementById('messageList');
-    if (el) {
-      setTimeout(() => el.scrollTop = el.scrollHeight, 50);
-    }
+    try {
+      this.scrollPanel?.el?.children[0]?.scrollTo({
+        top: this.scrollPanel.el.children[0].scrollHeight,
+        behavior: 'smooth'
+      });
+    } catch (err) {}
   }
 
   adjustTextareaHeight(event: Event): void {
@@ -134,5 +141,26 @@ export class CustomerChatComponent implements OnInit, OnDestroy {
     if (this.msgSub) this.msgSub.unsubscribe();
     if (this.notifSub) this.notifSub.unsubscribe();
     this.wsService.disconnect();
+  }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  // Thêm hàm để chèn label ngày vào giữa các tin nhắn
+  addDateLabels(messages: Message[]): any[] {
+    if (!messages.length) return [];
+    const result: any[] = [];
+    let lastDate = '';
+    for (let i = 0; i < messages.length; i++) {
+      const msg = messages[i];
+      const msgDate = msg.timestamp ? new Date(msg.timestamp).toLocaleDateString() : '';
+      if (msgDate && msgDate !== lastDate) {
+        result.push({ isDate: true, date: msg.timestamp });
+        lastDate = msgDate;
+      }
+      result.push({ isDate: false, msg });
+    }
+    return result;
   }
 }

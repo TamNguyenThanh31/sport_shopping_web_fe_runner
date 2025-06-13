@@ -2,29 +2,63 @@
   <ng-container *ngIf="session">
     <div class="chat-header">
       <div class="header-content">
-        <i class="pi pi-headset header-icon"></i>
+        <div class="staff-avatar" *ngIf="session.staffId">
+          <img src="assets/images/staff-avatar.png" alt="Staff Avatar" />
+          <span class="status-indicator online"></span>
+        </div>
         <div class="header-text">
-          <span *ngIf="!session.staffId" class="waiting-text">Đang chờ nhân viên nhận...</span>
-          <span *ngIf="session.staffId" class="staff-text">Bạn đang được hỗ trợ bởi nhân viên ID: {{ session.staffId }}</span>
+          <span *ngIf="!session.staffId" class="waiting-text">
+            <i class="pi pi-spin pi-spinner" style="font-size: 1rem; margin-right: 8px"></i>
+            Đang chờ nhân viên nhận...
+          </span>
+          <span *ngIf="session.staffId" class="staff-text">
+            Nhân viên hỗ trợ
+          </span>
         </div>
       </div>
       <button pButton type="button" icon="pi pi-times" class="p-button-rounded p-button-text p-button-danger close-button" (click)="closeChat()"></button>
     </div>
-    <p-scrollPanel id="messageList" [style]="{'height':'400px'}" styleClass="chat-window">
+    <p-scrollPanel #scrollPanel styleClass="chat-window" [style]="{'height': 'calc(100vh - 180px)'}">
       <div class="messages-container">
-        <div *ngFor="let msg of messages"
-             [ngClass]="{'message-customer': msg.senderId === session.customerId, 'message-staff': msg.senderId !== session.customerId}">
-          <div class="msg-content">
-            <p class="message-text">{{ msg.content }}</p>
-            <small class="timestamp">{{ msg.timestamp | date:'shortTime' }}</small>
+        <ng-container *ngIf="messagesWithDate.length; else emptyMsg">
+          <ng-container *ngFor="let item of messagesWithDate">
+            <div *ngIf="item.isDate" class="date-label">
+              <span>{{ item.date | date:'EEEE, dd/MM/yyyy' }}</span>
+            </div>
+            <div *ngIf="!item.isDate"
+                 [ngClass]="{'message-customer': item.msg.senderId === session.customerId, 'message-staff': item.msg.senderId !== session.customerId}">
+              <div class="message-wrapper">
+                <div class="avatar">
+                  <img [src]="item.msg.senderId === session.customerId ? 'assets/images/customer-avatar.png' : 'assets/images/staff-avatar.png'" alt="Avatar" />
+                </div>
+                <div class="msg-content">
+                  <div class="message-header">
+                    <span class="sender-name">{{ item.msg.senderId === session.customerId ? 'Bạn' : 'Nhân viên hỗ trợ' }}</span>
+                    <span class="timestamp">{{ item.msg.timestamp | date:'shortTime' }}</span>
+                  </div>
+                  <p class="message-text">{{ item.msg.content }}</p>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+        <ng-template #emptyMsg>
+          <div class="empty-message">
+            <i class="pi pi-comments" style="font-size: 2rem; margin-right: 8px"></i>
+            <div class="empty-text">
+              <h3>Chưa có tin nhắn nào</h3>
+              <p>Hãy bắt đầu cuộc trò chuyện với nhân viên hỗ trợ của chúng tôi!</p>
+            </div>
           </div>
-        </div>
+        </ng-template>
       </div>
     </p-scrollPanel>
     <div class="chat-input">
-      <textarea #messageInput pInputTextarea rows="1" [(ngModel)]="newMessageContent" 
-                placeholder="Nhập tin nhắn..." class="message-input"
-                (input)="adjustTextareaHeight($event)"></textarea>
+      <div class="input-wrapper">
+        <textarea #messageInput pInputTextarea rows="1" [(ngModel)]="newMessageContent"
+                  placeholder="Nhập tin nhắn..." class="message-input"
+                  (input)="adjustTextareaHeight($event)"></textarea>
+      </div>
       <button class="send-button" (click)="sendMessage()" [disabled]="!newMessageContent.trim()">
         <div class="svg-wrapper-1">
           <div class="svg-wrapper">
