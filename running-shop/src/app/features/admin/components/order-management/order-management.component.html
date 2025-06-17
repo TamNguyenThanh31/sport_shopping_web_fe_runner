@@ -209,7 +209,7 @@
   modal="true"
   styleClass="custom-dialog"
   [closable]="false"
-  [resizable]="false"
+  [resizable]="true"
   [draggable]="false"
 >
   <div *ngIf="selectedOrder" class="dialog-content">
@@ -218,16 +218,22 @@
       <span>Order ID: <strong>{{ selectedOrder.id }}</strong></span>
     </div>
     <div class="status-update-form">
-      <label for="newStatus">Chọn trạng thái mới</label>
-      <p-dropdown
-        id="newStatus"
-        [options]="statusOptions"
-        [(ngModel)]="newStatus"
-        optionLabel="label"
-        optionValue="value"
-        placeholder="Chọn trạng thái"
-        class="custom-dropdown">
-      </p-dropdown>
+      <label>Chọn trạng thái mới</label>
+      <div class="status-grid">
+        <div 
+          *ngFor="let status of statusOptions" 
+          class="status-card"
+          [class.selected]="newStatus === status.value"
+          (click)="newStatus = status.value">
+          <div class="status-icon" [ngClass]="'status-' + status.value.toLowerCase()">
+            <i class="pi" [ngClass]="getStatusIcon(status.value)"></i>
+          </div>
+          <div class="status-info">
+            <span class="status-label">{{ status.label }}</span>
+            <span class="status-description">{{ getStatusDescription(status.value) }}</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <ng-template pTemplate="footer">

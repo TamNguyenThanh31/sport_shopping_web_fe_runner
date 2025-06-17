@@ -212,4 +212,38 @@ export class OrderManagementComponent implements OnInit {
         }
       });
   }
+
+  getStatusIcon(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'pi-clock';
+      case 'processing':
+        return 'pi-sync';
+      case 'confirmed':
+        return 'pi-check-circle';
+      case 'completed':
+        return 'pi-check';
+      case 'cancelled':
+        return 'pi-times-circle';
+      default:
+        return 'pi-info-circle';
+    }
+  }
+
+  getStatusDescription(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'Đơn hàng đang chờ xử lý';
+      case 'processing':
+        return 'Đơn hàng đang được xử lý';
+      case 'confirmed':
+        return 'Đơn hàng đã được xác nhận';
+      case 'completed':
+        return 'Đơn hàng đã hoàn thành';
+      case 'cancelled':
+        return 'Đơn hàng đã bị hủy';
+      default:
+        return '';
+    }
+  }
 }
