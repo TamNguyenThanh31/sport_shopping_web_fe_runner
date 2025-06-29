@@ -1,37 +1,44 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ReportService } from "../../service/report.service";
-import {CurrencyPipe, NgClass, NgForOf} from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { ChartModule } from 'primeng/chart';
 import { Table, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ProductVariantInfo } from "../../../../shared/models/product-variant-info.model";
 import { StockRow } from "../../../../shared/models/stock-row.model";
+import {DialogModule} from "primeng/dialog";
+import {ReportOrder} from "../../../../shared/models/report-order.model";
+import {Page} from "../../../../shared/models/promotion.model";
+import {AuthService} from "../../../../core/services/auth.service";
+import { PaginatorModule } from 'primeng/paginator';
+import {Observable} from "rxjs";
+import { TablePageEvent } from 'primeng/table';
 
 @Component({
   selector: 'app-report-dashboard',
   standalone: true,
   imports: [
-    NgForOf,
+    CommonModule,
     ChartModule,
     TableModule,
     ButtonModule,
-    NgClass,
-    CurrencyPipe
+    DialogModule,
+    PaginatorModule
   ],
   templateUrl: './report-dashboard.component.html',
   styleUrls: ['./report-dashboard.component.scss']
 })
 export class ReportDashboardComponent implements OnInit {
-  // ─── “Hôm nay” ─────────────────────────────────────────────────────────────
+  // ─── "Hôm nay" ─────────────────────────────────────────────────────────────
   totalOrdersToday = 0;
   revenueToday = 0;
   profitToday = 0;
 
-  // ─── “Tuần này” ────────────────────────────────────────────────────────────
+  // ─── "Tuần này" ────────────────────────────────────────────────────────────
   revenueThisWeek = 0;
   profitThisWeek = 0;
 
-  // ─── “Tháng này” ───────────────────────────────────────────────────────────
+  // ─── "Tháng này" ───────────────────────────────────────────────────────────
   revenueThisMonth = 0;
   profitThisMonth = 0;
 
@@ -39,15 +46,15 @@ export class ReportDashboardComponent implements OnInit {
   stockByProduct: Record<string, ProductVariantInfo[]> = {};
   stockData: StockRow[] = [];
 
-  // ─── Biểu đồ cột “hôm nay” ─────────────────────────────────────────────────
+  // ─── Biểu đồ cột "hôm nay" ─────────────────────────────────────────────────
   barData: any;
   barOptions: any;
 
-  // ─── Biểu đồ cột “tuần này” ────────────────────────────────────────────────
+  // ─── Biểu đồ cột "tuần này" ────────────────────────────────────────────────
   weeklyBarData: any;
   weeklyBarOptions: any;
 
-  // ─── Biểu đồ cột “tháng này” ───────────────────────────────────────────────
+  // ─── Biểu đồ cột "tháng này" ───────────────────────────────────────────────
   monthlyBarData: any;
   monthlyBarOptions: any;
 
@@ -55,9 +62,20 @@ export class ReportDashboardComponent implements OnInit {
   pieData: any;
   pieOptions: any;
 
+  // Biến chi tiết
+  detailVisible = false;
+  detailData: ReportOrder[] = [];
+  detailTotal = 0;
+  detailPageSize = 10;
+  detailPage = 0;
+  detailPeriod: 'today' | 'week' | 'month' = 'today';
+
   @ViewChild('dt') dataTable!: Table;
 
-  constructor(private reportService: ReportService) {}
+  constructor(
+    private reportService: ReportService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.initCharts();
@@ -70,7 +88,7 @@ export class ReportDashboardComponent implements OnInit {
     const textColorSecondary = docStyle.getPropertyValue('--text-color-secondary');
     const surfaceBorder = docStyle.getPropertyValue('--surface-border');
 
-    // ───── Bar Chart “Hôm nay” ───────────────────────────────────────────────
+    // ───── Bar Chart "Hôm nay" ───────────────────────────────────────────────
     this.barData = {
       labels: ['Doanh thu', 'Lợi nhuận'],
       datasets: [
@@ -112,7 +130,7 @@ export class ReportDashboardComponent implements OnInit {
       }
     };
 
-    // ───── Bar Chart “Tuần này” ──────────────────────────────────────────────
+    // ───── Bar Chart "Tuần này" ──────────────────────────────────────────────
     this.weeklyBarData = {
       labels: ['Doanh thu', 'Lợi nhuận'],
       datasets: [
@@ -154,7 +172,7 @@ export class ReportDashboardComponent implements OnInit {
       }
     };
 
-    // ───── Bar Chart “Tháng này” ─────────────────────────────────────────────
+    // ───── Bar Chart "Tháng này" ─────────────────────────────────────────────
     this.monthlyBarData = {
       labels: ['Doanh thu', 'Lợi nhuận'],
       datasets: [
@@ -348,5 +366,54 @@ export class ReportDashboardComponent implements OnInit {
     if (quantity <= 5) return 'Sắp hết';
     if (quantity <= 10) return 'Còn ít';
     return 'Đủ hàng';
+  }
+
+  // Gọi khi click "Xem chi tiết"
+  showDetail(period: 'today' | 'week' | 'month'): void {
+    this.detailPeriod = period;
+    this.detailPage = 0;
+    this.detailData = [];
+    this.detailVisible = true;
+    this.loadDetailPage(0);
+  }
+
+  // Tải 1 trang chi tiết
+  private loadDetailPage(page: number): void {
+    const staffId = this.getCurrentStaffId();
+    let obs$: Observable<Page<ReportOrder>>;
+
+    if (this.detailPeriod === 'today') {
+      obs$ = this.reportService.getRevenueDetailToday(staffId, page, this.detailPageSize);
+    } else if (this.detailPeriod === 'week') {
+      obs$ = this.reportService.getRevenueDetailThisWeek(staffId, page, this.detailPageSize);
+    } else {
+      obs$ = this.reportService.getRevenueDetailThisMonth(staffId, page, this.detailPageSize);
+    }
+
+    obs$.subscribe(pg => {
+      // reset expanded flag
+      this.detailData = pg.content.map(o => ({ ...o, expanded: false }));
+      this.detailTotal = pg.totalElements;
+      this.detailPage = pg.number;
+    });
+  }
+
+  /** Bắt event đổi trang */
+  onDetailPage(event: any): void {
+    this.loadDetailPage(event.page);
+  }
+
+  /** Toggle row detail (manual expansion) */
+  toggleDetailRow(order: ReportOrder): void {
+    order.expanded = !order.expanded;
+  }
+
+  /** Lấy staffId từ AuthService, hoặc throw nếu chưa login */
+  private getCurrentStaffId(): number {
+    const id = this.authService.getUserId();
+    if (id === null) {
+      throw new Error('Bạn cần đăng nhập để xem báo cáo');
+    }
+    return id;
   }
 }

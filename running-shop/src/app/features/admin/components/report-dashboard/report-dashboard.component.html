@@ -13,6 +13,13 @@
       <div class="card-content">
         <h3>Doanh thu hôm nay</h3>
         <p class="number">{{ revenueToday | currency:'VND' }}</p>
+        <button
+          pButton
+          type="button"
+          label="Xem chi tiết"
+          class="p-button-text p-ml-2"
+          (click)="showDetail('today')">
+        </button>
       </div>
     </div>
     <div class="card">
@@ -43,6 +50,13 @@
       <div class="card-content">
         <h3>Doanh thu tuần này</h3>
         <p class="number">{{ revenueThisWeek | currency:'VND' }}</p>
+        <button
+          pButton
+          type="button"
+          label="Xem chi tiết"
+          class="p-button-text p-ml-2"
+          (click)="showDetail('week')">
+        </button>
       </div>
     </div>
     <div class="card">
@@ -57,6 +71,13 @@
       <div class="card-content">
         <h3>Doanh thu tháng này</h3>
         <p class="number">{{ revenueThisMonth | currency:'VND' }}</p>
+        <button
+          pButton
+          type="button"
+          label="Xem chi tiết"
+          class="p-button-text p-ml-2"
+          (click)="showDetail('month')">
+        </button>
       </div>
     </div>
     <div class="card">
@@ -182,3 +203,98 @@
     </p-table>
   </div>
 </div>
+
+<!-- Dialog chi tiết doanh thu/lợi nhuận -->
+<p-dialog
+  header="Chi tiết doanh thu"
+  [(visible)]="detailVisible"
+  [modal]="true"
+  [style]="{ width: '80vw', height: '70vh' }"
+  [closable]="true"
+  (onHide)="detailVisible = false">
+
+  <p-table
+    [value]="detailData"
+    [paginator]="true"
+    [rows]="detailPageSize"
+    [totalRecords]="detailTotal"
+    [rowsPerPageOptions]="[5,10,20]"
+    (onPage)="onDetailPage($event)"
+    [responsiveLayout]="'scroll'"
+    class="custom-table">
+
+    <!-- Header -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="width: 3rem"></th>
+        <th>Mã đơn</th>
+        <th>Ngày tạo</th>
+        <th>Khách hàng</th>
+        <th>Doanh thu</th>
+        <th>Chi phí</th>
+        <th>Lợi nhuận</th>
+      </tr>
+    </ng-template>
+
+    <!-- Body -->
+    <ng-template pTemplate="body" let-order>
+      <tr>
+        <td>
+          <button class="expand-button" (click)="toggleDetailRow(order)">
+            <i class="pi" [ngClass]="order.expanded ? 'pi-chevron-down' : 'pi-chevron-right'"></i>
+          </button>
+        </td>
+        <td>{{ order.orderId }}</td>
+        <td>{{ order.createdAt | date:'short' }}</td>
+        <td>{{ order.customerName }}</td>
+        <td>{{ order.totalRevenue | currency:'VND':'symbol' }}</td>
+        <td>{{ order.totalCost     | currency:'VND':'symbol' }}</td>
+        <td>{{ order.totalProfit   | currency:'VND':'symbol' }}</td>
+      </tr>
+
+      <!-- Expanded Row -->
+      <tr *ngIf="order.expanded">
+        <td colspan="7" class="expanded-content">
+          <div class="expanded-grid">
+
+            <!-- Sản phẩm trong đơn -->
+            <div class="expanded-card">
+              <div class="card-header">
+                <i class="pi pi-shopping-cart"></i>
+                <h3>Chi tiết sản phẩm</h3>
+              </div>
+              <div class="card-body">
+                <table class="p-datatable p-datatable-sm">
+                  <thead>
+                  <tr>
+                    <th>Sản phẩm</th>
+                    <th>SKU</th>
+                    <th>Số lượng</th>
+                    <th>Giá vốn</th>
+                    <th>Giá bán</th>
+                    <th>Lợi nhuận dòng</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let item of order.items">
+                    <td>{{ item.productName }}</td>
+                    <td>{{ item.sku }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.costAtTime   | currency:'VND':'symbol' }}</td>
+                    <td>{{ item.priceAtTime  | currency:'VND':'symbol' }}</td>
+                    <td>{{ item.lineProfit   | currency:'VND':'symbol' }}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+  </p-table>
+</p-dialog>
+
+

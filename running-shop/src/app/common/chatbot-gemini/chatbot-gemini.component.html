@@ -1,0 +1,30 @@
+<button class="chatbot-toggle-button" (click)="toggleVisible()">
+  💬
+</button>
+
+<div class="chat-popup" *ngIf="visible" (click)="onMaskClick()">
+  <div class="chat-header" (click)="$event.stopPropagation()">
+    <span>Chatbot AI</span>
+    <button class="close-btn" (click)="toggleVisible()">✖</button>
+  </div>
+  <div class="chat-body" (click)="$event.stopPropagation()">
+    <div *ngFor="let item of history">
+      <div [class.bot-message]="item.role==='model'" [class.user-message]="item.role==='user'">
+        <div class="message-text" [innerHTML]="item.parts[0].text"></div>
+        <img *ngIf="item.parts[0].attachment"
+             [src]="sanitizer.bypassSecurityTrustUrl('data:image/*;base64,'+item.parts[0].attachment)"
+             class="attachment-output" />
+      </div>
+    </div>
+    <div *ngIf="loading" class="loading-indicator">...</div>
+  </div>
+  <div class="chat-footer" (click)="$event.stopPropagation()">
+    <textarea [(ngModel)]="message" rows="2" placeholder="Nhập tin nhắn..."></textarea>
+    <button class="emoji-btn" (click)="toggleEmojiPicker()">😊</button>
+    <input type="file" hidden #fileInput (change)="onFileChange($event)" />
+    <button class="attach-btn" (click)="fileInput.click()">📎</button>
+    <button *ngIf="attachmentUrl" class="remove-attach-btn" (click)="removeAttachment()">✖</button>
+    <button class="send-btn" (click)="send()" [disabled]="loading">➤</button>
+<!--    <emoji-picker *ngIf="showEmojiPicker"></emoji-picker>-->
+  </div>
+</div>

@@ -26,6 +26,7 @@ import {SharedModule} from "../../../../shared/shared.module";
 import { CartService } from '../../services/cart.servcie';
 import { CartEventService } from 'src/app/core/services/cart-event.service';
 import { CountdownTimerComponent } from 'src/app/shared/countdown-timer/countdown-timer.component';
+import {ChatbotGeminiComponent} from "../../../../common/chatbot-gemini/chatbot-gemini.component";
 
 interface PageResponse<T> {
   content: T[];
@@ -61,7 +62,8 @@ interface PageResponse<T> {
     QuickViewComponent,
     FooterComponent,
     SharedModule,
-    CountdownTimerComponent
+    CountdownTimerComponent,
+    ChatbotGeminiComponent
   ],
   providers: [MessageService],
   standalone: true
