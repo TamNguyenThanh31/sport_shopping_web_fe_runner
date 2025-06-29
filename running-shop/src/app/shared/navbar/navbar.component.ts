@@ -79,13 +79,13 @@ export class NavbarComponent implements OnInit {
         styleClass: 'menu-item'
       },
       {
-        label: 'Training Plans',
+        label: 'Strava',
         icon: 'pi pi-map',
         routerLink: ['/strava'],
         styleClass: 'menu-item'
       },
       {
-        label: 'Community',
+        label: 'Hỗ trợ',
         icon: 'pi pi-users',
         routerLink: ['/chat'],
         styleClass: 'menu-item'

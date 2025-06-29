@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ProductVariantInfo } from '../../../shared/models/product-variant-info.model';
+import {ReportOrder} from "../../../shared/models/report-order.model";
+import {Page} from "../../../shared/models/promotion.model";
 
 @Injectable({
   providedIn: 'root'
@@ -66,6 +68,36 @@ export class ReportService {
   getCurrentStockByProduct(): Observable<Record<string, ProductVariantInfo[]>> {
     return this.http.get<Record<string, ProductVariantInfo[]>>(
       `${this.apiUrl}/stock/by-name`
+    );
+  }
+
+  getRevenueDetailToday(
+    staffId: number,
+    page: number,
+    size: number
+  ): Observable<Page<ReportOrder>> {
+    return this.http.get<Page<ReportOrder>>(
+      `${this.apiUrl}/revenue/detail/today?staffId=${staffId}&page=${page}&size=${size}`
+    );
+  }
+
+  getRevenueDetailThisWeek(
+    staffId: number,
+    page: number,
+    size: number
+  ): Observable<Page<ReportOrder>> {
+    return this.http.get<Page<ReportOrder>>(
+      `${this.apiUrl}/revenue/detail/week?staffId=${staffId}&page=${page}&size=${size}`
+    );
+  }
+
+  getRevenueDetailThisMonth(
+    staffId: number,
+    page: number,
+    size: number
+  ): Observable<Page<ReportOrder>> {
+    return this.http.get<Page<ReportOrder>>(
+      `${this.apiUrl}/revenue/detail/month?staffId=${staffId}&page=${page}&size=${size}`
     );
   }
 }
