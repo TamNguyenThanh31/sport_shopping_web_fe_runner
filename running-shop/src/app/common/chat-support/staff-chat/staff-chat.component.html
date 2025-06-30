@@ -36,7 +36,7 @@
     <div class="chat-header">
       <div class="header-content">
         <div class="customer-avatar">
-          <img src="assets/images/customer-avatar.png" alt="Customer Avatar" />
+          <img src="assets/images/customer-avatar.jpg" alt="Customer Avatar" />
           <span class="status-indicator online"></span>
         </div>
         <div class="header-text">
@@ -61,7 +61,7 @@
                  [ngClass]="{'message-customer': item.msg.senderId !== selectedSession.staffId, 'message-staff': item.msg.senderId === selectedSession.staffId}">
               <div class="message-wrapper">
                 <div class="avatar">
-                  <img [src]="item.msg.senderId === selectedSession.staffId ? 'assets/images/staff-avatar.png' : 'assets/images/customer-avatar.png'" alt="Avatar" />
+                  <img [src]="item.msg.senderId === selectedSession.staffId ? 'assets/images/staff-avatar.jpg' : 'assets/images/customer-avatar.jpg'" alt="Avatar" />
                 </div>
                 <div class="msg-content">
                   <div class="message-header">

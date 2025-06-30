@@ -102,7 +102,7 @@ export class LoginComponent implements OnInit {
 
   private navigateBasedOnRole(role: string): void {
     const routes: { [key: string]: string } = {
-      'ADMIN': '/admin',
+      'ADMIN': '/admin/report',
       'CUSTOMER': '/customer',
       'STAFF': '/staff'
     };

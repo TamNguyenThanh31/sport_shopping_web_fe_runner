@@ -162,10 +162,15 @@ export class NavbarComponent implements OnInit {
   }
 
   loadCartItemCount(): void {
-    this.cartService.getCartItemCount(this.currentUser ? 1 : 0).subscribe({
-      next: (count) => (this.cartItems = count),
-      error: (err) => console.error('Lỗi khi lấy số lượng giỏ hàng:', err)
-    });
+    const userId = this.authService.getUserId();
+    if (userId) {
+      this.cartService.getCartItemCount(userId).subscribe({
+        next: (count) => (this.cartItems = count),
+        error: (err) => console.error('Lỗi khi lấy số lượng giỏ hàng:', err)
+      });
+    } else {
+      this.cartItems = 0;
+    }
   }
 
   toggleCartSidebar(): void {

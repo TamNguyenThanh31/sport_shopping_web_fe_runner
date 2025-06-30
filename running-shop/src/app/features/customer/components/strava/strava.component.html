@@ -74,8 +74,9 @@
           <input
             type="number"
             [(ngModel)]="redeemAmount"
-            min="0"
-            placeholder="Nhập quãng đường"
+            min="100"
+            step="100"
+            placeholder="Nhập quãng đường (bội số 100)"
           />
           <p-dropdown
             [options]="[
@@ -85,6 +86,7 @@
             [(ngModel)]="redeemUnit"
           >
           </p-dropdown>
+          <small class="input-guide">Chỉ nhập các bội số của 100 (100, 200, 300,...)</small>
           <button class="redeem-button" [disabled]="!canRedeemCustom" (click)="redeemCustom()">
             <i class="pi pi-ticket"></i>
             Đổi Thưởng
