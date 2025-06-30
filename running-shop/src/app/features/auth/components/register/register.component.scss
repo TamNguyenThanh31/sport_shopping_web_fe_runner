@@ -19,7 +19,7 @@ $error-color: #ef4444;
   padding: 2rem;
   $image-path: '/assets/images/';
   background: linear-gradient(135deg, rgba(245, 247, 250, 0.9) 0%, rgba(228, 240, 251, 0.9) 100%),
-  url('#{$image-path}running-logo.png') no-repeat center center;
+  url('#{$image-path}background_login_signup.jpg') no-repeat center center;
   background-size: cover;
   background-blend-mode: overlay;
   font-family: 'Inter', 'Segoe UI', sans-serif;

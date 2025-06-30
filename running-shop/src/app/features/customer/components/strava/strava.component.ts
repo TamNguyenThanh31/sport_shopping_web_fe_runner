@@ -48,7 +48,6 @@ export class StravaComponent implements OnInit {
   ];
   selectedDays = 7;
 
-  // Đổi sang custom redeem
   redeemAmount = 0;
   redeemUnit: 'm' | 'km' = 'm';
 
@@ -62,12 +61,22 @@ export class StravaComponent implements OnInit {
     this.loadCoupons();
   }
 
-  /** Sync / load status */
+  /** Sync / load status và show cảnh báo nếu cần */
   sync(): void {
     this.loading = true;
     this.stravaService.getStatus(this.selectedDays).subscribe({
       next: data => {
         this.status = data;
+
+        // nếu backend báo nearLimit thì show toast cảnh báo
+        if (data.nearLimit) {
+          this.message.add({
+            severity: 'warn',
+            summary: 'Sắp hết hạn mức tháng',
+            detail: data.warningMessage
+          });
+        }
+
         this.loading = false;
       },
       error: err => {
@@ -84,21 +93,32 @@ export class StravaComponent implements OnInit {
     });
   }
 
-  /** Redirect để connect Strava */
   connect(): void {
     this.stravaService.connectStrava();
   }
 
-  /** Redeem custom (input amount) */
   redeemCustom(): void {
+    const needed = this.redeemUnit === 'km'
+      ? this.redeemAmount * 1000
+      : this.redeemAmount;
+
+    if (needed < 100 || needed % 100 !== 0) {
+      this.message.add({
+        severity: 'warn',
+        summary: 'Cảnh báo',
+        detail: 'Vui lòng nhập bội số của 100 và từ 100m trở lên!'
+      });
+      return;
+    }
+
     this.stravaService
       .redeemCouponCustom({ amount: this.redeemAmount, unit: this.redeemUnit })
       .subscribe({
-        next: () => {
+        next: promo => {
           this.message.add({
             severity: 'success',
             summary: 'Thành công',
-            detail: 'Đã tạo coupon thành công'
+            detail: `Đã tạo coupon: ${promo.code}`
           });
           this.sync();
           this.loadCoupons();
@@ -107,21 +127,16 @@ export class StravaComponent implements OnInit {
           this.message.add({
             severity: 'error',
             summary: 'Lỗi',
-            detail: err.error?.message || 'Không thể tạo coupon'
+            detail: err.error?.message || 'Không tạo được coupon'
           });
         }
       });
   }
 
-  /** Cho phép redeem custom nếu ≥ 100 m */
   get canRedeemCustom(): boolean {
-    const needed = this.redeemUnit === 'km'
-      ? this.redeemAmount * 1000
-      : this.redeemAmount;
-    return this.status != null && needed >= 100;
+    return this.status != null && this.redeemAmount > 0;
   }
 
-  /** Redeem nhanh 100 m → cố định */
   redeem(): void {
     this.stravaService.redeemCoupon().subscribe({
       next: promo => {
@@ -143,7 +158,6 @@ export class StravaComponent implements OnInit {
     });
   }
 
-  /** Load danh sách coupon của user */
   loadCoupons(): void {
     this.stravaService.getMyCoupons().subscribe({
       next: list => (this.coupons = list),
@@ -151,7 +165,6 @@ export class StravaComponent implements OnInit {
     });
   }
 
-  /** Cho phép redeem nhanh nếu ≥ 100 m */
   get canRedeem(): boolean {
     return (this.status?.availableKm ?? 0) >= 100;
   }
