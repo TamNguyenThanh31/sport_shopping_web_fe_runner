@@ -25,18 +25,18 @@
         </p-dropdown>
       </div>
 
-      <!-- User ID Filter -->
+      <!-- User Name Filter -->
       <div class="filter-item">
-        <label for="userFilter">User ID</label>
+        <label for="userNameFilter">Người dùng</label>
         <span class="p-input-icon-left">
           <i class="pi pi-user"></i>
           <input
-            id="userFilter"
-            type="number"
+            id="userNameFilter"
+            type="text"
             pInputText
-            [(ngModel)]="filterUserId"
+            [(ngModel)]="filterUserName"
             (ngModelChange)="onFilterChange()"
-            placeholder="Nhập User ID"
+            placeholder="Nhập tên người dùng"
             class="custom-input">
         </span>
       </div>
@@ -71,6 +71,16 @@
           </span>
         </div>
       </div>
+
+      <!-- Reset Filter Button -->
+      <div class="filter-item filter-reset">
+        <p-button
+          label="Xóa bộ lọc"
+          icon="pi pi-refresh"
+          (click)="resetFilters()"
+          styleClass="p-button-outlined p-button-sm filter-reset-btn"
+        ></p-button>
+      </div>
     </div>
   </div>
 
@@ -93,7 +103,7 @@
     >
       <ng-template pTemplate="header">
         <tr>
-          <th style="width: 3rem"></th>
+          <th style="width: 3.5rem"></th>
           <th>ID</th>
           <th>User ID</th>
           <th>Tổng tiền</th>
@@ -109,43 +119,41 @@
         <tr>
           <td>
             <button type="button" class="expand-button" (click)="order.expanded = !order.expanded">
-              <i class="pi" [ngClass]="order.expanded ? 'pi-chevron-down' : 'pi-chevron-right'"></i>
+              <i class="pi" [ngClass]="[order.expanded ? 'pi-chevron-down' : 'pi-chevron-right']"></i>
             </button>
           </td>
           <td>{{ order.id }}</td>
-          <td>{{ order.userId }}</td>
+          <td>{{ getUserName(order.userId) }}</td>
           <td>{{ order.totalPrice | currency:'VND':'symbol':'1.0-0' }}</td>
           <td>
-            <span class="status-badge" [ngClass]="'status-' + order.status.toLowerCase()">
+            <span class="status-badge" [ngClass]="['status-badge', 'status-' + (order.status?.toLowerCase() || '')]">
               {{ order.status }}
             </span>
           </td>
           <td>
-            <span class="payment-badge" [ngClass]="'payment-' + order.paymentStatus.toLowerCase()">
+            <span class="payment-badge" [ngClass]="['payment-badge', 'payment-' + (order.paymentStatus?.toLowerCase() || '')]">
               {{ order.paymentStatus }}
             </span>
           </td>
           <td>
-            <span class="payment-badge" [ngClass]="'payment-' + order.PaymentMethod">
+            <span class="payment-badge" [ngClass]="['payment-badge', 'payment-' + (order.PaymentMethod?.toLowerCase() || '')]">
               {{ order.paymentMethod }}
             </span>
           </td>
           <td>{{ order.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
           <td>
-            <button
-              pButton
-              type="button"
+            <p-button
               icon="pi pi-pencil"
               label="Cập nhật"
-              class="p-button-sm update-button"
+              styleClass="p-button-lg update-button"
               (click)="openStatusDialog(order)">
-            </button>
+            </p-button>
           </td>
         </tr>
 
         <!-- Expanded Row Content -->
         <tr *ngIf="order.expanded">
-          <td colspan="8" class="expanded-content">
+          <td colspan="9" class="expanded-content">
             <div class="expanded-grid">
               <!-- Shipping Address -->
               <div class="expanded-card">
@@ -214,25 +222,33 @@
 >
   <div *ngIf="selectedOrder" class="dialog-content">
     <div class="order-info">
-      <i class="pi pi-info-circle"></i>
       <span>Order ID: <strong>{{ selectedOrder.id }}</strong></span>
     </div>
     <div class="status-update-form">
       <label>Chọn trạng thái mới</label>
-      <div class="status-grid">
-        <div 
-          *ngFor="let status of statusOptions" 
-          class="status-card"
-          [class.selected]="newStatus === status.value"
-          (click)="newStatus = status.value">
-          <div class="status-icon" [ngClass]="'status-' + status.value.toLowerCase()">
-            <i class="pi" [ngClass]="getStatusIcon(status.value)"></i>
+      <div class="order-status-stepper">
+        <ng-container *ngFor="let status of stepStatusOptions; let i = index">
+          <div
+            class="step"
+            [class.active]="newStatus === status.value"
+            [class.completed]="isCompleted(status.value)"
+            (click)="newStatus = status.value"
+          >
+            <div class="circle">
+              <span *ngIf="isCompleted(status.value)">&#10003;</span>
+              <span *ngIf="!isCompleted(status.value)">{{ i + 1 }}</span>
+            </div>
+            <span class="label">{{ status.label }}</span>
+            <span class="desc">{{ getStatusDescription(status.value) }}</span>
+            <div class="bar" *ngIf="i < stepStatusOptions.length - 1"></div>
           </div>
-          <div class="status-info">
-            <span class="status-label">{{ status.label }}</span>
-            <span class="status-description">{{ getStatusDescription(status.value) }}</span>
-          </div>
-        </div>
+        </ng-container>
+      </div>
+
+      <!-- Card riêng cho CANCELLED -->
+      <div class="cancelled-card" (click)="newStatus = OrderStatus.CANCELLED" [class.selected]="newStatus === OrderStatus.CANCELLED">
+        <div class="cancel-label">Huỷ đơn hàng</div>
+        <div class="cancel-desc">Đơn hàng sẽ bị huỷ và không thể phục hồi</div>
       </div>
     </div>
   </div>
@@ -242,7 +258,6 @@
         pButton
         type="button"
         label="Hủy"
-        icon="pi pi-times"
         class="p-button-text cancel-button"
         (click)="displayStatusDialog = false">
       </button>
@@ -250,7 +265,6 @@
         pButton
         type="button"
         label="Cập nhật"
-        icon="pi pi-check"
         class="update-button"
         (click)="updateStatus()"
         [disabled]="!newStatus">
