@@ -32,79 +32,52 @@
     </p-panel>
   </div>
 
-  <div class="chat-area" *ngIf="selectedSession; else noSessionTpl">
-    <div class="chat-header">
-      <div class="header-content">
-        <div class="customer-avatar">
-          <img src="assets/images/customer-avatar.jpg" alt="Customer Avatar" />
-          <span class="status-indicator online"></span>
-        </div>
-        <div class="header-text">
-          <div class="customer-text">
-            <span class="customer-id">Khách hàng ID: {{ selectedSession.customerId }}</span>
-            <span class="session-time">Bắt đầu: {{ selectedSession.startedAt | date:'short' }}</span>
-          </div>
-        </div>
+  <div class="chat-area simple-chat-area" *ngIf="selectedSession; else noSessionTpl">
+    <header class="simple-chat-header">
+      <img src="assets/images/customer-avatar.jpg" alt="Customer Avatar" class="avatar-header" />
+      <div class="customer-text">
+        {{ customerName }}<br>
+        <span class="session-time">Bắt đầu: {{ selectedSession.startedAt | date:'short' }}</span>
       </div>
-      <button pButton type="button" icon="pi pi-times"
-              class="p-button-rounded p-button-text p-button-danger close-button"
-              (click)="closeChat()"></button>
-    </div>
-    <div class="chat-window">
-      <div class="messages-container">
-        <ng-container *ngIf="messagesWithDate.length; else emptyMsg">
-          <ng-container *ngFor="let item of messagesWithDate">
-            <div *ngIf="item.isDate" class="date-label">
-              <span>{{ item.date | date:'EEEE, dd/MM/yyyy' }}</span>
-            </div>
-            <div *ngIf="!item.isDate"
-                 [ngClass]="{'message-customer': item.msg.senderId !== selectedSession.staffId, 'message-staff': item.msg.senderId === selectedSession.staffId}">
-              <div class="message-wrapper">
-                <div class="avatar">
-                  <img [src]="item.msg.senderId === selectedSession.staffId ? 'assets/images/staff-avatar.jpg' : 'assets/images/customer-avatar.jpg'" alt="Avatar" />
-                </div>
-                <div class="msg-content">
-                  <div class="message-header">
-                    <span class="sender-name">{{ item.msg.senderId === selectedSession.staffId ? 'Bạn' : 'Khách hàng' }}</span>
-                    <span class="timestamp">{{ item.msg.timestamp | date:'shortTime' }}</span>
-                  </div>
-                  <p class="message-text">{{ item.msg.content }}</p>
-                </div>
+      <button pButton type="button" icon="pi pi-times" class="close-button" (click)="closeChat()"></button>
+    </header>
+    <main class="simple-chat-body">
+      <ng-container *ngIf="messagesWithDate.length; else emptyMsg">
+        <ng-container *ngFor="let item of messagesWithDate">
+          <div *ngIf="item.isDate" class="date-label-simple">
+            {{ item.date | date:'EEEE, dd/MM/yyyy' }}
+          </div>
+          <div *ngIf="!item.isDate"
+               [ngClass]="{'msg-staff align-right': item.msg.senderId === staffId, 'msg-customer align-left': item.msg.senderId !== staffId}">
+            <img [src]="item.msg.senderId === staffId ? 'assets/images/staff-avatar.jpg' : 'assets/images/customer-avatar.jpg'" class="avatar-msg" alt="Avatar" />
+            <div class="msg-bubble">
+              <div class="msg-meta">
+                <span class="sender">{{ item.msg.senderId === staffId ? 'Bạn' : customerName }}</span>
+                <span class="time">{{ item.msg.timestamp | date:'shortTime' }}</span>
               </div>
+              <div class="msg-content">{{ item.msg.content }}</div>
             </div>
-          </ng-container>
+          </div>
         </ng-container>
-        <ng-template #emptyMsg>
-          <div class="empty-message">
-            <i class="pi pi-comments" style="font-size: 2rem; margin-right: 8px"></i>
-            <div class="empty-text">
-              <h3>Chưa có tin nhắn nào</h3>
-              <p>Hãy bắt đầu cuộc trò chuyện với khách hàng!</p>
-            </div>
-          </div>
-        </ng-template>
-      </div>
-      <div class="chat-input">
-        <div class="input-wrapper">
-          <textarea #messageInput pInputTextarea rows="1"
-                    [(ngModel)]="newMessageContent"
-                    placeholder="Nhập tin nhắn..."
-                    class="message-input"
-                    (input)="adjustTextareaHeight($event)"></textarea>
+      </ng-container>
+      <ng-template #emptyMsg>
+        <div class="empty-message-simple">
+          <i class="pi pi-comments"></i>
+          <div>Chưa có tin nhắn nào</div>
         </div>
-        <button class="send-button" (click)="sendMessage()" [disabled]="!newMessageContent.trim()">
-          <div class="svg-wrapper-1">
-            <div class="svg-wrapper">
-              <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z" fill="currentColor"></path>
-              </svg>
-            </div>
-          </div>
-          <span>Gửi</span>
-        </button>
-      </div>
-    </div>
+      </ng-template>
+    </main>
+    <footer class="simple-chat-input">
+      <textarea #messageInput pInputTextarea rows="1"
+                [(ngModel)]="newMessageContent"
+                placeholder="Nhập tin nhắn..."
+                class="input-msg"
+                (input)="adjustTextareaHeight($event)"></textarea>
+      <button class="bt send-button" id="bt" (click)="sendMessage()" [disabled]="!newMessageContent.trim()">
+        <span class="msg" id="msg"></span>
+        Gửi
+      </button>
+    </footer>
   </div>
 
   <ng-template #noSessionTpl>
@@ -114,3 +87,169 @@
     </div>
   </ng-template>
 </div>
+
+<style>
+.simple-chat-area {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  min-height: 500px;
+  background: #fafdff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px 0 rgba(8,115,189,0.08);
+  overflow: hidden;
+  border: 1.5px solid #e3f0fa;
+}
+.simple-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: 14px 20px;
+  border-bottom: 1px solid #e3f0fa;
+  font-weight: 500;
+  color: #0873bd;
+  font-size: 17px;
+}
+.avatar-header {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 10px;
+  vertical-align: middle;
+  box-shadow: 0 1px 4px 0 rgba(8,115,189,0.08);
+}
+.close-button {
+  background: none;
+  border: none;
+  color: #0873bd;
+  font-size: 20px;
+  cursor: pointer;
+}
+.simple-chat-body {
+  flex: 1;
+  overflow-y: visible !important;
+  background: linear-gradient(180deg, #fafdff 0%, #e3f0fa 100%);
+  padding: 18px 12px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  scrollbar-width: none;
+}
+.simple-chat-body::-webkit-scrollbar {
+  display: none;
+}
+.date-label-simple {
+  text-align: center;
+  color: #b0cbe7;
+  font-size: 13px;
+  margin: 10px 0;
+}
+.msg-customer, .msg-staff {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 6px;
+}
+.msg-customer {
+  flex-direction: row-reverse;
+}
+.avatar-msg {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin: 0 8px;
+  box-shadow: 0 1px 4px 0 rgba(8,115,189,0.08);
+}
+.msg-bubble {
+  background: #e3f0fa;
+  color: #0a2540;
+  border-radius: 14px 14px 4px 14px;
+  padding: 12px 16px 10px 16px;
+  min-width: 60px;
+  max-width: 100%;
+  word-break: break-word;
+  box-shadow: 0 1px 4px 0 rgba(8,115,189,0.04);
+  font-size: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.msg-staff .msg-bubble {
+  background: #0873bd;
+  color: #fff;
+  border-radius: 14px 14px 14px 4px;
+  align-items: flex-end;
+}
+.msg-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #7baedc;
+  margin-bottom: 2px;
+}
+.msg-content {
+  font-size: 15px;
+}
+.empty-message-simple {
+  text-align: center;
+  color: #b0cbe7;
+  margin-top: 40px;
+  font-size: 15px;
+}
+.simple-chat-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: #fff;
+  border-top: 1px solid #e3f0fa;
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+}
+.input-msg {
+  flex: 1;
+  border-radius: 10px;
+  border: 1px solid #e3f0fa;
+  padding: 10px 14px;
+  font-size: 15px;
+  background: #fafdff;
+  resize: none;
+  outline: none;
+  transition: border 0.2s;
+}
+.input-msg:focus {
+  border: 1.5px solid #0873bd;
+  background: #fff;
+}
+.bt.send-button {
+  margin-left: 6px;
+  min-width: 80px;
+  height: 40px;
+  line-height: 40px;
+  font-size: 15px;
+  border-radius: 8px;
+  box-shadow: none;
+  background: #0873bd;
+  color: #fff;
+  border: none;
+}
+.bt.send-button:disabled {
+  background: #b0cbe7;
+  color: #fff;
+}
+.msg-staff.align-right {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  margin-left: auto;
+  margin-right: 0;
+  max-width: 70vw;
+}
+.msg-customer.align-left {
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-right: auto;
+  margin-left: 0;
+  max-width: 70vw;
+}
+</style>

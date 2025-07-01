@@ -41,6 +41,8 @@ export class StaffChatComponent implements OnInit, OnDestroy {
   messages: Message[] = [];
   newMessageContent = '';
   messagesWithDate: any[] = [];
+  customerName: string = 'Khách hàng';
+  staffId: number | null = null;
 
   private msgSub!: Subscription;
   private notifSub!: Subscription;
@@ -55,6 +57,7 @@ export class StaffChatComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.primengConfig.ripple = true;
+    this.staffId = this.authService.getUserId();
 
     // 1. Kết nối WebSocket
     this.wsService.connect();
@@ -107,6 +110,11 @@ export class StaffChatComponent implements OnInit, OnDestroy {
   /** Khi click chọn 1 session chờ hoặc session của tôi */
   selectSession(session: SupportSession, isWaiting: boolean): void {
     this.selectedSession = session;
+    // Lấy tên khách hàng
+    this.authService.getUserById(session.customerId).subscribe({
+      next: user => this.customerName = user.username || 'Khách hàng',
+      error: () => this.customerName = 'Khách hàng'
+    });
 
     if (isWaiting) {
       this.chatService.assignSession(session.id).subscribe({
