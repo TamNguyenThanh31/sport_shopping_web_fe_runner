@@ -35,6 +35,8 @@ export class CustomerChatComponent implements OnInit, OnDestroy, AfterViewChecke
   messages: Message[] = [];
   newMessageContent = '';
   messagesWithDate: any[] = [];
+  showCloseAlert: boolean = false;
+  showConfirmClose: boolean = false;
 
   private msgSub!: Subscription;
   private notifSub!: Subscription;
@@ -117,6 +119,7 @@ export class CustomerChatComponent implements OnInit, OnDestroy, AfterViewChecke
         this.toast.add({severity:'warn', summary:'Đã đóng', detail:'Bạn đã kết thúc trò chuyện.', life:3000});
         this.wsService.disconnect();
         this.messages = [];
+        this.showCloseAlert = true;
       },
       error: err => console.error('Close session error', err)
     });
@@ -162,5 +165,10 @@ export class CustomerChatComponent implements OnInit, OnDestroy, AfterViewChecke
       result.push({ isDate: false, msg });
     }
     return result;
+  }
+
+  confirmCloseChat(): void {
+    this.closeChat();
+    this.showConfirmClose = false;
   }
 }

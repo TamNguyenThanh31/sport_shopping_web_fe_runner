@@ -39,7 +39,6 @@
         {{ customerName }}<br>
         <span class="session-time">Bắt đầu: {{ selectedSession.startedAt | date:'short' }}</span>
       </div>
-      <button pButton type="button" icon="pi pi-times" class="close-button" (click)="closeChat()"></button>
     </header>
     <main class="simple-chat-body">
       <ng-container *ngIf="messagesWithDate.length; else emptyMsg">
