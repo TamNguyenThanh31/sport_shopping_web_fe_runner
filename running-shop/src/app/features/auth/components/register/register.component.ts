@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../../../core/services/auth.service";
 import {Router} from "@angular/router";
+import {MessageService} from 'primeng/api';
 
 @Component({
     selector: 'app-register',
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
-    standalone: false
+    standalone: false,
+    providers: [MessageService]
 })
 export class RegisterComponent implements OnInit {
   registerForm!: FormGroup;
@@ -15,7 +17,8 @@ export class RegisterComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -45,8 +48,13 @@ export class RegisterComponent implements OnInit {
   }
 
   private handleRegistrationSuccess(): void {
-    alert('Đăng ký thành công! Vui lòng đăng nhập.');
-    this.router.navigate(['/auth/login']);
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Thành công',
+      detail: 'Đăng ký thành công! Vui lòng đăng nhập.',
+      life: 3000
+    });
+    setTimeout(() => this.router.navigate(['/auth/login']), 1000);
   }
 
   private handleRegistrationError(error: any): void {
