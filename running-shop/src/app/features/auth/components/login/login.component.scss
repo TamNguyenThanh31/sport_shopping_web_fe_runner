@@ -78,6 +78,29 @@ $error-color: #dc3545;
     .card-body {
       padding: 2rem 2.5rem;
 
+      .error-alert {
+        display: flex;
+        align-items: center;
+        background: rgba($error-color, 0.1);
+        border: 1px solid rgba($error-color, 0.3);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 1.5rem;
+        color: $error-color;
+        font-size: 0.9rem;
+        animation: slideIn 0.3s ease;
+
+        i {
+          margin-right: 0.5rem;
+          font-size: 1rem;
+        }
+
+        span {
+          flex: 1;
+          line-height: 1.4;
+        }
+      }
+
       .form {
         .form-field {
           margin-bottom: 1.75rem;
@@ -326,6 +349,18 @@ $error-color: #dc3545;
         }
       }
     }
+  }
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

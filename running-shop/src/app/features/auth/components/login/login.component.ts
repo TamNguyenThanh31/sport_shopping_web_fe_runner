@@ -15,6 +15,8 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   showPassword = false;
   rememberMe = false;
+  loginError = '';
+  isLoading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -53,6 +55,13 @@ export class LoginComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
+  onInputChange(): void {
+    // Xóa thông báo lỗi khi người dùng bắt đầu nhập lại
+    if (this.loginError) {
+      this.loginError = '';
+    }
+  }
+
   onRememberMeChange(): void {
     this.rememberMe = this.loginForm.get('rememberMe')?.value;
   }
@@ -63,6 +72,8 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    this.loginError = '';
+    this.isLoading = true;
     this.authenticateUser();
   }
 
@@ -96,6 +107,7 @@ export class LoginComponent implements OnInit {
   }
 
   private handleLoginSuccess(response: any): void {
+    this.isLoading = false;
     this.navigateBasedOnRole(response.user.role);
     this.showSuccessMessage();
   }
@@ -120,7 +132,24 @@ export class LoginComponent implements OnInit {
   }
 
   private handleLoginError(error: any): void {
-    const errorMessage = error?.error?.message || 'Tài khoản hoặc mật khẩu không đúng.';
+    this.isLoading = false;
+    let errorMessage = 'Đã xảy ra lỗi khi đăng nhập.';
+    
+    if (error?.status === 401) {
+      errorMessage = 'Tài khoản hoặc mật khẩu không đúng. Vui lòng kiểm tra lại thông tin đăng nhập.';
+    } else if (error?.status === 404) {
+      errorMessage = 'Tài khoản không tồn tại. Vui lòng kiểm tra lại tên đăng nhập hoặc số điện thoại.';
+    } else if (error?.status === 403) {
+      errorMessage = 'Tài khoản đã bị khóa. Vui lòng liên hệ quản trị viên.';
+    } else if (error?.status === 400) {
+      errorMessage = 'Bạn đã nhập sai mật khẩu, hãy thử lại!';
+    } else if (error?.error?.message) {
+      errorMessage = error.error.message;
+    } else if (error?.message) {
+      errorMessage = error.message;
+    }
+    
+    this.loginError = errorMessage;
     this.showErrorMessage(errorMessage);
   }
 
