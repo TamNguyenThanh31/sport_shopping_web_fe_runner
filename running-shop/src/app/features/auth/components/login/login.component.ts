@@ -108,8 +108,8 @@ export class LoginComponent implements OnInit {
 
   private handleLoginSuccess(response: any): void {
     this.isLoading = false;
-    this.navigateBasedOnRole(response.user.role);
     this.showSuccessMessage();
+    this.navigateBasedOnRole(response.user.role);
   }
 
   private navigateBasedOnRole(role: string): void {
