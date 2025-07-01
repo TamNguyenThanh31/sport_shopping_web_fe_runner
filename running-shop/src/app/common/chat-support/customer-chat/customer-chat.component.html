@@ -8,9 +8,10 @@
       <ng-template #waiting>
         <i class="pi pi-spin pi-spinner"></i> Đang chờ nhân viên nhận...
       </ng-template>
-      <button pButton type="button" icon="pi pi-times" class="close-button" (click)="closeChat()"></button>
+      <button pButton type="button" icon="pi pi-times" class="close-button" (click)="showConfirmClose = true"></button>
     </header>
     <main class="simple-chat-body">
+      <div *ngIf="showCloseAlert" class="close-alert">Bạn đã đóng phiên chat thành công!</div>
       <ng-container *ngIf="messagesWithDate.length; else emptyMsg">
         <ng-container *ngFor="let item of messagesWithDate">
           <div *ngIf="item.isDate" class="date-label-simple">
@@ -53,6 +54,19 @@
     </div>
   </ng-template>
 </p-card>
+
+<ng-template [ngIf]="showConfirmClose">
+  <div class="popup-overlay">
+    <div class="popup-modal">
+      <div class="popup-title">Xác nhận đóng phiên chat</div>
+      <div class="popup-content">Bạn có chắc chắn muốn đóng phiên chat này không?</div>
+      <div class="popup-actions">
+        <button class="btn-confirm" (click)="confirmCloseChat()">Đồng ý</button>
+        <button class="btn-cancel" (click)="showConfirmClose = false">Hủy</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
 
 <style>
 .simple-chat-card {
@@ -207,5 +221,65 @@
 .bt.send-button:disabled {
   background: #b0cbe7;
   color: #fff;
+}
+.popup-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.popup-modal {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px 0 rgba(8,115,189,0.13);
+  padding: 28px 32px 22px 32px;
+  min-width: 320px;
+  max-width: 90vw;
+  text-align: center;
+}
+.popup-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0873bd;
+  margin-bottom: 12px;
+}
+.popup-content {
+  font-size: 15px;
+  color: #222;
+  margin-bottom: 18px;
+}
+.popup-actions {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
+.btn-confirm {
+  background: #0873bd;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 22px;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.btn-cancel {
+  background: #e3f0fa;
+  color: #0873bd;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 22px;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.btn-confirm:hover {
+  background: #0a5fa3;
+}
+.btn-cancel:hover {
+  background: #d0e6f7;
 }
 </style>
