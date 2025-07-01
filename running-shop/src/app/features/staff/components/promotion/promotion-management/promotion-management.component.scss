@@ -1,15 +1,14 @@
 /* ===== Theme Variables ===== */
-$primary-color: #2196F3;
+$primary-color: #2563EB;       // Xanh dương đậm, chuyên nghiệp
 $secondary-color: #DC2626;     // Đỏ nhẹ, nổi bật
 $accent-color: #059669;        // Xanh lá đậm, hiện đại
-$background-color: #f5f5f5;
-$text-color: #333;
+$background-color: #F9FAFB;    // Nền xám nhạt thanh lịch
 $text-dark: #111827;           // Chữ đậm, chuyên nghiệp
 $text-medium: #374151;         // Chữ trung bình
 $text-light: #6B7280;          // Chữ nhạt
-$border-color: #ddd;
-$hover-color: #f0f0f0;
-$shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+$border-color: #D1D5DB;        // Viền nhẹ
+$hover-bg: #E0F2FE;            // Nền hover xanh nhạt
+$shadow: 0 10px 30px rgba(0, 0, 0, 0.05); // Shadow mềm mại
 $card-bg: #FFFFFF;             // Nền thẻ trắng tinh
 $row-bg: #F9FAFB;              // Nền hàng bảng nhẹ
 $error-color: #DC2626;
@@ -20,188 +19,457 @@ $info-color: #00BCD4;
 
 /* ===== Container Styles ===== */
 .container-fluid {
+  padding: 3rem 2rem;
+  background: $background-color;
   min-height: 100vh;
-  padding: 20px;
-  background-color: $background-color;
-  font-family: 'Roboto', sans-serif;
-}
+  font-family: 'Inter', 'Segoe UI', sans-serif;
 
-/* ===== Loading Overlay ===== */
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.9);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+  /* ===== Header Section ===== */
+  .header-section {
+    background: $card-bg;
+    border-radius: 16px;
+    box-shadow: $shadow;
+    padding: 2rem;
+    margin-bottom: 2rem;
 
-  .loading-text {
-    margin-top: 1rem;
-    color: $text-color;
-    font-size: 1.1rem;
-  }
-}
-
-/* ===== Header Section ===== */
-.header-section {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: $shadow;
-  margin-bottom: 1.5rem;
-
-  .header-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-
-    h2 {
-      margin: 0;
-      color: $text-color;
-      font-size: 1.5rem;
-      font-weight: 500;
-    }
-  }
-}
-
-/* ===== Filter Section ===== */
-.filter-section {
-  .filter-toggle {
-    margin-bottom: 1rem;
-  }
-
-  .filter-controls {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    padding: 1rem;
-    background: $hover-color;
-    border-radius: 8px;
-
-    .filter-item {
+    .header-title {
       display: flex;
+      justify-content: space-between;
       align-items: center;
+      margin-bottom: 2rem;
 
-      .p-input-icon-left {
-        width: 100%;
+      h2 {
+        margin: 0;
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: $text-dark;
+        letter-spacing: -0.5px;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        &:before {
+          content: '';
+          width: 6px;
+          height: 28px;
+          background: $primary-color;
+          border-radius: 3px;
+        }
       }
 
-      input, .p-dropdown, .p-calendar {
-        width: 100%;
-      }
-    }
-  }
-}
+      .p-button-success {
+        background: linear-gradient(135deg, $primary-color 0%, lighten($primary-color, 10%) 100%) !important;
+        border: none !important;
+        border-radius: 10px;
+        padding: 0.85rem 1.5rem;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba($primary-color, 0.2);
+        transition: all 0.3s ease;
 
-/* ===== Promotion List Styles ===== */
-.promotion-list {
-  background: white;
-  border-radius: 8px;
-  box-shadow: $shadow;
-  overflow: hidden;
-
-  /* ===== Desktop View ===== */
-  .desktop-view {
-    .p-datatable {
-      .p-datatable-header {
-        background: $hover-color;
-        border: none;
-      }
-
-      .p-datatable-thead > tr > th {
-        background: $hover-color;
-        color: $text-color;
-        font-weight: 500;
-        padding: 1rem;
-        border: none;
-        border-bottom: 1px solid $border-color;
-      }
-
-      .p-datatable-tbody > tr > td {
-        padding: 1rem;
-        border: none;
-        border-bottom: 1px solid $border-color;
-      }
-
-      .p-datatable-tbody > tr:hover {
-        background: $hover-color;
-      }
-    }
-
-    .action-buttons {
-      display: flex;
-      gap: 0.5rem;
-      justify-content: center;
-    }
-  }
-
-  /* ===== Mobile View ===== */
-  .mobile-view {
-    display: none;
-    padding: 1rem;
-
-    .promotion-cards {
-      display: grid;
-      gap: 1rem;
-    }
-
-    .promotion-card {
-      background: white;
-      border-radius: 8px;
-      padding: 1rem;
-      box-shadow: $shadow;
-
-      .promotion-info {
-        margin-bottom: 1rem;
-
-        h3 {
-          margin: 0 0 0.5rem 0;
-          color: $text-color;
-          font-size: 1.2rem;
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba($primary-color, 0.3);
+          background: lighten($primary-color, 5%) !important;
         }
 
-        p {
-          margin: 0.5rem 0;
-          color: $text-color;
+        .p-button-label {
+          color: white !important;
+        }
 
-          strong {
-            color: $text-color;
+        .pi-plus {
+          color: white !important;
+        }
+      }
+    }
+
+    .filter-section {
+      .filter-toggle {
+        margin-bottom: 1rem;
+
+        .p-button-text {
+          color: $primary-color !important;
+          font-weight: 600;
+          padding: 0.5rem 1rem;
+          border-radius: 8px;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: $hover-bg !important;
+            transform: translateY(-2px);
+          }
+
+          .pi-filter {
+            margin-right: 0.5rem;
           }
         }
       }
 
-      .action-buttons {
+      .filter-controls {
         display: flex;
-        gap: 0.5rem;
-        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        background: $row-bg;
+        padding: 1.5rem;
+        border-radius: 12px;
+        box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03);
+
+        .filter-item {
+          flex: 1;
+          min-width: 200px;
+
+          .p-input-icon-left {
+            display: flex;
+            align-items: center;
+            width: 100%;
+
+            .pi-tag {
+              color: $primary-color;
+              font-size: 1.2rem;
+            }
+
+            .custom-input {
+              width: 100%;
+              padding: 0.85rem 1rem 0.85rem 2.75rem;
+              border: 1px solid $border-color;
+              border-radius: 10px;
+              background: $card-bg;
+              box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03);
+              transition: all 0.3s ease;
+              font-size: 0.95rem;
+              color: $text-dark;
+              font-weight: 500;
+              margin-left: 10px;
+
+              &:focus {
+                border-color: $primary-color;
+                box-shadow: 0 0 0 3px rgba($primary-color, 0.15);
+                background: white;
+              }
+
+              &::placeholder {
+                color: $text-light;
+                font-weight: 400;
+              }
+            }
+          }
+
+          .custom-dropdown {
+            width: 100%;
+            border: 1px solid $border-color;
+            border-radius: 10px;
+            background: $card-bg !important;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+
+            .p-select-label {
+              color: $text-dark !important;
+              font-weight: 500;
+              padding: 0.85rem 1rem;
+            }
+
+            .p-dropdown-trigger {
+              color: $primary-color !important;
+            }
+
+            &:hover {
+              border-color: $primary-color;
+              background: white !important;
+              box-shadow: 0 0 0 3px rgba($primary-color, 0.15);
+            }
+
+            .p-dropdown-panel {
+              border-radius: 10px;
+              box-shadow: $shadow;
+              background: $card-bg !important;
+              border: 1px solid $border-color;
+
+              .p-dropdown-items-wrapper {
+                .p-dropdown-item {
+                  color: $text-medium !important;
+                  font-weight: 500;
+                  padding: 0.85rem 1rem;
+
+                  &:hover {
+                    background: $hover-bg !important;
+                    color: $primary-color !important;
+                  }
+                }
+              }
+            }
+          }
+
+          .custom-calendar {
+            width: 100%;
+            border: 1px solid $border-color;
+            border-radius: 10px;
+            background: $card-bg !important;
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+
+            .p-inputtext {
+              color: $text-dark !important;
+              font-weight: 500;
+              padding: 0.85rem 1rem;
+              border: none !important;
+              background: transparent !important;
+            }
+
+            .p-datepicker-trigger {
+              color: $primary-color !important;
+            }
+
+            &:hover {
+              border-color: $primary-color;
+              background: white !important;
+              box-shadow: 0 0 0 3px rgba($primary-color, 0.15);
+            }
+          }
+
+          .p-button-outlined {
+            border: 1px solid $border-color;
+            color: $text-medium;
+            background: $card-bg !important;
+            border-radius: 10px;
+            padding: 0.85rem 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            width: 100%;
+
+            &:hover {
+              background: $hover-bg !important;
+              border-color: $primary-color;
+              color: $primary-color !important;
+              transform: translateY(-2px);
+              box-shadow: 0 4px 12px rgba($primary-color, 0.2);
+            }
+
+            .pi-refresh {
+              color: $primary-color;
+              margin-right: 0.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /* ===== Promotion List Styles ===== */
+  .promotion-list {
+    .custom-table {
+      background: $card-bg !important;
+      border-radius: 12px !important;
+      overflow: hidden !important;
+      border: 1px solid $border-color !important;
+      box-shadow: $shadow;
+
+      .p-datatable-thead > tr > th {
+        background: $primary-color !important;
+        color: white !important;
+        font-weight: 600 !important;
+        font-size: 0.95rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+        padding: 1.25rem !important;
+        border: none !important;
+        border-bottom: 2px solid rgba(white, 0.1) !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+        text-align: left !important;
+        line-height: 1.2 !important;
+        box-shadow: inset 0 -1px 0 rgba(white, 0.1) !important;
+        vertical-align: middle !important;
+      }
+
+      .p-datatable-tbody > tr {
+        background: $row-bg !important;
+        transition: all 0.3s ease !important;
+
+        &:nth-child(even) {
+          background: $card-bg !important;
+        }
+
+        &:hover {
+          background: $hover-bg !important;
+          transform: scale(1.005) !important;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+        }
+
+        > td {
+          padding: 1.25rem !important;
+          border: none !important;
+          border-bottom: 1px solid $border-color !important;
+          color: $text-medium !important;
+          font-size: 0.95rem !important;
+          vertical-align: middle !important;
+          background: inherit !important;
+          font-weight: 500 !important;
+          text-align: left !important;
+          line-height: 1.5 !important;
+
+          .promotion-code {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: $primary-color;
+
+            .pi-tag {
+              font-size: 1.1rem;
+            }
+          }
+
+          .discount-badge {
+            background: linear-gradient(135deg, $accent-color 0%, lighten($accent-color, 10%) 100%);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba($accent-color, 0.3);
+          }
+
+          .status-badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+
+            &.active {
+              background: linear-gradient(135deg, $accent-color 0%, lighten($accent-color, 10%) 100%);
+              color: white;
+              box-shadow: 0 2px 8px rgba($accent-color, 0.3);
+            }
+
+            &.inactive {
+              background: linear-gradient(135deg, $text-light 0%, lighten($text-light, 10%) 100%);
+              color: white;
+              box-shadow: 0 2px 8px rgba($text-light, 0.3);
+            }
+          }
+
+          .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+
+            .action-btn {
+              width: 38px;
+              height: 38px;
+              border-radius: 50%;
+              border: 2px solid #2563eb;
+              background: #fff;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              transition: background 0.2s, border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+              cursor: pointer;
+              padding: 0;
+
+              i {
+                font-size: 1.2rem;
+                transition: color 0.2s;
+              }
+
+              &.btn-view {
+                border-color: #2563eb;
+                i { color: #22c55e; } // xanh lá
+                &:hover {
+                  background: #e0f2fe;
+                  transform: scale(1.08);
+                }
+              }
+              &.btn-edit {
+                border-color: #2563eb;
+                i { color: #2563eb; } // xanh dương
+                &:hover {
+                  background: #e0f2fe;
+                  transform: scale(1.08);
+                }
+              }
+              &.btn-delete {
+                border-color: #dc2626;
+                i { color: #dc2626; } // đỏ
+                &:hover {
+                  background: #fee2e2;
+                  transform: scale(1.08);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .p-paginator {
+        background: $card-bg !important;
+        border: none !important;
+        padding: 1.25rem !important;
+        color: $text-dark !important;
+        border-top: 1px solid $border-color !important;
+
+        .p-paginator-current {
+          color: $text-medium !important;
+          font-weight: 500 !important;
+          background: $row-bg !important;
+          padding: 0.5rem 1rem !important;
+          border-radius: 8px !important;
+        }
+
+        .p-paginator-pages {
+          display: flex !important;
+          align-items: center !important;
+        }
+
+        .p-paginator-page,
+        .p-paginator-next,
+        .p-paginator-prev,
+        .p-paginator-first,
+        .p-paginator-last {
+          background: $card-bg !important;
+          color: $primary-color !important;
+          border: 1px solid $border-color !important;
+          border-radius: 8px !important;
+          min-width: 40px !important;
+          height: 40px !important;
+          margin: 0 6px !important;
+          transition: all 0.3s ease !important;
+          font-weight: 600 !important;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05) !important;
+
+          &.p-highlight {
+            background: $primary-color !important;
+            color: white !important;
+            border-color: $primary-color !important;
+            box-shadow: 0 4px 12px rgba($primary-color, 0.2) !important;
+          }
+
+          &:not(.p-highlight):hover {
+            background: $hover-bg !important;
+            color: $primary-color !important;
+            border-color: $primary-color !important;
+            transform: translateY(-2px) !important;
+          }
+
+          &.p-disabled {
+            color: $text-light !important;
+            opacity: 0.5 !important;
+            border-color: $border-color !important;
+          }
+
+          .pi {
+            font-size: 1rem !important;
+            color: $primary-color !important;
+          }
+        }
       }
     }
 
-    .no-promotions {
+    .text-center {
       text-align: center;
+      color: $text-light;
+      font-style: italic;
       padding: 2rem;
-      color: $text-color;
-    }
-  }
-}
-
-/* ===== Paginator Styles ===== */
-.p-paginator {
-  background: white;
-  border: none;
-  padding: 1rem;
-  border-top: 1px solid $border-color;
-
-  .p-paginator-pages .p-paginator-page {
-    &.p-highlight {
-      background: $primary-color;
-      color: white;
     }
   }
 }
@@ -209,12 +477,12 @@ $info-color: #00BCD4;
 /* ===== Dialog Styles ===== */
 ::ng-deep .p-dialog {
   .p-dialog-header {
-    background: $hover-color;
+    background: $hover-bg;
     border: none;
     padding: 1.5rem;
 
     .p-dialog-title {
-      color: $text-color;
+      color: $text-dark;
       font-size: 1.2rem;
       font-weight: 500;
     }
@@ -271,16 +539,63 @@ $info-color: #00BCD4;
 }
 
 /* ===== Responsive Design ===== */
-@media screen and (max-width: 768px) {
-  .desktop-view {
-    display: none;
-  }
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 1.5rem 1rem;
 
-  .mobile-view {
-    display: block;
-  }
+    .header-section {
+      padding: 1.5rem;
 
-  .filter-controls {
-    grid-template-columns: 1fr !important;
+      .header-title {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+
+        h2 {
+          font-size: 1.8rem;
+          text-align: center;
+        }
+      }
+
+      .filter-section {
+        .filter-controls {
+          flex-direction: column;
+          gap: 1rem;
+
+          .filter-item {
+            min-width: auto;
+          }
+        }
+      }
+    }
+
+    .promotion-list {
+      .custom-table {
+        .p-datatable-thead > tr > th,
+        .p-datatable-tbody > tr > td {
+          padding: 0.75rem !important;
+          font-size: 0.85rem !important;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+          gap: 0.5rem;
+
+          .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+
+            &.btn-view,
+            &.btn-edit,
+            &.btn-delete {
+              &:hover {
+                transform: scale(1.05);
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

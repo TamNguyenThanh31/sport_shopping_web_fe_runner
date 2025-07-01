@@ -18,6 +18,12 @@ import { PhonePipe } from './pipes/phone.pipe';
 import {Tooltip, TooltipModule} from "primeng/tooltip";
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {CountdownTimerComponent} from "./countdown-timer/countdown-timer.component";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {DialogModule} from "primeng/dialog";
+import {PasswordModule} from "primeng/password";
+import {ReactiveFormsModule} from "@angular/forms";
+import {MessageService} from "primeng/api";
+import {ToastModule} from "primeng/toast";
 
 
 
@@ -32,23 +38,31 @@ import {CountdownTimerComponent} from "./countdown-timer/countdown-timer.compone
     SidebarComponent,
     PhonePipe
   ],
-  imports: [
-    CommonModule,
-    MenubarModule,
-    MenuModule,
-    ButtonModule,
-    AvatarModule,
-    PanelMenuModule,
-    CardModule,
-    RippleModule,
-    DividerModule,
-    ProgressBarModule,
-    TimelineModule,
-    TooltipModule,
-    RouterLink,
-    RouterLinkActive,
-    NavbarComponent,
-    CountdownTimerComponent
-  ],
+    imports: [
+        CommonModule,
+        MenubarModule,
+        MenuModule,
+        ButtonModule,
+        AvatarModule,
+        PanelMenuModule,
+        CardModule,
+        RippleModule,
+        DividerModule,
+        ProgressBarModule,
+        TimelineModule,
+        TooltipModule,
+        RouterLink,
+        RouterLinkActive,
+        NavbarComponent,
+        CountdownTimerComponent,
+        ProgressSpinnerModule,
+        DialogModule,
+        PasswordModule,
+        ReactiveFormsModule,
+        ToastModule
+    ],
+    providers: [
+        MessageService
+    ]
 })
 export class SharedModule { }

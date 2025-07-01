@@ -10,18 +10,37 @@
                   [style]="{'background-color': '#4361ee', 'color': '#fff', 'font-size': '2rem', 'font-weight': '600'}">
         </p-avatar>
       </div>
-      <h1>{{ user.username }}'s Runner Profile</h1>
-      <p class="runner-tagline">Tracking your running journey since {{ user.createdAt | date:'yyyy' }}</p>
+      <h1>Hồ sơ Runner của {{ user.username }}</h1>
+      <p class="runner-tagline">Theo dõi hành trình chạy bộ của bạn từ năm {{ user.createdAt | date:'yyyy' }}</p>
+
+      <!-- Strava Connection Status -->
+      <div class="strava-status" *ngIf="!loadingStrava">
+        <div class="strava-badge" *ngIf="stravaConnected; else notConnected">
+          <i class="pi pi-check-circle" style="color: #fc4c02"></i>
+          <span>Đã kết nối với Strava</span>
+        </div>
+        <ng-template #notConnected>
+          <div class="strava-badge not-connected">
+            <i class="pi pi-exclamation-triangle"></i>
+            <span>Chưa kết nối với Strava</span>
+            <p-button label="Kết nối Strava"
+                      icon="pi pi-external-link"
+                      styleClass="p-button-sm p-button-outlined"
+                      (click)="connectStrava()">
+            </p-button>
+          </div>
+        </ng-template>
+      </div>
     </div>
   </div>
 
   <!-- Main Content -->
   <div class="profile-main">
     <div class="profile-section personal-info">
-      <h2><i class="pi pi-user"></i> Personal Information</h2>
+      <h2><i class="pi pi-user"></i> Thông tin cá nhân</h2>
       <div class="info-grid">
         <div class="info-item">
-          <label>Username</label>
+          <label>Tên đăng nhập</label>
           <p>{{ user.username }}</p>
         </div>
         <div class="info-item">
@@ -29,76 +48,251 @@
           <p>{{ user.email }}</p>
         </div>
         <div class="info-item">
-          <label>Account Type</label>
+          <label>Loại tài khoản</label>
           <p>{{ user.role | titlecase }}</p>
         </div>
         <div class="info-item">
-          <label>Member Since</label>
+          <label>Thành viên từ</label>
           <p>{{ user.createdAt | date:'fullDate' }}</p>
         </div>
       </div>
     </div>
 
-    <div class="profile-section stats-section">
-      <h2><i class="pi pi-chart-line"></i> Running Statistics</h2>
+    <!-- Strava Statistics Section -->
+    <div class="profile-section stats-section" *ngIf="stravaConnected">
+      <h2><i class="pi pi-chart-line"></i> Thống kê chạy bộ (30 ngày)</h2>
       <div class="stats-grid">
         <div class="stat-card">
-          <div class="stat-value">42</div>
-          <div class="stat-label">Total Runs</div>
-          <i class="pi pi-map-marker stat-icon"></i>
+          <div class="stat-content">
+            <div class="stat-value">{{ stravaStatus?.totalDistanceKm | number:'1.0-1' }}km</div>
+            <div class="stat-label">Quãng đường đã chạy</div>
+          </div>
         </div>
         <div class="stat-card">
-          <div class="stat-value">156km</div>
-          <div class="stat-label">Distance Covered</div>
-          <i class="pi pi-globe stat-icon"></i>
+          <div class="stat-content">
+            <div class="stat-value">{{ stravaStatus?.averagePace }}</div>
+            <div class="stat-label">Tốc độ trung bình</div>
+          </div>
         </div>
         <div class="stat-card">
-          <div class="stat-value">5:42/km</div>
-          <div class="stat-label">Avg. Pace</div>
-          <i class="pi pi-stopwatch stat-icon"></i>
+          <div class="stat-content">
+            <div class="stat-value">{{ monthlyProgress | number:'1.0-0' }}%</div>
+            <div class="stat-label">Tiến độ tháng</div>
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="monthlyProgress"></div>
+            </div>
+          </div>
         </div>
         <div class="stat-card">
-          <div class="stat-value">Level 3</div>
-          <div class="stat-label">Runner Level</div>
-          <i class="pi pi-star stat-icon"></i>
+          <div class="stat-content">
+            <div class="stat-value" [style.color]="runnerLevel.color">{{ runnerLevel.title }}</div>
+            <div class="stat-label">Cấp độ Runner</div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="profile-section recent-activity">
-      <h2><i class="pi pi-history"></i> Recent Activity</h2>
-      <p-timeline [value]="activities" align="alternate">
-        <ng-template pTemplate="content" let-activity>
-          <div class="activity-card">
-            <div class="activity-date">{{ activity.date | date:'shortDate' }}</div>
-            <div class="activity-title">{{ activity.title }}</div>
-            <div class="activity-desc">{{ activity.description }}</div>
+    <!-- Strava Not Connected Section -->
+    <div class="profile-section strava-connect-section" *ngIf="!stravaConnected && !loadingStrava">
+      <div class="strava-connect-card">
+        <div class="strava-logo">
+          <i class="pi pi-external-link" style="font-size: 3rem; color: #fc4c02"></i>
+        </div>
+        <h3>Kết nối tài khoản Strava của bạn</h3>
+        <p>Đồng bộ dữ liệu chạy bộ để xem thống kê chi tiết và theo dõi tiến độ của bạn</p>
+        <div class="strava-benefits">
+          <div class="benefit-item">
+            <i class="pi pi-check"></i>
+            <span>Theo dõi quãng đường chạy</span>
           </div>
-        </ng-template>
-        <ng-template pTemplate="opposite" let-activity>
-          <i class="pi" [ngClass]="activity.icon" style="font-size: 1.5rem"></i>
-        </ng-template>
-      </p-timeline>
+          <div class="benefit-item">
+            <i class="pi pi-check"></i>
+            <span>Giám sát cải thiện tốc độ</span>
+          </div>
+          <div class="benefit-item">
+            <i class="pi pi-check"></i>
+            <span>Nhận phần thưởng cho các lần chạy</span>
+          </div>
+        </div>
+        <p-button label="Kết nối Strava"
+                  icon="pi pi-external-link"
+                  styleClass="p-button-raised p-button-lg"
+                  (click)="connectStrava()">
+        </p-button>
+      </div>
+    </div>
+
+    <!-- Loading Section -->
+    <div class="profile-section loading-section" *ngIf="loadingStrava">
+      <div class="loading-content">
+        <p-progressSpinner></p-progressSpinner>
+        <p>Đang tải dữ liệu Strava của bạn...</p>
+      </div>
     </div>
   </div>
 
   <!-- Footer Actions -->
   <div class="profile-actions">
-    <p-button label="Edit Profile" icon="pi pi-user-edit" styleClass="p-button-rounded p-button-outlined"></p-button>
-    <p-button label="View Full Stats" icon="pi pi-chart-bar" styleClass="p-button-rounded"></p-button>
-    <p-button label="Logout" icon="pi pi-sign-out" styleClass="p-button-rounded p-button-danger"
+    <p-button label="Đổi mật khẩu" icon="pi pi-lock" styleClass="p-button-rounded p-button-outlined"
+              (click)="openChangePasswordDialog()"></p-button>
+    <p-button label="Đăng xuất" icon="pi pi-sign-out" styleClass="p-button-rounded p-button-danger"
               (click)="authService.logout()"></p-button>
   </div>
+
+  <!-- Change Password Dialog -->
+  <p-dialog
+    header="Thay đổi mật khẩu"
+    [(visible)]="showChangePasswordDialog"
+    [modal]="true"
+    [style]="{width: '500px'}"
+    [draggable]="false"
+    [resizable]="false"
+    (onHide)="closeChangePasswordDialog()">
+
+    <form [formGroup]="changePasswordForm" (ngSubmit)="onSubmitChangePassword()" class="change-password-form">
+
+      <!-- Current Password -->
+      <div class="form-field">
+        <label for="currentPassword" class="form-label">
+          <i class="pi pi-lock"></i> Mật khẩu hiện tại
+        </label>
+        <p-password
+          id="currentPassword"
+          formControlName="currentPassword"
+          [toggleMask]="true"
+          [feedback]="false"
+          placeholder="Nhập mật khẩu hiện tại"
+          [style]="{'width': '100%'}"
+          [inputStyleClass]="'w-full'">
+        </p-password>
+        <div class="error-message" *ngIf="isCurrentPasswordInvalid">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span *ngIf="hasCurrentPasswordError('required')">Mật khẩu hiện tại là bắt buộc</span>
+          <span *ngIf="hasCurrentPasswordError('minlength')">Mật khẩu phải có ít nhất 6 ký tự</span>
+        </div>
+      </div>
+
+      <!-- New Password -->
+      <div class="form-field">
+        <label for="newPassword" class="form-label">
+          <i class="pi pi-key"></i> Mật khẩu mới
+        </label>
+        <p-password
+          id="newPassword"
+          formControlName="newPassword"
+          [toggleMask]="true"
+          [feedback]="true"
+          placeholder="Nhập mật khẩu mới"
+          [style]="{'width': '100%'}"
+          [inputStyleClass]="'w-full'">
+        </p-password>
+
+        <!-- Password Strength Indicator -->
+        <div class="password-strength" *ngIf="newPasswordValue">
+          <div class="strength-bar">
+            <div class="strength-fill"
+                 [style.width.%]="passwordStrength.percentage"
+                 [style.background-color]="passwordStrength.color">
+            </div>
+          </div>
+          <span class="strength-text" [style.color]="passwordStrength.color">
+            {{ passwordStrength.strength }}
+          </span>
+        </div>
+
+        <div class="error-message" *ngIf="isNewPasswordInvalid">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span *ngIf="hasNewPasswordError('required')">Mật khẩu mới là bắt buộc</span>
+          <span *ngIf="hasNewPasswordError('minlength')">Mật khẩu phải có ít nhất 6 ký tự</span>
+          <span *ngIf="hasNewPasswordError('pattern')">Mật khẩu phải chứa chữ hoa, chữ thường, số và ký tự đặc biệt</span>
+        </div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-field">
+        <label for="confirmPassword" class="form-label">
+          <i class="pi pi-check-circle"></i> Xác nhận mật khẩu mới
+        </label>
+        <p-password
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          [toggleMask]="true"
+          [feedback]="false"
+          placeholder="Nhập lại mật khẩu mới"
+          [style]="{'width': '100%'}"
+          [inputStyleClass]="'w-full'">
+        </p-password>
+        <div class="error-message" *ngIf="isConfirmPasswordInvalid">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span *ngIf="hasConfirmPasswordError('required')">Xác nhận mật khẩu là bắt buộc</span>
+        </div>
+        <div class="error-message" *ngIf="hasPasswordMismatchError">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>Mật khẩu xác nhận không khớp</span>
+        </div>
+      </div>
+
+      <!-- Password Requirements -->
+      <div class="password-requirements">
+        <h4><i class="pi pi-info-circle"></i> Yêu cầu mật khẩu:</h4>
+        <ul>
+          <li [class.valid]="hasMinLength">
+            <i class="pi" [class.pi-check]="hasMinLength" [class.pi-times]="!hasMinLength"></i>
+            Ít nhất 6 ký tự
+          </li>
+          <li [class.valid]="hasLowerCase">
+            <i class="pi" [class.pi-check]="hasLowerCase" [class.pi-times]="!hasLowerCase"></i>
+            Chứa chữ thường
+          </li>
+          <li [class.valid]="hasUpperCase">
+            <i class="pi" [class.pi-check]="hasUpperCase" [class.pi-times]="!hasUpperCase"></i>
+            Chứa chữ hoa
+          </li>
+          <li [class.valid]="hasNumber">
+            <i class="pi" [class.pi-check]="hasNumber" [class.pi-times]="!hasNumber"></i>
+            Chứa số
+          </li>
+          <li [class.valid]="hasSpecialChar">
+            <i class="pi" [class.pi-check]="hasSpecialChar" [class.pi-times]="!hasSpecialChar"></i>
+            Chứa ký tự đặc biệt (&#64;$!%*?&)
+          </li>
+        </ul>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="form-actions">
+        <p-button
+          type="button"
+          label="Hủy"
+          icon="pi pi-times"
+          styleClass="p-button-text"
+          (click)="closeChangePasswordDialog()"
+          [disabled]="loadingPasswordChange">
+        </p-button>
+        <p-button
+          type="submit"
+          label="Thay đổi mật khẩu"
+          icon="pi pi-check"
+          styleClass="p-button-raised"
+          [loading]="loadingPasswordChange"
+          [disabled]="changePasswordForm.invalid || loadingPasswordChange">
+        </p-button>
+      </div>
+    </form>
+  </p-dialog>
 </div>
 
 <ng-template #notLoggedIn>
   <div class="login-prompt">
     <div class="prompt-content">
       <i class="pi pi-lock" style="font-size: 4rem; color: #4361ee"></i>
-      <h2>Access Your Runner Profile</h2>
-      <p>Sign in to view your complete running statistics, achievements, and activity history.</p>
-      <p-button label="Sign In Now" icon="pi pi-sign-in" styleClass="p-button-raised p-button-lg"
+      <h2>Truy cập hồ sơ Runner của bạn</h2>
+      <p>Đăng nhập để xem thống kê chạy bộ đầy đủ, thành tích và lịch sử hoạt động của bạn.</p>
+      <p-button label="Đăng nhập ngay" icon="pi pi-sign-in" styleClass="p-button-raised p-button-lg"
                 [routerLink]="['/auth/login']"></p-button>
     </div>
   </div>
 </ng-template>
+
+<!-- Toast for notifications -->
+<p-toast></p-toast>
