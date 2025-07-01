@@ -54,6 +54,7 @@ export class PromotionManagementComponent implements OnInit {
   totalRecords = 0;
   page = 0;
   rows = 10;
+  showFilters = false;
   searchParams: {
     code?: string;
     isActive?: boolean;
@@ -112,6 +113,26 @@ export class PromotionManagementComponent implements OnInit {
     this.page = 0;
     this.loadPromotions();
     console.log('Search params before sending:', this.searchParams);
+  }
+
+  toggleFilters(): void {
+    this.showFilters = !this.showFilters;
+  }
+
+  resetFilters(): void {
+    this.searchParams = {
+      code: '',
+      isActive: undefined,
+      dateFrom: undefined,
+      dateTo: undefined
+    };
+    this.page = 0;
+    this.loadPromotions();
+    this.messageService.add({ 
+      severity: 'info', 
+      summary: 'Thông báo', 
+      detail: 'Đã xóa bộ lọc' 
+    });
   }
 
   deletePromotion(id: number): void {

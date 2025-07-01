@@ -2,11 +2,11 @@
   <div *ngIf="!displayDetail" class="content-wrapper">
     <div class="header-section">
       <div class="title-group">
-        <h2>{{type === 'customer' ? 'Customer' : 'Staff'}} Management</h2>
-        <p class="subtitle">Manage your {{type === 'customer' ? 'customers' : 'staff members'}} efficiently</p>
+        <h2>{{type === 'customer' ? 'Quản lý khách hàng' : 'Quản lý nhân viên'}}</h2>
+        <p class="subtitle">Quản lý {{type === 'customer' ? 'khách hàng' : 'nhân viên'}} một cách hiệu quả</p>
       </div>
       <p-button
-        label="Add New"
+        label="Thêm mới"
         icon="pi pi-plus"
         (click)="showDialog()"
         styleClass="add-button">
@@ -25,38 +25,38 @@
           <ng-template pTemplate="header">
             <tr>
               <th style="min-width: 80px">ID</th>
-              <th>Username</th>
+              <th>Tên đăng nhập</th>
               <th>Email</th>
-              <th style="min-width: 180px">Actions</th>
+              <th style="min-width: 180px">Thao tác</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-user>
             <tr>
               <td class="user-id" data-label="ID">{{user.id}}</td>
-              <td class="username" data-label="Username">
-                <span class="mobile-label">Username:</span>
+              <td class="username" data-label="Tên đăng nhập">
+                <span class="mobile-label">Tên đăng nhập:</span>
                 {{user.username}}
               </td>
               <td class="email" data-label="Email">
                 <span class="mobile-label">Email:</span>
                 {{user.email}}
               </td>
-              <td class="actions" data-label="Actions">
+              <td class="actions" data-label="Thao tác">
                 <div class="action-buttons">
                   <button pButton pRipple
                           icon="pi pi-pencil"
                           class="p-button-rounded p-button-text p-button-plain edit-btn"
-                          pTooltip="Edit" tooltipPosition="top"
+                          pTooltip="Chỉnh sửa" tooltipPosition="top"
                           (click)="showDialog(user)"></button>
                   <button pButton pRipple
                           icon="pi pi-trash"
                           class="p-button-rounded p-button-text p-button-plain delete-btn"
-                          pTooltip="Delete" tooltipPosition="top"
+                          pTooltip="Xóa" tooltipPosition="top"
                           (click)="deleteUser(user.id)"></button>
                   <button pButton pRipple
                           icon="pi pi-eye"
                           class="p-button-rounded p-button-text p-button-plain detail-btn"
-                          pTooltip="Details" tooltipPosition="top"
+                          pTooltip="Chi tiết" tooltipPosition="top"
                           (click)="showDetail(user.id)"></button>
                 </div>
               </td>
@@ -66,7 +66,7 @@
             <tr>
               <td colspan="4" class="empty-message">
                 <i class="pi pi-info-circle"></i>
-                No {{type === 'customer' ? 'customers' : 'staff members'}} found
+                Không tìm thấy {{type === 'customer' ? 'khách hàng' : 'nhân viên'}} nào
               </td>
             </tr>
           </ng-template>
@@ -78,7 +78,7 @@
           [rowsPerPageOptions]="[5, 10, 25]"
           (onPageChange)="onPageChange($event)"
           [showCurrentPageReport]="true"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+          currentPageReportTemplate="Hiển thị {first} đến {last} trong tổng số {totalRecords} bản ghi">
         </p-paginator>
       </div>
     </div>
@@ -86,7 +86,7 @@
 
   <!-- User Form Dialog -->
   <p-dialog
-    header="{{selectedUserId ? 'Edit' : 'Add New'}} {{type === 'customer' ? 'Customer' : 'Staff'}}"
+    header="{{selectedUserId ? 'Chỉnh sửa' : 'Thêm mới'}} {{type === 'customer' ? 'khách hàng' : 'nhân viên'}}"
     [(visible)]="displayDialog"
     [modal]="true"
     [style]="{ width: 'min(90vw, 500px)' }"
@@ -95,47 +95,47 @@
     [breakpoints]="{ '960px': '75vw', '640px': '90vw' }">
     <form [formGroup]="userForm" (ngSubmit)="saveUser()" class="user-form">
       <div class="form-group">
-        <label for="username">Username *</label>
-        <input pInputText id="username" formControlName="username" type="text" placeholder="Enter username" />
+        <label for="username">Tên đăng nhập *</label>
+        <input pInputText id="username" formControlName="username" type="text" placeholder="Nhập tên đăng nhập" />
         <small *ngIf="userForm.get('username')?.touched && userForm.get('username')?.errors" class="error-message">
-          <span *ngIf="userForm.get('username')?.hasError('required')">Username is required</span>
+          <span *ngIf="userForm.get('username')?.hasError('required')">Tên đăng nhập là bắt buộc</span>
         </small>
       </div>
 
       <div class="form-group">
         <label for="email">Email *</label>
-        <input pInputText id="email" formControlName="email" type="email" placeholder="Enter email" />
+        <input pInputText id="email" formControlName="email" type="email" placeholder="Nhập email" />
         <small *ngIf="userForm.get('email')?.touched && userForm.get('email')?.errors" class="error-message">
-          <span *ngIf="userForm.get('email')?.hasError('required')">Email is required</span>
-          <span *ngIf="userForm.get('email')?.hasError('email')">Invalid email format</span>
+          <span *ngIf="userForm.get('email')?.hasError('required')">Email là bắt buộc</span>
+          <span *ngIf="userForm.get('email')?.hasError('email')">Định dạng email không hợp lệ</span>
         </small>
       </div>
 
       <div class="form-group">
-        <label for="password">Password {{selectedUserId ? '' : '*'}}</label>
+        <label for="password">Mật khẩu {{selectedUserId ? '' : '*'}}</label>
         <p-password
           id="password"
           formControlName="password"
           [toggleMask]="true"
           [feedback]="false"
-          placeholder="Enter password"
+          placeholder="Nhập mật khẩu"
           [inputStyleClass]="'w-full'">
         </p-password>
         <small *ngIf="userForm.get('password')?.touched && userForm.get('password')?.errors" class="error-message">
-          <span *ngIf="userForm.get('password')?.hasError('required')">Password is required</span>
-          <span *ngIf="userForm.get('password')?.hasError('minlength')">Password must be at least 6 characters</span>
+          <span *ngIf="userForm.get('password')?.hasError('required')">Mật khẩu là bắt buộc</span>
+          <span *ngIf="userForm.get('password')?.hasError('minlength')">Mật khẩu phải có ít nhất 6 ký tự</span>
         </small>
       </div>
 
       <div class="form-actions">
         <button pButton
                 type="button"
-                label="Cancel"
+                label="Hủy"
                 class="p-button-outlined cancel-btn"
                 (click)="displayDialog = false"></button>
         <button pButton
                 type="submit"
-                label="Save"
+                label="Lưu"
                 class="save-btn"
                 [disabled]="userForm.invalid"></button>
       </div>
@@ -144,7 +144,7 @@
 
   <!-- User Detail Dialog -->
   <p-dialog
-    header="User Details"
+    header="Chi tiết người dùng"
     [(visible)]="displayDetail"
     [modal]="true"
     [style]="{ width: 'min(90vw, 500px)' }"
@@ -157,7 +157,7 @@
         <span class="detail-value">{{userDetail.id}}</span>
       </div>
       <div class="detail-item">
-        <span class="detail-label">Username:</span>
+        <span class="detail-label">Tên đăng nhập:</span>
         <span class="detail-value">{{userDetail.username}}</span>
       </div>
       <div class="detail-item">
@@ -165,21 +165,21 @@
         <span class="detail-value">{{userDetail.email}}</span>
       </div>
       <div class="detail-item">
-        <span class="detail-label">Role:</span>
+        <span class="detail-label">Vai trò:</span>
         <span class="detail-value role-badge" [ngClass]="userDetail.role.toLowerCase()">{{userDetail.role}}</span>
       </div>
       <div class="detail-item">
-        <span class="detail-label">Created:</span>
+        <span class="detail-label">Ngày tạo:</span>
         <span class="detail-value">{{userDetail.createdAt | date:'medium'}}</span>
       </div>
       <div class="detail-item">
-        <span class="detail-label">Updated:</span>
+        <span class="detail-label">Ngày cập nhật:</span>
         <span class="detail-value">{{userDetail.updatedAt | date:'medium'}}</span>
       </div>
 
       <div class="detail-actions">
         <button pButton
-                label="Close"
+                label="Đóng"
                 class="close-btn"
                 (click)="closeDetail()"></button>
       </div>
