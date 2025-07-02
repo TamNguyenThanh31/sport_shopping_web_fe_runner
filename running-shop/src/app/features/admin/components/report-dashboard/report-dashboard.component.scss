@@ -1,12 +1,40 @@
+// Google Material Color Palette (Material 3)
+$primary: #1a73e8;
+$on-primary: #fff;
+$primary-container: #e8f0fe;
+$secondary: #43a047;
+$on-secondary: #fff;
+$background: #f5f7fa;
+$surface: #fff;
+$error: #e53935;
+$on-error: #fff;
+$text-primary: #1a202c;
+$text-secondary: #5f6368;
+$text-disabled: #bdbdbd;
+$border: #e3eafc;
+$shadow: 0 4px 16px rgba(26, 115, 232, 0.08);
+$shadow-hover: 0 8px 32px rgba(26, 115, 232, 0.16);
+$radius-lg: 20px;
+$radius-md: 14px;
+$radius-sm: 8px;
+$font-main: 'Roboto', Arial, sans-serif;
+
+// Bar chart color palette (20 màu Material tươi sáng)
+$bar-colors: (
+  #1976D2, #43A047, #FBC02D, #E53935, #8E24AA, #00ACC1, #F57C00, #3949AB, #00897B, #C2185B,
+  #7E57C2, #26A69A, #FF7043, #AB47BC, #29B6F6, #66BB6A, #FFA726, #8D6E63, #789262, #D4E157
+);
+
 .dashboard-container {
-  padding: 24px;
-  max-width: 100%;
+  padding: 32px 24px;
+  max-width: 1200px;
   margin: 0 auto;
-  background: #f5f5f7;
+  background: $background;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
+  font-family: $font-main;
 }
 
 .summary-cards {
@@ -19,72 +47,85 @@
 .card {
   flex: 1;
   min-width: 250px;
-  background: white;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  background: $surface;
+  padding: 28px 24px;
+  border-radius: $radius-lg;
+  box-shadow: $shadow;
   display: flex;
   align-items: center;
-  gap: 16px;
-  transition: transform 0.2s ease;
-
+  gap: 18px;
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: 1.5px solid $border;
   &:hover {
-    transform: translateY(-2px);
+    box-shadow: $shadow-hover;
+    transform: translateY(-2px) scale(1.01);
+    border-color: $primary;
   }
-
   .card-icon {
-    width: 48px;
-    height: 48px;
-    background: rgba(0, 122, 255, 0.1);
-    border-radius: 12px;
+    width: 54px;
+    height: 54px;
+    background: $primary-container;
+    border-radius: $radius-md;
     display: flex;
     align-items: center;
     justify-content: center;
-
     i {
-      font-size: 24px;
-      color: #007AFF;
+      font-size: 28px;
+      color: $primary;
     }
   }
-
   .card-content {
     h3 {
       margin: 0;
-      color: #1d1d1f;
-      font-size: 14px;
+      color: $text-secondary;
+      font-size: 15px;
       font-weight: 500;
+      letter-spacing: 0.01em;
     }
-
     .number {
-      font-size: 28px;
-      font-weight: 600;
-      color: #007AFF;
-      margin: 4px 0 0;
+      font-size: 32px;
+      font-weight: 700;
+      color: $primary;
+      margin: 6px 0 0;
+      letter-spacing: -0.01em;
+    }
+    button {
+      margin-top: 8px;
+      color: $primary;
+      background: transparent;
+      font-weight: 500;
+      border-radius: $radius-sm;
+      &:hover {
+        background: $primary-container;
+      }
     }
   }
 }
 
 .charts-container {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 24px;
-  margin-bottom: 0;
   width: 100%;
   min-width: 0;
+  justify-content: space-between;
 }
 
 .chart-wrapper {
-  background: white;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
+  max-width: 100%;
+  width: 100%;
+  margin: 0 auto 32px auto;
+  padding: 32px 24px 24px 24px;
+  background: $surface;
+  border-radius: $radius-lg;
+  box-shadow: $shadow;
+  overflow: hidden;
   min-width: 0;
 
   &.full-width {
     width: 100%;
-    height: 500px;
+    min-width: 0;
+    height: 400px;
   }
 
   &.half-width {
@@ -105,7 +146,6 @@
     justify-content: center;
     overflow: hidden;
     position: relative;
-
     ::ng-deep canvas {
       max-width: 300px !important;
       max-height: 300px !important;
@@ -121,16 +161,64 @@
     height: 400px;
   }
 
-  h3 {
-    margin: 0 0 16px 0;
-    color: #1d1d1f;
-    font-size: 20px;
-    font-weight: 600;
+  &.chart-revenue-profit {
+    background: linear-gradient(120deg, $primary-container 0%, $surface 100%);
+    box-shadow: 0 6px 24px rgba(26, 115, 232, 0.10);
+    border-radius: $radius-lg;
   }
 
-  ::ng-deep canvas {
+  &.chart-top-selling {
+    background: linear-gradient(120deg, $background 0%, $primary-container 100%);
+    box-shadow: 0 6px 24px rgba(26, 115, 232, 0.10);
+    border-radius: $radius-lg;
+  }
+
+  h3 {
+    margin: 0 0 18px 0;
+    color: $primary;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  ::ng-deep .apexcharts-canvas {
     width: 100% !important;
-    height: calc(100% - 40px) !important;
+    max-width: 100% !important;
+    min-width: 0;
+    height: 340px !important;
+    margin: 0 auto;
+    background: transparent;
+    overflow: hidden !important;
+    border-radius: $radius-md;
+  }
+
+  ::ng-deep .apexcharts-bar-series .apexcharts-series {
+    transform: translateY(0) !important;
+  }
+
+  ::ng-deep .apexcharts-xaxis-label, ::ng-deep .apexcharts-yaxis-label {
+    font-size: 16px !important;
+    font-family: $font-main !important;
+    color: $primary !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.01em;
+  }
+
+  ::ng-deep .apexcharts-datalabel {
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    color: $text-primary !important;
+    text-shadow: 0 1px 4px $surface, 0 1px 4px $primary-container;
+  }
+
+  ::ng-deep .apexcharts-yaxis-label {
+    white-space: normal !important;
+    word-break: break-word !important;
+    max-width: 300px !important;
+    min-width: 0 !important;
+    font-size: 15px !important;
+    padding: 0 2px !important;
+    text-align: left !important;
   }
 }
 
@@ -150,10 +238,11 @@
 
 .stock-summary {
   width: 100%;
-  background: white;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  background: #fff;
+  padding: 32px 24px;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(79, 141, 253, 0.08);
+  margin-bottom: 0;
 
   .stock-header {
     display: flex;
@@ -163,78 +252,71 @@
 
     h2 {
       margin: 0;
-      color: #1d1d1f;
-      font-size: 20px;
-      font-weight: 600;
+      color: #1976D2;
+      font-size: 22px;
+      font-weight: 700;
     }
   }
 }
 
 :host ::ng-deep {
   .p-datatable {
+    font-family: $font-main !important;
+    background: $surface !important;
+    border-radius: $radius-md !important;
+    box-shadow: $shadow !important;
     .p-datatable-header {
       background: transparent;
       border: none;
       padding: 0;
     }
-
     .p-datatable-thead > tr > th {
-      background: #f5f5f7;
-      color: #1d1d1f;
-      font-weight: 600;
-      border: none;
-      padding: 16px;
-      font-size: 13px;
+      background: $primary-container !important;
+      color: $primary !important;
+      font-weight: 700 !important;
+      border: none !important;
+      padding: 16px !important;
+      font-size: 15px !important;
       letter-spacing: -0.01em;
     }
-
     .p-datatable-tbody > tr {
-      transition: all 0.2s ease;
-      border-bottom: 1px solid #f5f5f7;
-
+      transition: background 0.2s;
+      border-bottom: 1px solid $border !important;
       &:hover {
-        background: #f5f5f7;
+        background: $background !important;
       }
-
       > td {
-        border: none;
-        padding: 16px;
-        color: #1d1d1f;
-        font-size: 14px;
+        border: none !important;
+        padding: 16px !important;
+        color: $text-primary !important;
+        font-size: 15px !important;
       }
-
-      // Style cho cột toggle
       > td:first-child {
         width: 48px;
         text-align: center;
-
         a {
-          color: #007AFF;
+          color: $primary;
           text-decoration: none;
           display: inline-flex;
           align-items: center;
           justify-content: center;
           width: 24px;
           height: 24px;
-          border-radius: 6px;
-          transition: background-color 0.2s;
-
+          border-radius: $radius-sm;
+          transition: background 0.2s;
           &:hover {
-            background: rgba(0, 122, 255, 0.1);
+            background: $primary-container;
           }
-
           i {
-            font-size: 12px;
+            font-size: 14px;
             transition: transform 0.2s;
           }
         }
       }
     }
-
-    // Style cho phần mở rộng
     .p-datatable-row-expansion {
-      background: #fafcff;
-      border-bottom: 1px solid #f5f5f7;
+      background: $background !important;
+      border-bottom: 1px solid $border !important;
       td {
         padding: 0 !important;
       }
@@ -243,71 +325,64 @@
         margin-top: 18px;
         margin-bottom: 18px;
         max-width: 90%;
-        background: #fff;
-        border-radius: 14px;
-        box-shadow: 0 2px 8px rgba(0,122,255,0.07);
+        background: $surface;
+        border-radius: $radius-md;
+        box-shadow: 0 2px 8px rgba(26,115,232,0.07);
         padding: 24px 32px 20px 32px;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-
         h5 {
-          color: #007AFF;
-          font-size: 15px;
-          font-weight: 600;
+          color: $primary;
+          font-size: 16px;
+          font-weight: 700;
           margin: 0 0 18px 0;
           letter-spacing: -0.01em;
         }
-
         table {
           width: 100%;
           border-collapse: separate;
           border-spacing: 0;
           background: transparent;
-
           thead th {
-            background: #f5f5f7;
-            color: #1d1d1f;
-            font-weight: 600;
-            font-size: 13px;
-            padding: 10px 16px;
+            background: $primary-container !important;
+            color: $primary !important;
+            font-weight: 700 !important;
+            font-size: 14px !important;
+            padding: 10px 16px !important;
             text-align: center;
-            border: none;
+            border: none !important;
             border-radius: 8px 8px 0 0;
           }
-
           tbody tr {
-            transition: background-color 0.2s;
+            transition: background 0.2s;
             &:hover {
-              background: #f0f8ff;
+              background: $background !important;
             }
             td {
-              padding: 12px 16px;
-              font-size: 13px;
-              color: #1d1d1f;
-              border: none;
+              padding: 12px 16px !important;
+              font-size: 14px !important;
+              color: $text-primary !important;
+              border: none !important;
               text-align: center;
             }
           }
         }
       }
     }
-  }
-
-  .p-paginator {
-    border: none;
-    background: transparent;
-    padding: 16px 0 0;
-
-    .p-paginator-pages {
-      .p-paginator-page {
-        &.p-highlight {
-          background: #007AFF;
-          color: white;
-        }
-
-        &:not(.p-highlight):hover {
-          background: rgba(0, 122, 255, 0.1);
+    .p-paginator {
+      border: none !important;
+      background: transparent !important;
+      padding: 16px 0 0 !important;
+      .p-paginator-pages {
+        .p-paginator-page {
+          &.p-highlight {
+            background: $primary !important;
+            color: $on-primary !important;
+          }
+          &:not(.p-highlight):hover {
+            background: $primary-container !important;
+          }
         }
       }
     }
@@ -315,120 +390,140 @@
 }
 
 .status-badge {
-  padding: 4px 12px;
+  padding: 4px 14px;
   border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: 80px;
 
   &.status-empty {
-    background: rgba(255, 59, 48, 0.1);
-    color: #FF3B30;
+    background: rgba($error, 0.12);
+    color: $error;
   }
 
   &.status-low {
-    background: rgba(255, 149, 0, 0.1);
-    color: #FF9500;
+    background: rgba($primary, 0.10);
+    color: $primary;
   }
 
   &.status-medium {
-    background: rgba(255, 204, 0, 0.1);
-    color: #FFCC00;
+    background: rgba($secondary, 0.10);
+    color: $secondary;
   }
 
   &.status-good {
-    background: rgba(52, 199, 89, 0.1);
-    color: #34C759;
+    background: rgba($primary, 0.08);
+    color: $primary;
   }
+}
+
+// Responsive Chart Style
+.responsive-chart {
+  width: 100% !important;
+  min-width: 0;
+  max-width: 100% !important;
+  display: block;
+  min-height: 320px;
+  height: 340px !important;
+  overflow: hidden;
+}
+
+// Modern Chart Wrapper
+.modern-chart {
+  box-shadow: $shadow;
+  border-radius: $radius-md;
+  padding: 20px 18px 18px 18px;
+  background: $surface;
+  margin-bottom: 0;
+  min-width: 0;
+  min-height: 260px;
+  transition: box-shadow 0.2s;
+}
+.modern-chart:hover {
+  box-shadow: $shadow-hover;
+}
+
+.charts-container-vertical {
+  flex-direction: column;
+  gap: 24px;
+}
+
+.chart-wrapper.half-width,
+.chart-wrapper.full-width {
+  min-width: 320px;
+  max-width: 100%;
+  flex: 1 1 350px;
+  margin: 0 auto 0 auto;
 }
 
 @media (max-width: 1200px) {
-  .charts-container {
-    flex-wrap: wrap;
+  .dashboard-container {
+    padding: 16px 4px;
+    gap: 18px;
   }
-  .chart-wrapper.half-width, .chart-wrapper.pie-chart {
-    width: 100%;
+  .chart-wrapper {
+    padding: 16px 4px 12px 4px;
     min-width: 0;
-    max-width: 100%;
-    margin: 0 auto 24px auto;
   }
-  .chart-wrapper.pie-chart {
-    max-width: 280px;
-    max-height: 280px;
-    height: 100%;
-  }
-  .chart-wrapper.pie-chart ::ng-deep canvas {
-    max-width: 280px !important;
-    max-height: 280px !important;
+  .chart-wrapper.full-width {
+    height: 340px;
   }
 }
 
-@media (max-width: 992px) {
+@media (max-width: 900px) {
+  .summary-cards, .extra-summaries {
+    flex-direction: column;
+    gap: 12px;
+  }
   .chart-wrapper {
-    &.half-width {
-      width: 100%;
-      min-width: 100%;
-      height: 400px;
-
-      &.pie-chart {
-        height: 350px;
-        max-width: 350px;
-      }
-    }
+    padding: 10px 0 8px 0;
+    min-width: 0;
+    border-radius: 16px;
+  }
+  .responsive-chart {
+    min-height: 180px;
+    height: 200px !important;
+  }
+  ::ng-deep .apexcharts-yaxis-label {
+    max-width: 120px !important;
+    font-size: 13px !important;
   }
 }
 
 @media (max-width: 768px) {
+  .chart-wrapper {
+    padding: 8px 0;
+  }
+}
+
+@media (max-width: 600px) {
   .dashboard-container {
-    padding: 16px;
-    gap: 16px;
+    padding: 4px;
+    gap: 6px;
   }
-
-  .summary-cards, .extra-summaries {
-    flex-direction: column;
+  .chart-wrapper {
+    padding: 4px 0 4px 0;
+    min-width: 0;
+    border-radius: 12px;
   }
-
-  .charts-container {
-    flex-direction: column;
+  .responsive-chart {
+    min-height: 100px;
+    height: 120px !important;
   }
-  .chart-wrapper.half-width, .chart-wrapper.pie-chart, .chart-wrapper.full-width {
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    height: 220px;
-    margin: 0 auto 16px auto;
-  }
-  .chart-wrapper.pie-chart {
-    max-width: 180px;
-    max-height: 180px;
-    height: 100%;
-  }
-  .chart-wrapper.pie-chart ::ng-deep canvas {
-    max-width: 180px !important;
-    max-height: 180px !important;
-  }
-
   .card {
-    padding: 16px;
+    padding: 12px 8px;
+    border-radius: 12px;
   }
-
-  :host ::ng-deep {
-    .p-datatable {
-      .p-datatable-thead > tr > th,
-      .p-datatable-tbody > tr > td {
-        padding: 12px;
-      }
-
-      .p-datatable-row-expansion {
-        .p-ml-4 {
-          margin: 8px;
-          padding: 16px;
-        }
-      }
-    }
+  .stock-summary {
+    padding: 12px 4px;
+    border-radius: 12px;
+  }
+  ::ng-deep .apexcharts-yaxis-label {
+    max-width: 80px !important;
+    font-size: 11px !important;
   }
 }
 
@@ -598,5 +693,191 @@
         }
       }
     }
+  }
+}
+
+.dynamic-report-filter {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0 16px 0;
+  label {
+    font-weight: 500;
+    color: #1976D2;
+    font-size: 15px;
+  }
+  input[type="date"] {
+    padding: 8px 12px;
+    border: 1px solid #e3eafc;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+    background: #f5f7fa;
+    color: #222;
+    transition: border 0.2s;
+    &:focus {
+      border: 1.5px solid #4F8DFD;
+    }
+  }
+  button {
+    margin-left: 8px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 15px;
+    background: #4F8DFD;
+    color: #fff;
+    border: none;
+    box-shadow: 0 2px 8px rgba(79, 141, 253, 0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+    &:hover {
+      background: #1976D2;
+      box-shadow: 0 4px 16px rgba(79, 141, 253, 0.16);
+    }
+    &.p-button-secondary {
+      background: #e3eafc;
+      color: #1976D2;
+      &:hover {
+        background: #c7d7f7;
+        color: #1976D2;
+      }
+    }
+  }
+}
+
+// Filter bar style
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: $surface;
+  border-radius: $radius-lg;
+  box-shadow: $shadow;
+  padding: 18px 32px;
+  margin-bottom: 28px;
+  .filter-label {
+    font-weight: 600;
+    color: $primary;
+    font-size: 16px;
+    margin-right: 8px;
+  }
+  input[type="date"] {
+    padding: 10px 16px;
+    border: 1.5px solid $border;
+    border-radius: $radius-md;
+    font-size: 15px;
+    background: $background;
+    color: $text-primary;
+    transition: border 0.2s;
+    &:focus {
+      border: 1.5px solid $primary;
+    }
+  }
+  button {
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    background: $primary;
+    color: $on-primary;
+    border: none;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+    padding: 10px 22px;
+    transition: background 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    &:hover {
+      background: darken($primary, 8%);
+      box-shadow: 0 4px 16px rgba(25, 118, 210, 0.16);
+    }
+    &.p-button-secondary {
+      background: $gray-border;
+      color: $primary;
+      &:hover {
+        background: lighten($primary, 38%);
+        color: $primary;
+      }
+    }
+  }
+}
+
+// Chart bar color override
+::ng-deep .apexcharts-bar-series .apexcharts-series {
+  // Không gradient, mỗi bar 1 màu tươi sáng
+  // Apex sẽ lấy từ mảng colors truyền vào options
+}
+
+// Tooltip, datalabel, yaxis-label
+::ng-deep .apexcharts-tooltip {
+  border-radius: 14px !important;
+  box-shadow: 0 4px 16px rgba(25, 118, 210, 0.10) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  background: $surface !important;
+  color: #222 !important;
+  padding: 12px 18px !important;
+}
+::ng-deep .apexcharts-datalabel {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #222 !important;
+  text-shadow: 0 1px 4px $surface, 0 1px 4px $gray-border;
+}
+::ng-deep .apexcharts-yaxis-label {
+  white-space: normal !important;
+  word-break: break-word !important;
+  max-width: 300px !important;
+  min-width: 0 !important;
+  font-size: 15px !important;
+  padding: 0 2px !important;
+  text-align: left !important;
+  color: $primary !important;
+  font-weight: 600 !important;
+}
+
+// Button, badge, trạng thái
+.card, .chart-wrapper, .filter-bar, .modern-chart, .p-datatable, .status-badge, button {
+  transition: box-shadow 0.2s, background 0.2s, color 0.2s, border 0.2s;
+}
+
+// Button Material style
+button, .p-button {
+  border-radius: $radius-sm !important;
+  font-family: $font-main !important;
+  font-weight: 500 !important;
+  font-size: 15px !important;
+  background: $primary !important;
+  color: $on-primary !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(26, 115, 232, 0.08) !important;
+  transition: background 0.2s, box-shadow 0.2s;
+  &:hover, &:focus {
+    background: darken($primary, 8%) !important;
+    box-shadow: 0 4px 16px rgba(26, 115, 232, 0.16) !important;
+  }
+  &.p-button-secondary {
+    background: $primary-container !important;
+    color: $primary !important;
+    &:hover {
+      background: lighten($primary, 38%) !important;
+      color: $primary !important;
+    }
+  }
+}
+
+// Dialog style
+:host ::ng-deep .p-dialog {
+  border-radius: $radius-lg !important;
+  .p-dialog-header {
+    background: $primary-container !important;
+    color: $primary !important;
+    font-weight: 700 !important;
+    font-size: 20px !important;
+    border-radius: $radius-lg $radius-lg 0 0 !important;
+  }
+  .p-dialog-content {
+    background: $surface !important;
+    color: $text-primary !important;
+    font-size: 16px !important;
+    border-radius: 0 0 $radius-lg $radius-lg !important;
   }
 }

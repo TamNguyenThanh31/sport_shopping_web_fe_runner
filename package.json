@@ -1,7 +1,9 @@
 {
   "dependencies": {
     "chart.js": "^3.9.1",
+    "echarts": "^5.4.3",
     "ng2-charts": "^4.1.1",
+    "ngx-echarts": "^17.0.1",
     "primeicons": "^7.0.0"
   }
 }
