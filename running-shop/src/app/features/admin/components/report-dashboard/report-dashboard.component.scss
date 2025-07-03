@@ -1,387 +1,557 @@
-// Google Material Color Palette (Material 3)
-$primary: #1a73e8;
-$on-primary: #fff;
-$primary-container: #e8f0fe;
-$secondary: #43a047;
-$on-secondary: #fff;
-$background: #f5f7fa;
-$surface: #fff;
-$error: #e53935;
-$on-error: #fff;
-$text-primary: #1a202c;
-$text-secondary: #5f6368;
-$text-disabled: #bdbdbd;
-$border: #e3eafc;
-$shadow: 0 4px 16px rgba(26, 115, 232, 0.08);
-$shadow-hover: 0 8px 32px rgba(26, 115, 232, 0.16);
-$radius-lg: 20px;
-$radius-md: 14px;
-$radius-sm: 8px;
-$font-main: 'Roboto', Arial, sans-serif;
+// Modern Color Palette - Tươi sáng và hiện đại
+$primary: #2563eb;
+$primary-light: #3b82f6;
+$primary-dark: #1d4ed8;
+$secondary: #10b981;
+$secondary-light: #34d399;
+$secondary-dark: #059669;
+$accent: #f59e0b;
+$accent-light: #fbbf24;
+$accent-dark: #d97706;
 
-// Bar chart color palette (20 màu Material tươi sáng)
-$bar-colors: (
-  #1976D2, #43A047, #FBC02D, #E53935, #8E24AA, #00ACC1, #F57C00, #3949AB, #00897B, #C2185B,
-  #7E57C2, #26A69A, #FF7043, #AB47BC, #29B6F6, #66BB6A, #FFA726, #8D6E63, #789262, #D4E157
-);
+$success: #10b981;
+$warning: #f59e0b;
+$danger: #ef4444;
+$info: #3b82f6;
+
+$background: #f8fafc;
+$surface: #ffffff;
+$surface-hover: #f1f5f9;
+$border: #e2e8f0;
+$border-light: #f1f5f9;
+
+$text-primary: #1e293b;
+$text-secondary: #64748b;
+$text-muted: #94a3b8;
+$text-white: #ffffff;
+
+$shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+$shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+$shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+$shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+$shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+$radius-sm: 6px;
+$radius: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 20px;
+
+$font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+// Status colors - Tươi sáng và phân biệt rõ ràng
+$status-empty: #ef4444;
+$status-low: #f59e0b;
+$status-medium: #3b82f6;
+$status-good: #10b981;
 
 .dashboard-container {
-  padding: 32px 24px;
-  max-width: 1200px;
+  padding: 24px;
+  max-width: 1400px;
   margin: 0 auto;
   background: $background;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
   font-family: $font-main;
 }
 
+// Summary Cards - Hiện đại và tươi sáng
 .summary-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  margin-bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
 }
 
 .card {
-  flex: 1;
-  min-width: 250px;
   background: $surface;
-  padding: 28px 24px;
+  padding: 24px;
   border-radius: $radius-lg;
   box-shadow: $shadow;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  transition: box-shadow 0.2s, transform 0.2s;
-  border: 1.5px solid $border;
+  border: 1px solid $border-light;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+
   &:hover {
-    box-shadow: $shadow-hover;
-    transform: translateY(-2px) scale(1.01);
-    border-color: $primary;
+    box-shadow: $shadow-lg;
+    transform: translateY(-2px);
+    border-color: $primary-light;
   }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, $primary, $secondary);
+  }
+
   .card-icon {
-    width: 54px;
-    height: 54px;
-    background: $primary-container;
+    width: 48px;
+    height: 48px;
     border-radius: $radius-md;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 16px;
+
     i {
-      font-size: 28px;
-      color: $primary;
+      font-size: 24px;
+      color: $text-white;
     }
+
+    &.orders { background: $primary; }
+    &.revenue { background: $secondary; }
+    &.profit { background: $accent; }
   }
+
   .card-content {
     h3 {
-      margin: 0;
+      margin: 0 0 8px 0;
       color: $text-secondary;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 500;
-      letter-spacing: 0.01em;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
+
     .number {
       font-size: 32px;
       font-weight: 700;
-      color: $primary;
-      margin: 6px 0 0;
-      letter-spacing: -0.01em;
+      color: $text-primary;
+      margin: 0;
+      line-height: 1.2;
     }
+
     button {
-      margin-top: 8px;
+      margin-top: 12px;
       color: $primary;
       background: transparent;
+      border: none;
       font-weight: 500;
+      font-size: 14px;
+      padding: 8px 0;
       border-radius: $radius-sm;
+      transition: all 0.2s ease;
+
       &:hover {
-        background: $primary-container;
+        background: rgba($primary, 0.1);
+        color: $primary-dark;
       }
     }
   }
 }
 
-.charts-container {
+// Filter Section - Gọn gàng và hiện đại
+.dynamic-report-filter {
+  background: $surface;
+  padding: 20px;
+  border-radius: $radius-lg;
+  box-shadow: $shadow;
+  border: 1px solid $border-light;
+  margin-bottom: 24px;
   display: flex;
+  align-items: center;
+  gap: 16px;
   flex-wrap: wrap;
+
+  label {
+    font-weight: 600;
+    color: $text-primary;
+    font-size: 14px;
+    margin: 0;
+  }
+
+  input[type="date"] {
+    padding: 10px 12px;
+    border: 1px solid $border;
+    border-radius: $radius;
+    font-size: 14px;
+    background: $surface;
+    color: $text-primary;
+    transition: all 0.2s ease;
+    min-width: 140px;
+
+    &:focus {
+      outline: none;
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba($primary, 0.1);
+    }
+  }
+
+  button {
+    padding: 10px 20px;
+    border-radius: $radius;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &.primary {
+      background: $primary;
+      color: $text-white;
+
+      &:hover {
+        background: $primary-dark;
+        transform: translateY(-1px);
+        box-shadow: $shadow-md;
+      }
+    }
+
+    &.secondary {
+      background: $surface;
+      color: $primary;
+      border: 1px solid $primary;
+
+      &:hover {
+        background: rgba($primary, 0.1);
+        border-color: $primary-dark;
+      }
+    }
+  }
+}
+
+// Charts Container - Layout hiện đại
+.charts-container {
+  display: grid;
   gap: 24px;
-  width: 100%;
-  min-width: 0;
-  justify-content: space-between;
+  margin-bottom: 32px;
 }
 
 .chart-wrapper {
-  max-width: 100%;
-  width: 100%;
-  margin: 0 auto 32px auto;
-  padding: 32px 24px 24px 24px;
   background: $surface;
   border-radius: $radius-lg;
   box-shadow: $shadow;
+  border: 1px solid $border-light;
   overflow: hidden;
-  min-width: 0;
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: $shadow-lg;
+  }
 
   &.full-width {
-    width: 100%;
-    min-width: 0;
-    height: 400px;
+    grid-column: 1 / -1;
   }
 
-  &.half-width {
-    flex: 1 1 0;
-    min-width: 0;
-    height: 400px;
-  }
+  .chart-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid $border-light;
+    background: $surface;
 
-  &.pie-chart {
-    flex: 1 1 0;
-    min-width: 0;
-    height: 400px;
-    width: 100%;
-    box-sizing: border-box;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    position: relative;
-    ::ng-deep canvas {
-      max-width: 300px !important;
-      max-height: 300px !important;
-      width: auto !important;
-      height: auto !important;
-      margin: 0 auto;
+    h3 {
+      margin: 0;
+      color: $text-primary;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .chart-subtitle {
+      color: $text-secondary;
+      font-size: 14px;
+      margin-top: 4px;
     }
   }
 
-  &.third-width {
-    flex: 1;
-    min-width: calc(33.333% - 16px);
-    height: 400px;
+  .chart-content {
+    padding: 20px 24px 24px;
   }
 
-  &.chart-revenue-profit {
-    background: linear-gradient(120deg, $primary-container 0%, $surface 100%);
-    box-shadow: 0 6px 24px rgba(26, 115, 232, 0.10);
-    border-radius: $radius-lg;
-  }
-
-  &.chart-top-selling {
-    background: linear-gradient(120deg, $background 0%, $primary-container 100%);
-    box-shadow: 0 6px 24px rgba(26, 115, 232, 0.10);
-    border-radius: $radius-lg;
-  }
-
-  h3 {
-    margin: 0 0 18px 0;
-    color: $primary;
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-  }
-
+  // Chart styling - Loại bỏ bo góc và gradient
   ::ng-deep .apexcharts-canvas {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0;
-    height: 340px !important;
-    margin: 0 auto;
-    background: transparent;
-    overflow: hidden !important;
-    border-radius: $radius-md;
+    background: transparent !important;
   }
 
-  ::ng-deep .apexcharts-bar-series .apexcharts-series {
-    transform: translateY(0) !important;
-  }
-
-  ::ng-deep .apexcharts-xaxis-label, ::ng-deep .apexcharts-yaxis-label {
-    font-size: 16px !important;
+  ::ng-deep .apexcharts-title-text {
     font-family: $font-main !important;
-    color: $primary !important;
     font-weight: 600 !important;
-    letter-spacing: 0.01em;
+    color: $text-primary !important;
+  }
+
+  ::ng-deep .apexcharts-xaxis-label,
+  ::ng-deep .apexcharts-yaxis-label {
+    font-family: $font-main !important;
+    font-size: 12px !important;
+    color: $text-secondary !important;
+    font-weight: 500 !important;
   }
 
   ::ng-deep .apexcharts-datalabel {
-    font-size: 18px !important;
-    font-weight: 700 !important;
+    font-family: $font-main !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
     color: $text-primary !important;
-    text-shadow: 0 1px 4px $surface, 0 1px 4px $primary-container;
   }
 
-  ::ng-deep .apexcharts-yaxis-label {
-    white-space: normal !important;
-    word-break: break-word !important;
-    max-width: 300px !important;
-    min-width: 0 !important;
-    font-size: 15px !important;
-    padding: 0 2px !important;
-    text-align: left !important;
+  ::ng-deep .apexcharts-tooltip {
+    background: $surface !important;
+    border: 1px solid $border !important;
+    border-radius: $radius !important;
+    box-shadow: $shadow-lg !important;
+    color: $text-primary !important;
+    font-family: $font-main !important;
+  }
+
+  ::ng-deep .apexcharts-gridline {
+    stroke: $border-light !important;
   }
 }
 
-.chart-wrapper.pie-chart ::ng-deep canvas {
-  width: 100% !important;
-  height: calc(100% - 40px) !important;
-  display: block;
-  margin: 0 auto;
-}
-
-.extra-summaries {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  margin-bottom: 0;
-}
-
+// Stock Summary - Hiện đại và dễ đọc
 .stock-summary {
-  width: 100%;
-  background: #fff;
-  padding: 32px 24px;
-  border-radius: 20px;
-  box-shadow: 0 4px 16px rgba(79, 141, 253, 0.08);
-  margin-bottom: 0;
+  background: $surface;
+  border-radius: $radius-lg;
+  box-shadow: $shadow;
+  border: 1px solid $border-light;
+  overflow: hidden;
 
   .stock-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid $border-light;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    background: $surface;
 
     h2 {
       margin: 0;
-      color: #1976D2;
-      font-size: 22px;
-      font-weight: 700;
+      color: $text-primary;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+
+      button {
+        padding: 8px 12px;
+        border-radius: $radius;
+        font-size: 14px;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+
+        &.refresh {
+          background: $surface;
+          color: $primary;
+          border: 1px solid $primary;
+
+          &:hover {
+            background: rgba($primary, 0.1);
+          }
+        }
+
+        &.sort {
+          background: $surface;
+          color: $text-secondary;
+          border: 1px solid $border;
+
+          &:hover {
+            background: $surface-hover;
+            border-color: $text-secondary;
+          }
+        }
+      }
     }
   }
 }
 
+// Status Badges - Màu sắc phân biệt rõ ràng
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.status-empty {
+    background: rgba($status-empty, 0.1);
+    color: $status-empty;
+    border: 1px solid rgba($status-empty, 0.2);
+  }
+
+  &.status-low {
+    background: rgba($status-low, 0.1);
+    color: $status-low;
+    border: 1px solid rgba($status-low, 0.2);
+  }
+
+  &.status-medium {
+    background: rgba($status-medium, 0.1);
+    color: $status-medium;
+    border: 1px solid rgba($status-medium, 0.2);
+  }
+
+  &.status-good {
+    background: rgba($status-good, 0.1);
+    color: $status-good;
+    border: 1px solid rgba($status-good, 0.2);
+  }
+}
+
+// PrimeNG Table Styling - Hiện đại
 :host ::ng-deep {
   .p-datatable {
     font-family: $font-main !important;
-    background: $surface !important;
-    border-radius: $radius-md !important;
-    box-shadow: $shadow !important;
+
     .p-datatable-header {
-      background: transparent;
-      border: none;
-      padding: 0;
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
     }
+
     .p-datatable-thead > tr > th {
-      background: $primary-container !important;
-      color: $primary !important;
-      font-weight: 700 !important;
+      background: $surface-hover !important;
+      color: $text-primary !important;
+      font-weight: 600 !important;
       border: none !important;
       padding: 16px !important;
-      font-size: 15px !important;
-      letter-spacing: -0.01em;
+      font-size: 14px !important;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
+
     .p-datatable-tbody > tr {
-      transition: background 0.2s;
-      border-bottom: 1px solid $border !important;
+      transition: background 0.2s ease;
+      border-bottom: 1px solid $border-light !important;
+
       &:hover {
-        background: $background !important;
+        background: $surface-hover !important;
       }
+
       > td {
         border: none !important;
         padding: 16px !important;
         color: $text-primary !important;
-        font-size: 15px !important;
+        font-size: 14px !important;
       }
+
       > td:first-child {
         width: 48px;
         text-align: center;
+
         a {
           color: $primary;
           text-decoration: none;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 24px;
-          height: 24px;
-          border-radius: $radius-sm;
-          transition: background 0.2s;
+          width: 32px;
+          height: 32px;
+          border-radius: $radius;
+          transition: all 0.2s ease;
+
           &:hover {
-            background: $primary-container;
+            background: rgba($primary, 0.1);
+            transform: scale(1.1);
           }
+
           i {
             font-size: 14px;
-            transition: transform 0.2s;
           }
         }
       }
     }
+
     .p-datatable-row-expansion {
-      background: $background !important;
-      border-bottom: 1px solid $border !important;
+      background: $surface-hover !important;
+      border-bottom: 1px solid $border-light !important;
+
       td {
         padding: 0 !important;
       }
-      .p-ml-4 {
-        margin: 0 auto;
-        margin-top: 18px;
-        margin-bottom: 18px;
-        max-width: 90%;
+
+      .expansion-content {
+        margin: 16px 24px;
         background: $surface;
-        border-radius: $radius-md;
-        box-shadow: 0 2px 8px rgba(26,115,232,0.07);
-        padding: 24px 32px 20px 32px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+        border-radius: $radius;
+        box-shadow: $shadow-sm;
+        border: 1px solid $border-light;
+        overflow: hidden;
+
         h5 {
-          color: $primary;
+          color: $text-primary;
           font-size: 16px;
-          font-weight: 700;
-          margin: 0 0 18px 0;
-          letter-spacing: -0.01em;
+          font-weight: 600;
+          margin: 0;
+          padding: 16px 20px;
+          border-bottom: 1px solid $border-light;
+          background: $surface-hover;
         }
-        table {
+
+        .variant-table {
           width: 100%;
-          border-collapse: separate;
-          border-spacing: 0;
-          background: transparent;
+          border-collapse: collapse;
+
           thead th {
-            background: $primary-container !important;
-            color: $primary !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
-            padding: 10px 16px !important;
-            text-align: center;
+            background: $surface-hover !important;
+            color: $text-primary !important;
+            font-weight: 600 !important;
+            font-size: 13px !important;
+            padding: 12px 16px !important;
+            text-align: left;
             border: none !important;
-            border-radius: 8px 8px 0 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
           }
+
           tbody tr {
-            transition: background 0.2s;
+            transition: background 0.2s ease;
+            border-bottom: 1px solid $border-light;
+
             &:hover {
-              background: $background !important;
+              background: $surface-hover !important;
             }
+
+            &:last-child {
+              border-bottom: none;
+            }
+
             td {
               padding: 12px 16px !important;
-              font-size: 14px !important;
+              font-size: 13px !important;
               color: $text-primary !important;
               border: none !important;
-              text-align: center;
             }
           }
         }
       }
     }
+
     .p-paginator {
       border: none !important;
       background: transparent !important;
-      padding: 16px 0 0 !important;
+      padding: 16px 24px !important;
+
       .p-paginator-pages {
         .p-paginator-page {
+          border-radius: $radius !important;
+          margin: 0 2px !important;
+
           &.p-highlight {
             background: $primary !important;
-            color: $on-primary !important;
+            color: $text-white !important;
           }
+
           &:not(.p-highlight):hover {
-            background: $primary-container !important;
+            background: rgba($primary, 0.1) !important;
+            color: $primary !important;
           }
         }
       }
@@ -389,495 +559,273 @@ $bar-colors: (
   }
 }
 
-.status-badge {
-  padding: 4px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
-  display: inline-flex;
+// Dialog Styling - Hiện đại
+:host ::ng-deep .p-dialog {
+  border-radius: $radius-xl !important;
+  box-shadow: $shadow-xl !important;
+  border: 1.5px solid $border-light !important;
+  .p-dialog-header {
+    background: $surface !important;
+    color: $text-primary !important;
+    font-weight: 700 !important;
+    font-size: 22px !important;
+    border-bottom: 1.5px solid $border-light !important;
+    border-radius: $radius-xl $radius-xl 0 0 !important;
+    padding: 28px 36px !important;
+  }
+  .p-dialog-content {
+    background: $background !important;
+    color: $text-primary !important;
+    font-size: 16px !important;
+    border-radius: 0 0 $radius-xl $radius-xl !important;
+    padding: 36px 28px 28px 28px !important;
+  }
+}
+
+:host ::ng-deep .p-table {
+  background: $surface !important;
+  border-radius: $radius-lg !important;
+  box-shadow: $shadow-lg !important;
+  overflow: hidden;
+  .p-datatable-thead > tr > th {
+    background: $surface-hover !important;
+    color: $text-primary !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: none !important;
+    text-align: center;
+    padding: 20px 0 !important;
+  }
+  .p-datatable-tbody > tr {
+    border-bottom: 1.5px solid $border-light !important;
+    transition: background 0.2s;
+    &:hover {
+      background: $surface-hover !important;
+    }
+    > td {
+      font-size: 16px !important;
+      color: $text-primary !important;
+      border: none !important;
+      text-align: center;
+      padding: 18px 0 !important;
+    }
+    > td:first-child {
+      width: 48px;
+      text-align: center;
+    }
+  }
+}
+
+// Nút expand
+.expand-button {
+  background: $surface;
+  border: 1.5px solid $border;
+  color: $primary;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 80px;
-
-  &.status-empty {
-    background: rgba($error, 0.12);
-    color: $error;
+  &:hover {
+    background: $primary-light;
+    color: $text-white;
+    border-color: $primary;
+    transform: scale(1.1);
+    box-shadow: $shadow-md;
   }
-
-  &.status-low {
-    background: rgba($primary, 0.10);
-    color: $primary;
-  }
-
-  &.status-medium {
-    background: rgba($secondary, 0.10);
-    color: $secondary;
-  }
-
-  &.status-good {
-    background: rgba($primary, 0.08);
-    color: $primary;
+  i {
+    font-size: 18px;
+    transition: transform 0.2s;
   }
 }
 
-// Responsive Chart Style
-.responsive-chart {
-  width: 100% !important;
+// Card mở rộng chi tiết sản phẩm (dùng chung cho dialog và tồn kho)
+.expanded-content {
+  width: 98%;
+  margin: 32px auto 18px auto;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
   min-width: 0;
-  max-width: 100% !important;
-  display: block;
-  min-height: 320px;
-  height: 340px !important;
-  overflow: hidden;
+  position: relative;
+  z-index: 2;
 }
 
-// Modern Chart Wrapper
-.modern-chart {
-  box-shadow: $shadow;
-  border-radius: $radius-md;
-  padding: 20px 18px 18px 18px;
+.expanded-content .expanded-card {
   background: $surface;
+  border-radius: $radius-xl;
+  box-shadow: 0 8px 32px rgba(37,99,235,0.13);
+  padding: 0 0 24px 0;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  border: 2px solid $border-light;
+  margin-top: 18px;
   margin-bottom: 0;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+
+.expanded-content .card-header, .expanded-content h5 {
+  display: none;
+}
+
+.expanded-content .variant-table {
+  width: 100%;
   min-width: 0;
-  min-height: 260px;
-  transition: box-shadow 0.2s;
-}
-.modern-chart:hover {
-  box-shadow: $shadow-hover;
-}
-
-.charts-container-vertical {
-  flex-direction: column;
-  gap: 24px;
-}
-
-.chart-wrapper.half-width,
-.chart-wrapper.full-width {
-  min-width: 320px;
-  max-width: 100%;
-  flex: 1 1 350px;
-  margin: 0 auto 0 auto;
-}
-
-@media (max-width: 1200px) {
-  .dashboard-container {
-    padding: 16px 4px;
-    gap: 18px;
+  border-radius: $radius-lg;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  thead th {
+    background: $primary;
+    color: $text-white;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 15px 16px;
+    text-align: center;
+    border: none;
   }
-  .chart-wrapper {
-    padding: 16px 4px 12px 4px;
-    min-width: 0;
-  }
-  .chart-wrapper.full-width {
-    height: 340px;
-  }
-}
-
-@media (max-width: 900px) {
-  .summary-cards, .extra-summaries {
-    flex-direction: column;
-    gap: 12px;
-  }
-  .chart-wrapper {
-    padding: 10px 0 8px 0;
-    min-width: 0;
-    border-radius: 16px;
-  }
-  .responsive-chart {
-    min-height: 180px;
-    height: 200px !important;
-  }
-  ::ng-deep .apexcharts-yaxis-label {
-    max-width: 120px !important;
-    font-size: 13px !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .chart-wrapper {
-    padding: 8px 0;
+  tbody tr {
+    border-bottom: 1.5px solid $border-light;
+    background: $surface;
+    &:hover { background: #f4f6fb; }
+    td {
+      padding: 14px 16px;
+      font-size: 15px;
+      color: $text-primary;
+      border: none;
+      text-align: center;
+      background: transparent;
+    }
   }
 }
 
 @media (max-width: 600px) {
-  .dashboard-container {
-    padding: 4px;
-    gap: 6px;
-  }
-  .chart-wrapper {
-    padding: 4px 0 4px 0;
-    min-width: 0;
-    border-radius: 12px;
-  }
-  .responsive-chart {
-    min-height: 100px;
-    height: 120px !important;
-  }
-  .card {
-    padding: 12px 8px;
-    border-radius: 12px;
-  }
-  .stock-summary {
-    padding: 12px 4px;
-    border-radius: 12px;
-  }
-  ::ng-deep .apexcharts-yaxis-label {
-    max-width: 80px !important;
-    font-size: 11px !important;
-  }
-}
-
-.stock-summary .p-datatable-row-expansion .p-ml-4 {
-  margin-left: 48px;
-  margin-right: 0;
-  margin-top: 18px;
-  margin-bottom: 18px;
-  max-width: calc(100% - 48px - 24px);
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 2px 8px rgba(0,122,255,0.07);
-  padding: 20px 28px 16px 28px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  h5 {
-    color: #007AFF;
-    font-size: 15px;
-    font-weight: 600;
-    margin: 0 0 14px 0;
-    letter-spacing: -0.01em;
-    text-align: left;
-    width: 100%;
-  }
-
-  .p-datatable.p-datatable-sm {
-    width: 100%;
-    background: transparent;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: none;
-    margin: 0;
-    thead th {
-      background: #eaf6ff;
-      color: #007AFF;
-      font-weight: 600;
-      font-size: 13px;
-      padding: 10px 16px;
-      text-align: center;
-      border: none;
-      border-radius: 8px 8px 0 0;
-      letter-spacing: -0.01em;
-    }
-    tbody tr {
-      transition: background-color 0.2s;
-      &:hover {
-        background: #f0f8ff;
-      }
-      td {
-        padding: 12px 16px;
-        font-size: 13px;
-        color: #1d1d1f;
-        border: none;
-        text-align: center;
-        background: transparent;
-      }
-    }
-  }
-}
-
-.charts-container + .charts-container {
-  flex-direction: column;
-  gap: 24px;
-}
-
-.chart-wrapper.full-width {
-  width: 100%;
-  height: 450px;
-  min-width: 0;
-}
-
-// Styles cho custom table với expandable rows
-.custom-table {
-  .expand-button {
-    background: transparent;
-    border: none;
-    color: #007AFF;
-    cursor: pointer;
-    padding: 0.5rem;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-
-    &:hover {
-      background-color: rgba(0, 122, 255, 0.1);
-    }
-
-    i {
-      font-size: 14px;
-    }
-  }
-
-  .expanded-content {
-    background-color: #F2F2F7;
-    padding: 1.5rem !important;
-
-    .expanded-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .expanded-card {
-      background-color: #fff;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-
-      .card-header {
-        background-color: #F2F2F7;
-        padding: 1rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-
-        i {
-          color: #007AFF;
-        }
-
-        h3 {
-          margin: 0;
-          font-size: 1rem;
-          font-weight: 600;
-          color: #1d1d1f;
-        }
-      }
-
-      .card-body {
-        padding: 1rem;
-
-        .p-datatable {
-          width: 100%;
-          background: transparent;
-          border-radius: 8px;
-          overflow: hidden;
-          box-shadow: none;
-          margin: 0;
-
-          thead th {
-            background: #eaf6ff;
-            color: #007AFF;
-            font-weight: 600;
-            font-size: 13px;
-            padding: 10px 16px;
-            text-align: center;
-            border: none;
-            letter-spacing: -0.01em;
-          }
-
-          tbody tr {
-            transition: background-color 0.2s;
-
-            &:hover {
-              background: #f0f8ff;
-            }
-
-            td {
-              padding: 12px 16px;
-              font-size: 13px;
-              color: #1d1d1f;
-              border: none;
-              text-align: center;
-              background: transparent;
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-.dynamic-report-filter {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin: 24px 0 16px 0;
-  label {
-    font-weight: 500;
-    color: #1976D2;
-    font-size: 15px;
-  }
-  input[type="date"] {
-    padding: 8px 12px;
-    border: 1px solid #e3eafc;
-    border-radius: 8px;
-    font-size: 15px;
-    outline: none;
-    background: #f5f7fa;
-    color: #222;
-    transition: border 0.2s;
-    &:focus {
-      border: 1.5px solid #4F8DFD;
-    }
-  }
-  button {
-    margin-left: 8px;
-    border-radius: 8px;
-    font-weight: 500;
-    font-size: 15px;
-    background: #4F8DFD;
-    color: #fff;
-    border: none;
-    box-shadow: 0 2px 8px rgba(79, 141, 253, 0.08);
-    transition: background 0.2s, box-shadow 0.2s;
-    &:hover {
-      background: #1976D2;
-      box-shadow: 0 4px 16px rgba(79, 141, 253, 0.16);
-    }
-    &.p-button-secondary {
-      background: #e3eafc;
-      color: #1976D2;
-      &:hover {
-        background: #c7d7f7;
-        color: #1976D2;
-      }
-    }
-  }
-}
-
-// Filter bar style
-.filter-bar {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  background: $surface;
-  border-radius: $radius-lg;
-  box-shadow: $shadow;
-  padding: 18px 32px;
-  margin-bottom: 28px;
-  .filter-label {
-    font-weight: 600;
-    color: $primary;
-    font-size: 16px;
-    margin-right: 8px;
-  }
-  input[type="date"] {
-    padding: 10px 16px;
-    border: 1.5px solid $border;
+  .expanded-content .expanded-card {
     border-radius: $radius-md;
-    font-size: 15px;
-    background: $background;
-    color: $text-primary;
-    transition: border 0.2s;
-    &:focus {
-      border: 1.5px solid $primary;
+    padding: 0 0 12px 0;
+  }
+  .expanded-content .variant-table thead th,
+  .expanded-content .variant-table tbody td {
+    padding: 8px 6px;
+    font-size: 13px;
+  }
+}
+
+// Responsive Design
+@media (max-width: 1200px) {
+  .dashboard-container {
+    padding: 16px;
+  }
+
+  .summary-cards {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 12px;
+  }
+
+  .summary-cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .dynamic-report-filter {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+
+    > div {
+      display: flex;
+      gap: 8px;
+      align-items: center;
     }
   }
-  button {
-    border-radius: 10px;
-    font-weight: 600;
-    font-size: 15px;
-    background: $primary;
-    color: $on-primary;
-    border: none;
-    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
-    padding: 10px 22px;
-    transition: background 0.2s, box-shadow 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    &:hover {
-      background: darken($primary, 8%);
-      box-shadow: 0 4px 16px rgba(25, 118, 210, 0.16);
+
+  .chart-wrapper {
+    .chart-header {
+      padding: 16px 20px 12px;
     }
-    &.p-button-secondary {
-      background: $gray-border;
-      color: $primary;
-      &:hover {
-        background: lighten($primary, 38%);
-        color: $primary;
+
+    .chart-content {
+      padding: 16px 20px 20px;
+    }
+  }
+
+  .stock-summary {
+    .stock-header {
+      padding: 16px 20px;
+      flex-direction: column;
+      gap: 12px;
+      align-items: stretch;
+
+      .header-actions {
+        justify-content: center;
       }
     }
   }
 }
 
-// Chart bar color override
-::ng-deep .apexcharts-bar-series .apexcharts-series {
-  // Không gradient, mỗi bar 1 màu tươi sáng
-  // Apex sẽ lấy từ mảng colors truyền vào options
-}
-
-// Tooltip, datalabel, yaxis-label
-::ng-deep .apexcharts-tooltip {
-  border-radius: 14px !important;
-  box-shadow: 0 4px 16px rgba(25, 118, 210, 0.10) !important;
-  font-size: 16px !important;
-  font-weight: 600 !important;
-  background: $surface !important;
-  color: #222 !important;
-  padding: 12px 18px !important;
-}
-::ng-deep .apexcharts-datalabel {
-  font-size: 18px !important;
-  font-weight: 700 !important;
-  color: #222 !important;
-  text-shadow: 0 1px 4px $surface, 0 1px 4px $gray-border;
-}
-::ng-deep .apexcharts-yaxis-label {
-  white-space: normal !important;
-  word-break: break-word !important;
-  max-width: 300px !important;
-  min-width: 0 !important;
-  font-size: 15px !important;
-  padding: 0 2px !important;
-  text-align: left !important;
-  color: $primary !important;
-  font-weight: 600 !important;
-}
-
-// Button, badge, trạng thái
-.card, .chart-wrapper, .filter-bar, .modern-chart, .p-datatable, .status-badge, button {
-  transition: box-shadow 0.2s, background 0.2s, color 0.2s, border 0.2s;
-}
-
-// Button Material style
-button, .p-button {
-  border-radius: $radius-sm !important;
-  font-family: $font-main !important;
-  font-weight: 500 !important;
-  font-size: 15px !important;
-  background: $primary !important;
-  color: $on-primary !important;
-  border: none !important;
-  box-shadow: 0 2px 8px rgba(26, 115, 232, 0.08) !important;
-  transition: background 0.2s, box-shadow 0.2s;
-  &:hover, &:focus {
-    background: darken($primary, 8%) !important;
-    box-shadow: 0 4px 16px rgba(26, 115, 232, 0.16) !important;
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 8px;
   }
-  &.p-button-secondary {
-    background: $primary-container !important;
-    color: $primary !important;
-    &:hover {
-      background: lighten($primary, 38%) !important;
-      color: $primary !important;
+
+  .card {
+    padding: 16px;
+  }
+
+  .dynamic-report-filter {
+    padding: 16px;
+  }
+
+  .chart-wrapper {
+    .chart-header {
+      padding: 12px 16px 8px;
+    }
+
+    .chart-content {
+      padding: 12px 16px 16px;
     }
   }
 }
 
-// Dialog style
-:host ::ng-deep .p-dialog {
-  border-radius: $radius-lg !important;
-  .p-dialog-header {
-    background: $primary-container !important;
-    color: $primary !important;
-    font-weight: 700 !important;
-    font-size: 20px !important;
-    border-radius: $radius-lg $radius-lg 0 0 !important;
+@media (max-width: 900px) {
+  :host ::ng-deep .p-dialog-content {
+    padding: 12px 4px 12px 4px !important;
   }
-  .p-dialog-content {
-    background: $surface !important;
-    color: $text-primary !important;
-    font-size: 16px !important;
-    border-radius: 0 0 $radius-lg $radius-lg !important;
+  .expanded-content {
+    padding: 12px 4px 8px 4px;
+  }
+}
+
+// Icon mở rộng đồng bộ cho cả hai bảng
+.p-table a, .p-table a:visited {
+  color: $primary;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: $radius;
+  transition: background 0.2s, color 0.2s, transform 0.2s;
+  &:hover {
+    background: rgba($primary, 0.08);
+    color: $primary-dark;
+    transform: scale(1.12);
+  }
+  i {
+    font-size: 18px;
+    transition: transform 0.2s;
   }
 }

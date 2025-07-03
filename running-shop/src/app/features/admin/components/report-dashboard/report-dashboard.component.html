@@ -1,16 +1,20 @@
 <div class="dashboard-container">
   <!-- Summary Cards - Tổng quan hôm nay -->
-  <div class="summary-cards p-d-flex p-jc-between p-ai-center p-mb-4">
-    <div class="card p-shadow-2 p-p-3 p-mr-3">
-      <div class="card-icon"><i class="pi pi-shopping-cart" aria-hidden="true"></i></div>
+  <div class="summary-cards">
+    <div class="card">
+      <div class="card-icon orders">
+        <i class="pi pi-shopping-cart" aria-hidden="true"></i>
+      </div>
       <div class="card-content">
         <h3>Tổng đơn hôm nay</h3>
         <p class="number">{{ totalOrdersToday }}</p>
       </div>
     </div>
 
-    <div class="card p-shadow-2 p-p-3 p-mr-3">
-      <div class="card-icon"><i class="pi pi-chart-line" aria-hidden="true"></i></div>
+    <div class="card">
+      <div class="card-icon revenue">
+        <i class="pi pi-chart-line" aria-hidden="true"></i>
+      </div>
       <div class="card-content">
         <h3>Doanh thu hôm nay</h3>
         <p class="number">{{ revenueToday | currency: 'VND' }}</p>
@@ -18,15 +22,17 @@
           pButton
           type="button"
           label="Xem chi tiết"
-          class="p-button-text p-ml-2"
+          class="p-button-text"
           (click)="showDetail('today')"
           [attr.aria-label]="'Xem chi tiết doanh thu hôm nay'">
         </button>
       </div>
     </div>
 
-    <div class="card p-shadow-2 p-p-3">
-      <div class="card-icon"><i class="pi pi-wallet" aria-hidden="true"></i></div>
+    <div class="card">
+      <div class="card-icon profit">
+        <i class="pi pi-wallet" aria-hidden="true"></i>
+      </div>
       <div class="card-content">
         <h3>Lợi nhuận hôm nay</h3>
         <p class="number">{{ profitToday | currency: 'VND' }}</p>
@@ -35,14 +41,13 @@
   </div>
 
   <!-- Dynamic Report Filter - Lọc doanh thu lợi nhuận -->
-  <div class="dynamic-report-filter p-d-flex p-ai-center p-mb-3" style="gap: 1rem;">
+  <div class="dynamic-report-filter">
     <label for="startDate">Từ ngày:</label>
     <input
       id="startDate"
       type="date"
       [(ngModel)]="startDate"
       aria-label="Ngày bắt đầu lọc báo cáo"
-      class="p-inputtext p-component"
     />
     <label for="endDate">Đến ngày:</label>
     <input
@@ -50,73 +55,74 @@
       type="date"
       [(ngModel)]="endDate"
       aria-label="Ngày kết thúc lọc báo cáo"
-      class="p-inputtext p-component"
     />
     <button
-      pButton
-      type="button"
-      label="Xem báo cáo"
-      class="p-button-sm"
+      class="primary"
       (click)="updateDynamicChart(startDate, endDate)"
       [attr.aria-label]="'Xem báo cáo doanh thu lợi nhuận'">
+      <i class="pi pi-search"></i>
+      Xem báo cáo
     </button>
     <button
-      pButton
-      type="button"
-      label="Xem chi tiết"
-      class="p-button-sm p-button-secondary"
+      class="secondary"
       (click)="showDetailDynamic()"
       [attr.aria-label]="'Xem chi tiết doanh thu lợi nhuận'">
+      <i class="pi pi-list"></i>
+      Xem chi tiết
     </button>
   </div>
 
   <!-- Dynamic Chart - Biểu đồ doanh thu & lợi nhuận theo thời gian -->
-  <div class="chart-wrapper full-width modern-chart chart-revenue-profit p-mb-5">
-    <h3>Doanh thu & Lợi nhuận theo khoảng thời gian</h3>
-    <apx-chart
-      *ngIf="chartOptionsDynamic"
-      [series]="chartOptionsDynamic.series"
-      [chart]="chartOptionsDynamic.chart"
-      [xaxis]="chartOptionsDynamic.xaxis"
-      [title]="chartOptionsDynamic.title"
-      [colors]="chartOptionsDynamic.colors"
-      [plotOptions]="chartOptionsDynamic.plotOptions"
-      [dataLabels]="chartOptionsDynamic.dataLabels"
-      [grid]="chartOptionsDynamic.grid"
-      [yaxis]="chartOptionsDynamic.yaxis"
-      class="responsive-chart"
-      aria-label="Biểu đồ doanh thu và lợi nhuận theo khoảng thời gian"
-    ></apx-chart>
+  <div class="chart-wrapper full-width">
+    <div class="chart-header">
+      <h3>Doanh thu & Lợi nhuận theo khoảng thời gian</h3>
+      <div class="chart-subtitle">Phân tích hiệu suất kinh doanh</div>
+    </div>
+    <div class="chart-content">
+      <apx-chart
+        *ngIf="chartOptionsDynamic"
+        [series]="chartOptionsDynamic.series"
+        [chart]="chartOptionsDynamic.chart"
+        [xaxis]="chartOptionsDynamic.xaxis"
+        [title]="chartOptionsDynamic.title"
+        [colors]="chartOptionsDynamic.colors"
+        [plotOptions]="chartOptionsDynamic.plotOptions"
+        [dataLabels]="chartOptionsDynamic.dataLabels"
+        [grid]="chartOptionsDynamic.grid"
+        [yaxis]="chartOptionsDynamic.yaxis"
+        aria-label="Biểu đồ doanh thu và lợi nhuận theo khoảng thời gian"
+      ></apx-chart>
+    </div>
   </div>
 
-  <!-- Charts Section: Top 10 sản phẩm bán chạy -->
-  <div class="charts-container p-d-flex p-jc-start p-ai-start p-flex-wrap p-mb-5">
-    <div class="chart-wrapper full-width modern-chart chart-top-selling p-mb-4">
+  <!-- Top Selling Products Chart -->
+  <div class="chart-wrapper full-width">
+    <div class="chart-header">
       <h3>Top 10 sản phẩm bán chạy</h3>
-      <div class="top-selling-filter p-d-flex p-ai-center p-mb-3" style="gap: 1rem;">
-        <label for="topStartDate" class="p-mr-1">Từ ngày:</label>
+      <div class="chart-subtitle">Sản phẩm được ưa chuộng nhất</div>
+    </div>
+    <div class="chart-content">
+      <div class="dynamic-report-filter" style="margin-bottom: 16px;">
+        <label for="topStartDate">Từ ngày:</label>
         <input
           id="topStartDate"
           type="date"
           [(ngModel)]="topStartDate"
           aria-label="Ngày bắt đầu lọc top bán chạy"
-          class="p-inputtext p-component"
         />
-        <label for="topEndDate" class="p-ml-3 p-mr-1">Đến ngày:</label>
+        <label for="topEndDate">Đến ngày:</label>
         <input
           id="topEndDate"
           type="date"
           [(ngModel)]="topEndDate"
           aria-label="Ngày kết thúc lọc top bán chạy"
-          class="p-inputtext p-component"
         />
         <button
-          pButton
-          type="button"
-          label="Xem báo cáo"
-          class="p-button-sm p-ml-3"
+          class="primary"
           (click)="updateTopSellingChart(topStartDate, topEndDate)"
           [attr.aria-label]="'Xem báo cáo top bán chạy'">
+          <i class="pi pi-search"></i>
+          Xem báo cáo
         </button>
       </div>
       <apx-chart
@@ -131,30 +137,28 @@
         [grid]="chartOptionsTopSelling.grid"
         [title]="chartOptionsTopSelling.title"
         [tooltip]="chartOptionsTopSelling.tooltip"
-        class="responsive-chart"
       ></apx-chart>
     </div>
   </div>
 
   <!-- Stock Summary - Tồn kho -->
-  <div class="stock-summary p-mb-5">
-    <div class="stock-header p-d-flex p-jc-between p-ai-center p-mb-3">
+  <div class="stock-summary">
+    <div class="stock-header">
       <h2>Tồn kho hiện tại</h2>
-      <div>
+      <div class="header-actions">
         <button
-          pButton
-          icon="pi pi-refresh"
-          styleClass="p-button-rounded p-button-text"
+          class="refresh"
           (click)="loadReports()"
           [attr.aria-label]="'Làm mới báo cáo tồn kho'">
+          <i class="pi pi-refresh"></i>
+          Làm mới
         </button>
         <button
-          pButton
-          icon="pi pi-sort-amount-down"
-          label="Sắp xếp tồn kho"
-          styleClass="p-button-rounded p-button-text p-ml-2"
+          class="sort"
           (click)="sortByStock()"
           [attr.aria-label]="'Sắp xếp tồn kho theo số lượng'">
+          <i class="pi pi-sort-amount-down"></i>
+          Sắp xếp
         </button>
       </div>
     </div>
@@ -164,7 +168,6 @@
              dataKey="name"
              [paginator]="true"
              [rows]="10"
-             styleClass="p-datatable-sm"
              [showCurrentPageReport]="true"
              currentPageReportTemplate="Hiển thị {first} đến {last} của {totalRecords} sản phẩm"
              [rowsPerPageOptions]="[10,25,50]"
@@ -211,10 +214,9 @@
 
       <ng-template pTemplate="rowexpansion" let-rowData>
         <tr>
-          <td colspan="4" class="p-0">
-            <div class="p-ml-4 p-mt-2">
-              <h5>Biến thể của "{{ rowData.name }}"</h5>
-              <table class="p-datatable p-datatable-sm" aria-label="Bảng biến thể của sản phẩm">
+          <td colspan="4" class="expanded-content">
+            <div class="expanded-card">
+              <table class="variant-table">
                 <thead>
                 <tr>
                   <th>Tên biến thể</th>
@@ -267,7 +269,6 @@
     [rowsPerPageOptions]="[5, 10, 20]"
     (onPage)="onDetailPage($event)"
     [responsiveLayout]="'scroll'"
-    class="custom-table"
     aria-label="Bảng chi tiết đơn hàng doanh thu">
 
     <ng-template pTemplate="header">
@@ -285,12 +286,9 @@
     <ng-template pTemplate="body" let-order>
       <tr>
         <td>
-          <button
-            class="expand-button p-button p-button-text p-button-rounded"
-            (click)="toggleDetailRow(order)"
-            [attr.aria-label]="'Mở rộng chi tiết đơn ' + order.orderId">
+          <a href="#" (click)="toggleDetailRow(order); $event.preventDefault()" [attr.aria-label]="'Mở rộng chi tiết đơn ' + order.orderId">
             <i class="pi" [ngClass]="order.expanded ? 'pi-chevron-down' : 'pi-chevron-right'"></i>
-          </button>
+          </a>
         </td>
         <td>{{ order.orderId }}</td>
         <td>{{ order.createdAt | date:'short' }}</td>
@@ -304,13 +302,13 @@
       <tr *ngIf="order.expanded">
         <td colspan="7" class="expanded-content">
           <div class="expanded-grid">
-            <div class="expanded-card p-shadow-2 p-p-3">
-              <div class="card-header p-d-flex p-ai-center p-mb-2" style="gap: 0.5rem;">
+            <div class="expanded-card">
+              <div class="card-header">
                 <i class="pi pi-shopping-cart"></i>
                 <h3>Chi tiết sản phẩm</h3>
               </div>
               <div class="card-body">
-                <table class="p-datatable p-datatable-sm" aria-label="Bảng chi tiết sản phẩm đơn hàng">
+                <table class="variant-table">
                   <thead>
                   <tr>
                     <th>Sản phẩm</th>

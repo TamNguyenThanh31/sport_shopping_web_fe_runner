@@ -134,13 +134,13 @@ export class ReportDashboardComponent implements OnInit {
         height: 340,
         toolbar: { show: false }
       },
-      colors: ['#4F8DFD', '#43E6A0'], // xanh dương, xanh lá pastel
-      plotOptions: { bar: { borderRadius: 12, columnWidth: '40%' } },
-      dataLabels: { enabled: true, style: { colors: ['#222'], fontWeight: 700 } },
-      grid: { borderColor: '#e3eafc', strokeDashArray: 4 },
-      xaxis: { categories: ['Khoảng thời gian'], labels: { style: { colors: '#1976D2', fontWeight: 500 } } },
-      yaxis: { labels: { style: { colors: '#1976D2', fontWeight: 500 } } },
-      title: { text: 'Doanh thu & Lợi nhuận', style: { color: '#1d3557', fontWeight: 700, fontSize: '18px' } }
+      colors: ['#2563eb', '#10b981'], // Màu tươi sáng và hiện đại
+      plotOptions: { bar: { columnWidth: '40%' } }, // Loại bỏ borderRadius
+      dataLabels: { enabled: true, style: { colors: ['#1e293b'], fontWeight: 600 } },
+      grid: { borderColor: '#e2e8f0', strokeDashArray: 4 },
+      xaxis: { categories: ['Khoảng thời gian'], labels: { style: { colors: '#64748b', fontWeight: 500 } } },
+      yaxis: { labels: { style: { colors: '#64748b', fontWeight: 500 } } },
+      title: { text: '', style: { color: 'transparent' } } // Title ẩn để tránh trùng lặp
     };
   }
 
@@ -177,26 +177,26 @@ export class ReportDashboardComponent implements OnInit {
       series: [{ name: 'Số lượng đã bán', data: [] }],
       chart: { type: 'bar', height: 340, toolbar: { show: false } },
       colors: [
-        '#1976D2', '#43A047', '#FBC02D', '#E53935', '#8E24AA', '#00ACC1', '#F57C00', '#3949AB', '#00897B', '#C2185B',
-        '#7E57C2', '#26A69A', '#FF7043', '#AB47BC', '#29B6F6', '#66BB6A', '#FFA726', '#8D6E63', '#789262', '#D4E157'
+        '#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#f97316', '#6366f1', '#14b8a6', '#ec4899',
+        '#a855f7', '#0ea5e9', '#84cc16', '#f43f5e', '#06b6d4', '#22c55e', '#fbbf24', '#78716c', '#059669', '#a3e635'
       ],
-      plotOptions: { bar: { horizontal: true, borderRadius: 14, barHeight: '60%' } },
-      dataLabels: { enabled: true, style: { colors: ['#222'], fontWeight: 700 } },
-      grid: { borderColor: '#e3eafc', strokeDashArray: 4 },
+      plotOptions: { bar: { horizontal: true, barHeight: '60%' } }, // Loại bỏ borderRadius
+      dataLabels: { enabled: true, style: { colors: ['#1e293b'], fontWeight: 600 } },
+      grid: { borderColor: '#e2e8f0', strokeDashArray: 4 },
       xaxis: {
         labels: {
-          style: { colors: '#1976D2', fontWeight: 500 },
+          style: { colors: '#64748b', fontWeight: 500 },
           formatter: (val: string | number) => parseInt(val as string, 10)
         },
         decimalsInFloat: 0,
-        tickAmount:  Math.max(2, ...this.chartOptionsTopSelling?.series?.[0]?.data?.map((d: any) => d.y) || [2]), // số tick đúng bằng số nguyên lớn nhất
+        tickAmount:  Math.max(2, ...this.chartOptionsTopSelling?.series?.[0]?.data?.map((d: any) => d.y) || [2]),
         min: 0,
         forceNiceScale: true,
         stepSize: 1
       },
       yaxis: {
         labels: {
-          style: { colors: '#1976D2', fontWeight: 500, fontSize: '15px', maxWidth: 300 },
+          style: { colors: '#64748b', fontWeight: 500, fontSize: '14px', maxWidth: 300 },
           formatter: (val: string) => val,
           minWidth: 0,
           maxWidth: 300,
@@ -206,12 +206,12 @@ export class ReportDashboardComponent implements OnInit {
         custom: function({ series, seriesIndex, dataPointIndex, w }: { series: any; seriesIndex: number; dataPointIndex: number; w: any; }) {
           const point = w.config.series[seriesIndex].data[dataPointIndex];
           return `<div style='padding:8px 12px;'>`
-            + `<div style='font-size:15px;font-weight:600;color:#1976D2;'>${point.name}</div>`
-            + `<div style='font-size:14px;color:#222;'>Số lượng đã bán: <b>${point.y}</b></div>`
+            + `<div style='font-size:14px;font-weight:600;color:#2563eb;'>${point.name}</div>`
+            + `<div style='font-size:13px;color:#1e293b;'>Số lượng đã bán: <b>${point.y}</b></div>`
             + `</div>`;
         }
       },
-      title: { text: 'Top 10 sản phẩm bán chạy', style: { color: '#1d3557', fontWeight: 700, fontSize: '18px' } }
+      title: { text: '', style: { color: 'transparent' } } // Title ẩn để tránh trùng lặp
     };
     this.updateTopSellingChart();
   }
