@@ -4,7 +4,7 @@
       <div class="logo-icon">
         <i class="pi pi-shield"></i>
       </div>
-      <span class="logo-text">Run<span class="text-primary">Admin</span></span>
+      <span class="logo-text">NTT<span class="text-primary">Admin</span></span>
     </div>
     <button type="button" class="toggle-btn" (click)="toggleSidebar()" pRipple>
       <i class="pi" [ngClass]="isCollapsed ? 'pi-chevron-right' : 'pi-chevron-left'"></i>
@@ -60,24 +60,6 @@
           <i class="pi pi-shopping-cart menu-icon"></i>
           <span class="menu-text" *ngIf="!isCollapsed">Quản lý đơn hàng</span>
         </a>
-        <a class="menu-item" routerLink="/admin/users" routerLinkActive="active"
-           pTooltip="Users" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
-          <i class="pi pi-users menu-icon"></i>
-          <span class="menu-text" *ngIf="!isCollapsed">Runners</span>
-        </a>
-      </div>
-      <div class="menu-section">
-        <div class="section-label" *ngIf="!isCollapsed">ANALYTICS</div>
-        <a class="menu-item" routerLink="/admin/stats" routerLinkActive="active"
-           pTooltip="Statistics" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
-          <i class="pi pi-chart-line menu-icon"></i>
-          <span class="menu-text" *ngIf="!isCollapsed">Running Stats</span>
-        </a>
-        <a class="menu-item" routerLink="/admin/events" routerLinkActive="active"
-           pTooltip="Events" [tooltipDisabled]="!isCollapsed" tooltipPosition="right">
-          <i class="pi pi-calendar menu-icon"></i>
-          <span class="menu-text" *ngIf="!isCollapsed">Race Events</span>
-        </a>
       </div>
     </ng-container>
 
@@ -115,7 +97,7 @@
         <img src="assets/images/running-logo.png" alt="Admin Avatar">
       </div>
       <div class="user-info">
-        <div class="name">Marathon Admin</div>
+        <div class="name">Admin</div>
         <div class="role">Race Director</div>
       </div>
     </div>

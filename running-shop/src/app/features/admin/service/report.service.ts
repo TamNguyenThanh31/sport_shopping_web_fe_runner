@@ -154,9 +154,9 @@ export class ReportService {
    * @returns Observable chứa mảng TopSellingProductDTO
    */
   getTopSellingProducts(
-    limit: number = 10,
     startDate?: string | null,
-    endDate?: string | null
+    endDate?: string | null,
+    limit: number = 10
   ): Observable<TopSellingProductDTO[]> {
     let params = new HttpParams().set('limit', limit.toString());
 
@@ -172,4 +172,5 @@ export class ReportService {
       { params }
     );
   }
+
 }

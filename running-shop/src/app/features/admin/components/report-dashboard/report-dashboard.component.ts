@@ -220,7 +220,7 @@ export class ReportDashboardComponent implements OnInit {
   updateTopSellingChart(startDate?: string, endDate?: string) {
     const start = startDate ? this.toStartOfDay(startDate) : undefined;
     const end = endDate ? this.toEndOfDay(endDate) : undefined;
-    this.reportService.getTopSellingProducts(10, start, end).subscribe(products => {
+    this.reportService.getTopSellingProducts(start, end, 10).subscribe(products => {
       this.chartOptionsTopSelling = {
         ...this.chartOptionsTopSelling,
         series: [{
