@@ -10,6 +10,8 @@ import { SidebarService } from "../sidebar.service";
 })
 export class SidebarComponent implements OnInit {
   isAdminOrStaff: boolean = false;
+  isAdmin: boolean = false;
+  isStaff: boolean = false;
   isCollapsed: boolean = false;
 
   constructor(
@@ -25,6 +27,8 @@ export class SidebarComponent implements OnInit {
 
     this.authService.currentUser$.subscribe(user => {
       this.isAdminOrStaff = user?.role === 'ADMIN' || user?.role === 'STAFF';
+      this.isAdmin = user?.role === 'ADMIN';
+      this.isStaff = user?.role === 'STAFF';
     });
   }
 
