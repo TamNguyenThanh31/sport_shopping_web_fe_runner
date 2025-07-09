@@ -7,5 +7,4 @@ export interface UserDTO {
   role: 'ADMIN' | 'CUSTOMER' | 'STAFF';
   createdAt: string;
   updatedAt: string;
-  onlineStatus?: boolean;
 }

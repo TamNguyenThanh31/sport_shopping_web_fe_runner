@@ -47,6 +47,7 @@ export class CustomerStaffManagementComponent implements OnInit {
     this.userForm = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9]{10,11}$/)]],
       password: ['', [Validators.minLength(6)]]
     });
   }
@@ -102,7 +103,8 @@ export class CustomerStaffManagementComponent implements OnInit {
     if (user) {
       this.userForm.patchValue({
         username: user.username,
-        email: user.email
+        email: user.email,
+        phoneNumber: user.phoneNumber
       });
       this.userForm.get('password')?.clearValidators();
     } else {
@@ -121,6 +123,7 @@ export class CustomerStaffManagementComponent implements OnInit {
     const userData = {
       username: this.userForm.value.username,
       email: this.userForm.value.email,
+      phoneNumber: this.userForm.value.phoneNumber,
       password: this.userForm.value.password || undefined,
       role: this.type.toUpperCase() // CUSTOMER or STAFF
     };
