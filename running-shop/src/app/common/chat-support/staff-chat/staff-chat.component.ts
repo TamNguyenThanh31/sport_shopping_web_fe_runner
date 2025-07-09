@@ -46,6 +46,7 @@ export class StaffChatComponent implements OnInit, OnDestroy {
 
   private msgSub!: Subscription;
   private notifSub!: Subscription;
+  private connectionSub!: Subscription;
 
   constructor(
     private chatService: ChatService,
@@ -62,30 +63,33 @@ export class StaffChatComponent implements OnInit, OnDestroy {
     // 1. Kết nối WebSocket
     this.wsService.connect();
 
-    setTimeout(() => {
-      // 2. Subscribe notifications
-      this.wsService.subscribeToNotifications();
+    // 2. Đợi kết nối hoàn tất trước khi subscribe
+    this.connectionSub = this.wsService.isConnected().subscribe(connected => {
+      if (connected) {
+        // 3. Subscribe notifications
+        this.wsService.subscribeToNotifications();
 
-      // 3. Lấy session chờ và session hiện tại
-      this.loadWaitingSessions();
-      this.loadMySessions();
-
-      // 4. Lắng nghe message mới
-      this.msgSub = this.wsService.onMessage().subscribe(msg => {
-        if (this.selectedSession && msg.sessionId === this.selectedSession.id) {
-          this.messages.push(msg);
-          this.messagesWithDate = this.addDateLabels(this.messages);
-          setTimeout(() => this.scrollToBottom(), 100);
-        }
-      });
-
-      // 5. Lắng nghe notification
-      this.notifSub = this.wsService.onNotification().subscribe(text => {
-        this.toast.add({severity:'info', summary:'Thông báo', detail: text, life:5000});
+        // 4. Lấy session chờ và session hiện tại
         this.loadWaitingSessions();
         this.loadMySessions();
-      });
-    }, 500);
+
+        // 5. Lắng nghe message mới
+        this.msgSub = this.wsService.onMessage().subscribe(msg => {
+          if (this.selectedSession && msg.sessionId === this.selectedSession.id) {
+            this.messages.push(msg);
+            this.messagesWithDate = this.addDateLabels(this.messages);
+            setTimeout(() => this.scrollToBottom(), 100);
+          }
+        });
+
+        // 6. Lắng nghe notification
+        this.notifSub = this.wsService.onNotification().subscribe(text => {
+          this.toast.add({severity:'info', summary:'Thông báo', detail: text, life:5000});
+          this.loadWaitingSessions();
+          this.loadMySessions();
+        });
+      }
+    });
   }
 
   /** Tải session chờ */
@@ -145,7 +149,13 @@ export class StaffChatComponent implements OnInit, OnDestroy {
 
 
   private subscribeAndLoadMessages(sessionId: number): void {
-    this.wsService.subscribeToSession(sessionId);
+    // Kiểm tra kết nối trước khi subscribe
+    this.wsService.isConnected().subscribe(connected => {
+      if (connected) {
+        this.wsService.subscribeToSession(sessionId);
+      }
+    });
+    
     this.chatService.getMessages(sessionId).subscribe({
       next: msgs => {
         this.messages = msgs;
@@ -201,6 +211,7 @@ export class StaffChatComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.msgSub) this.msgSub.unsubscribe();
     if (this.notifSub) this.notifSub.unsubscribe();
+    if (this.connectionSub) this.connectionSub.unsubscribe();
     this.wsService.disconnect();
   }
 

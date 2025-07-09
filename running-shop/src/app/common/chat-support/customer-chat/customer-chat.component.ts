@@ -40,6 +40,7 @@ export class CustomerChatComponent implements OnInit, OnDestroy, AfterViewChecke
 
   private msgSub!: Subscription;
   private notifSub!: Subscription;
+  private connectionSub!: Subscription;
 
   @ViewChild('messageInput') messageInput: ElementRef | undefined;
   @ViewChild('messageList') messageList!: ElementRef;
@@ -64,35 +65,37 @@ export class CustomerChatComponent implements OnInit, OnDestroy, AfterViewChecke
         // 2. Kết nối WebSocket
         this.wsService.connect();
 
-        // Đợi một chút cho STOMP active rồi subscribe
-        setTimeout(() => {
-          this.wsService.subscribeToSession(this.session.id);
-          this.wsService.subscribeToNotifications();
+        // 3. Đợi kết nối hoàn tất trước khi subscribe
+        this.connectionSub = this.wsService.isConnected().subscribe(connected => {
+          if (connected) {
+            this.wsService.subscribeToSession(this.session.id);
+            this.wsService.subscribeToNotifications();
 
-          // 3. Load lịch sử chat
-          this.chatService.getMessages(this.session.id).subscribe({
-            next: msgs => {
-              this.messages = msgs;
-              this.messagesWithDate = this.addDateLabels(this.messages);
-              this.scrollToBottom();
-            },
-            error: err => console.error('Load message history error', err)
-          });
+            // 4. Load lịch sử chat
+            this.chatService.getMessages(this.session.id).subscribe({
+              next: msgs => {
+                this.messages = msgs;
+                this.messagesWithDate = this.addDateLabels(this.messages);
+                this.scrollToBottom();
+              },
+              error: err => console.error('Load message history error', err)
+            });
 
-          // 4. Lắng nghe message mới realtime
-          this.msgSub = this.wsService.onMessage().subscribe(msg => {
-            if (msg.sessionId === this.session.id) {
-              this.messages.push(msg);
-              this.messagesWithDate = this.addDateLabels(this.messages);
-              this.scrollToBottom();
-            }
-          });
+            // 5. Lắng nghe message mới realtime
+            this.msgSub = this.wsService.onMessage().subscribe(msg => {
+              if (msg.sessionId === this.session.id) {
+                this.messages.push(msg);
+                this.messagesWithDate = this.addDateLabels(this.messages);
+                this.scrollToBottom();
+              }
+            });
 
-          // 5. Lắng nghe notification
-          this.notifSub = this.wsService.onNotification().subscribe(text => {
-            this.toast.add({severity:'info', summary:'Thông báo', detail: text, life:5000});
-          });
-        }, 500);
+            // 6. Lắng nghe notification
+            this.notifSub = this.wsService.onNotification().subscribe(text => {
+              this.toast.add({severity:'info', summary:'Thông báo', detail: text, life:5000});
+            });
+          }
+        });
 
       },
       error: err => console.error('Open session error', err)
@@ -143,6 +146,7 @@ export class CustomerChatComponent implements OnInit, OnDestroy, AfterViewChecke
   ngOnDestroy(): void {
     if (this.msgSub) this.msgSub.unsubscribe();
     if (this.notifSub) this.notifSub.unsubscribe();
+    if (this.connectionSub) this.connectionSub.unsubscribe();
     this.wsService.disconnect();
   }
 
