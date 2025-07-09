@@ -125,19 +125,20 @@
           Xem báo cáo
         </button>
       </div>
-      <apx-chart
-        *ngIf="chartOptionsTopSelling"
-        [series]="chartOptionsTopSelling.series"
-        [chart]="chartOptionsTopSelling.chart"
-        [xaxis]="chartOptionsTopSelling.xaxis"
-        [yaxis]="chartOptionsTopSelling.yaxis"
-        [colors]="chartOptionsTopSelling.colors"
-        [plotOptions]="chartOptionsTopSelling.plotOptions"
-        [dataLabels]="chartOptionsTopSelling.dataLabels"
-        [grid]="chartOptionsTopSelling.grid"
-        [title]="chartOptionsTopSelling.title"
-        [tooltip]="chartOptionsTopSelling.tooltip"
-      ></apx-chart>
+      <div class="chart-container" *ngIf="chartOptionsTopSelling">
+        <apx-chart 
+          [series]="chartOptionsTopSelling.series"
+          [chart]="chartOptionsTopSelling.chart"
+          [xaxis]="chartOptionsTopSelling.xaxis"
+          [yaxis]="chartOptionsTopSelling.yaxis"
+          [colors]="chartOptionsTopSelling.colors"
+          [plotOptions]="chartOptionsTopSelling.plotOptions"
+          [dataLabels]="chartOptionsTopSelling.dataLabels"
+          [grid]="chartOptionsTopSelling.grid"
+          [tooltip]="chartOptionsTopSelling.tooltip"
+          [title]="chartOptionsTopSelling.title">
+        </apx-chart>
+      </div>
     </div>
   </div>
 

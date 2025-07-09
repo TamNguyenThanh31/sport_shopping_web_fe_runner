@@ -123,7 +123,6 @@ export class ReportDashboardComponent implements OnInit, AfterViewInit {
       //this.updatePieChart();
     });
 
-    // Anh có thể thêm API riêng cho tuần và tháng tương tự nếu backend có
   }
 
   // Khởi tạo biểu đồ doanh thu & lợi nhuận động
@@ -138,13 +137,13 @@ export class ReportDashboardComponent implements OnInit, AfterViewInit {
         height: 340,
         toolbar: { show: false }
       },
-      colors: ['#2563eb', '#10b981'], // Màu tươi sáng và hiện đại
+      colors: ['#2563eb', '#10b981'], 
       plotOptions: { bar: { columnWidth: '40%' } }, // Loại bỏ borderRadius
       dataLabels: { enabled: true, style: { colors: ['#1e293b'], fontWeight: 600 } },
       grid: { borderColor: '#e2e8f0', strokeDashArray: 4 },
       xaxis: { categories: ['Khoảng thời gian'], labels: { style: { colors: '#64748b', fontWeight: 500 } } },
       yaxis: { labels: { style: { colors: '#64748b', fontWeight: 500 } } },
-      title: { text: '', style: { color: 'transparent' } } // Title ẩn để tránh trùng lặp
+      title: { text: '', style: { color: 'transparent' } } 
     };
   }
 
@@ -184,19 +183,17 @@ export class ReportDashboardComponent implements OnInit, AfterViewInit {
         '#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#f97316', '#6366f1', '#14b8a6', '#ec4899',
         '#a855f7', '#0ea5e9', '#84cc16', '#f43f5e', '#06b6d4', '#22c55e', '#fbbf24', '#78716c', '#059669', '#a3e635'
       ],
-      plotOptions: { bar: { horizontal: true, barHeight: '60%' } }, // Loại bỏ borderRadius
+      plotOptions: { bar: { horizontal: true, barHeight: '60%' } },
       dataLabels: { enabled: true, style: { colors: ['#1e293b'], fontWeight: 600 } },
       grid: { borderColor: '#e2e8f0', strokeDashArray: 4 },
       xaxis: {
         labels: {
           style: { colors: '#64748b', fontWeight: 500 },
-          formatter: (val: string | number) => parseInt(val as string, 10)
+          formatter: (val: number) => Number.isInteger(val) ? val : ''
         },
         decimalsInFloat: 0,
-        tickAmount:  Math.max(2, ...this.chartOptionsTopSelling?.series?.[0]?.data?.map((d: any) => d.y) || [2]),
-        min: 0,
-        forceNiceScale: true,
-        stepSize: 1
+        // max động để bar không sát mép phải
+        max: this.chartOptionsTopSelling?.series?.[0]?.data?.length > 0 ? Math.max(...this.chartOptionsTopSelling.series[0].data.map((d: any) => d.y)) + 1 : undefined
       },
       yaxis: {
         labels: {
@@ -215,7 +212,7 @@ export class ReportDashboardComponent implements OnInit, AfterViewInit {
             + `</div>`;
         }
       },
-      title: { text: '', style: { color: 'transparent' } } // Title ẩn để tránh trùng lặp
+      title: { text: '', style: { color: 'transparent' } } 
     };
     this.updateTopSellingChart();
   }
@@ -235,6 +232,15 @@ export class ReportDashboardComponent implements OnInit, AfterViewInit {
             name: p.productName
           }))
         }],
+        xaxis: {
+          labels: {
+            style: { colors: '#64748b', fontWeight: 500 },
+            formatter: (val: number) => Number.isInteger(val) ? val : ''
+          },
+          decimalsInFloat: 0,
+          // max động để bar không sát mép phải
+          max: products.length > 0 ? Math.max(...products.map(p => Math.round(p.totalQuantitySold))) + 1 : undefined
+        },
         tooltip: {
           custom: function({ series, seriesIndex, dataPointIndex, w }: { series: any; seriesIndex: number; dataPointIndex: number; w: any; }) {
             const point = w.config.series[seriesIndex].data[dataPointIndex];
