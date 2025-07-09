@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ReportService } from "../../service/report.service";
 import { ProductVariantInfo } from "../../../../shared/models/product-variant-info.model";
 import { StockRow } from "../../../../shared/models/stock-row.model";
@@ -31,7 +31,7 @@ import {DialogModule} from "primeng/dialog";
   ],
   styleUrls: ['./report-dashboard.component.scss']
 })
-export class ReportDashboardComponent implements OnInit {
+export class ReportDashboardComponent implements OnInit, AfterViewInit {
   // Tổng quan hôm nay
   totalOrdersToday = 0;
   revenueToday = 0;
@@ -92,13 +92,17 @@ export class ReportDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.loadReports();
     this.initDynamicChart();
-    this.initTopSellingChart();
     // Mặc định filter ngày là hôm nay
     const today = this.getTodayISO();
     this.startDate = today;
     this.endDate = today;
     this.topStartDate = today;
     this.topEndDate = today;
+  }
+
+  ngAfterViewInit(): void {
+    // Gọi sau khi view đã render xong
+    this.initTopSellingChart();
   }
 
   // Load tất cả báo cáo cơ bản, tồn kho, biểu đồ
@@ -241,6 +245,10 @@ export class ReportDashboardComponent implements OnInit {
           }
         }
       };
+      // Trigger resize cho ApexCharts sau khi cập nhật dữ liệu
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+      }, 100);
     });
   }
 
