@@ -1,17 +1,21 @@
 <p-card header="Hỗ trợ khách hàng" styleClass="chat-card simple-chat-card">
   <ng-container *ngIf="session">
     <header class="simple-chat-header">
-      <span *ngIf="session.staffId; else waiting">
+      <span *ngIf="session.staffId;">
         <img src="assets/images/staff-avatar.jpg" alt="Staff Avatar" class="avatar-header" />
         Nhân viên hỗ trợ
       </span>
-      <ng-template #waiting>
-        <i class="pi pi-spin pi-spinner"></i> Đang chờ nhân viên nhận...
-      </ng-template>
       <button pButton type="button" icon="pi pi-times" class="close-button" (click)="showConfirmClose = true"></button>
     </header>
     <main class="simple-chat-body">
-      <div *ngIf="showCloseAlert" class="close-alert">Bạn đã đóng phiên chat thành công!</div>
+      <!-- Đã chuyển sang toast notification, không hiển thị các thông báo này trong chat nữa -->
+      <!-- <div *ngIf="showCloseAlert" class="close-alert">Bạn đã đóng phiên chat thành công!</div>
+      <div *ngIf="isWaitingForStaff" class="waiting-staff">
+        Đang chờ nhân viên tiếp nhận...
+      </div> -->
+      <div *ngIf="notification" class="notification">
+        {{ notification }}
+      </div>
       <ng-container *ngIf="messagesWithDate.length; else emptyMsg">
         <ng-container *ngFor="let item of messagesWithDate">
           <div *ngIf="item.isDate" class="date-label-simple">
@@ -67,219 +71,4 @@
     </div>
   </div>
 </ng-template>
-
-<style>
-.simple-chat-card {
-  display: flex;
-  flex-direction: column;
-  height: 80vh;
-  min-height: 500px;
-  background: #fafdff;
-  border-radius: 16px;
-  box-shadow: 0 2px 12px 0 rgba(8,115,189,0.08);
-  overflow: hidden;
-  border: 1.5px solid #e3f0fa;
-}
-.simple-chat-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #fff;
-  padding: 14px 20px;
-  border-bottom: 1px solid #e3f0fa;
-  font-weight: 500;
-  color: #0873bd;
-  font-size: 17px;
-}
-.avatar-header {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  margin-right: 10px;
-  vertical-align: middle;
-  box-shadow: 0 1px 4px 0 rgba(8,115,189,0.08);
-}
-.close-button {
-  background: none;
-  border: none;
-  color: #0873bd;
-  font-size: 20px;
-  cursor: pointer;
-}
-.simple-chat-body {
-  flex: 1;
-  overflow-y: visible !important;
-  background: linear-gradient(180deg, #fafdff 0%, #e3f0fa 100%);
-  padding: 18px 12px 12px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  scrollbar-width: none;
-}
-.simple-chat-body::-webkit-scrollbar {
-  display: none;
-}
-.date-label-simple {
-  text-align: center;
-  color: #b0cbe7;
-  font-size: 13px;
-  margin: 10px 0;
-}
-.msg-customer, .msg-staff {
-  display: flex;
-  align-items: flex-end;
-  margin-bottom: 6px;
-}
-.msg-customer {
-  flex-direction: row-reverse;
-}
-.avatar-msg {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  margin: 0 8px;
-  box-shadow: 0 1px 4px 0 rgba(8,115,189,0.08);
-}
-.msg-bubble {
-  background: #e3f0fa;
-  color: #0a2540;
-  border-radius: 14px 14px 4px 14px;
-  padding: 12px 16px 10px 16px;
-  min-width: 60px;
-  max-width: 70vw;
-  word-break: break-word;
-  box-shadow: 0 1px 4px 0 rgba(8,115,189,0.04);
-  font-size: 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-.msg-customer .msg-bubble {
-  background: #0873bd;
-  color: #fff;
-  border-radius: 14px 14px 14px 4px;
-}
-.msg-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: #7baedc;
-  margin-bottom: 4px;
-  width: 100%;
-  word-break: break-all;
-}
-.msg-content {
-  font-size: 15px;
-  word-break: break-word;
-  width: 100%;
-  text-align: left;
-}
-.empty-message-simple {
-  text-align: center;
-  color: #b0cbe7;
-  margin-top: 40px;
-  font-size: 15px;
-}
-.simple-chat-input {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 14px 16px;
-  background: #fff;
-  border-top: 1px solid #e3f0fa;
-  position: sticky;
-  bottom: 0;
-  z-index: 2;
-}
-.input-msg {
-  flex: 1;
-  border-radius: 10px;
-  border: 1px solid #e3f0fa;
-  padding: 10px 14px;
-  font-size: 15px;
-  background: #fafdff;
-  resize: none;
-  outline: none;
-  transition: border 0.2s;
-}
-.input-msg:focus {
-  border: 1.5px solid #0873bd;
-  background: #fff;
-}
-.bt.send-button {
-  margin-left: 6px;
-  min-width: 80px;
-  height: 40px;
-  line-height: 40px;
-  font-size: 15px;
-  border-radius: 8px;
-  box-shadow: none;
-  background: #0873bd;
-  color: #fff;
-  border: none;
-}
-.bt.send-button:disabled {
-  background: #b0cbe7;
-  color: #fff;
-}
-.popup-overlay {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.18);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-.popup-modal {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 24px 0 rgba(8,115,189,0.13);
-  padding: 28px 32px 22px 32px;
-  min-width: 320px;
-  max-width: 90vw;
-  text-align: center;
-}
-.popup-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #0873bd;
-  margin-bottom: 12px;
-}
-.popup-content {
-  font-size: 15px;
-  color: #222;
-  margin-bottom: 18px;
-}
-.popup-actions {
-  display: flex;
-  justify-content: center;
-  gap: 18px;
-}
-.btn-confirm {
-  background: #0873bd;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 22px;
-  font-size: 15px;
-  cursor: pointer;
-  font-weight: 500;
-}
-.btn-cancel {
-  background: #e3f0fa;
-  color: #0873bd;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 22px;
-  font-size: 15px;
-  cursor: pointer;
-  font-weight: 500;
-}
-.btn-confirm:hover {
-  background: #0a5fa3;
-}
-.btn-cancel:hover {
-  background: #d0e6f7;
-}
-</style>
+<p-toast></p-toast>

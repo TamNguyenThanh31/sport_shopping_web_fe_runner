@@ -3,7 +3,7 @@ import {SupportSession} from "../../../shared/models/support-session.model";
 import {Subscription} from "rxjs";
 import {Message} from "../../../shared/models/message.model";
 import {ChatService} from "../../service/chat.service";
-import { MessageService as ToastService, PrimeNGConfig } from 'primeng/api';
+import { MessageService } from 'primeng/api';
 import {AuthService} from "../../../core/services/auth.service";
 import {WebSocketService} from "../../../core/services/websocket.service";
 import {CardModule} from "primeng/card";
@@ -12,6 +12,7 @@ import {ScrollPanelModule} from "primeng/scrollpanel";
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {FormsModule} from "@angular/forms";
 import {ButtonDirective} from "primeng/button";
+import {ToastModule} from "primeng/toast";
 
 @Component({
   selector: 'app-customer-chat',
@@ -25,7 +26,8 @@ import {ButtonDirective} from "primeng/button";
     InputTextareaModule,
     FormsModule,
     DatePipe,
-    ButtonDirective
+    ButtonDirective,
+    ToastModule
   ],
   templateUrl: './customer-chat.component.html',
   styleUrl: './customer-chat.component.scss'
@@ -37,10 +39,16 @@ export class CustomerChatComponent implements OnInit, OnDestroy, AfterViewChecke
   messagesWithDate: any[] = [];
   showCloseAlert: boolean = false;
   showConfirmClose: boolean = false;
+  notification: string | null = null;
+  isWaitingForStaff = false;
+  private notificationSub: Subscription | undefined;
+  private messageSub: Subscription | undefined;
 
   private msgSub!: Subscription;
   private notifSub!: Subscription;
   private connectionSub!: Subscription;
+
+  lastNotification: string | null = null;
 
   @ViewChild('messageInput') messageInput: ElementRef | undefined;
   @ViewChild('messageList') messageList!: ElementRef;
@@ -49,14 +57,11 @@ export class CustomerChatComponent implements OnInit, OnDestroy, AfterViewChecke
   constructor(
     private chatService: ChatService,
     private wsService: WebSocketService,
-    private toast: ToastService,
-    private primengConfig: PrimeNGConfig,
+    private messageService: MessageService,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.primengConfig.ripple = true;
-
     // 1. Mở (hoặc lấy) session
     this.chatService.openSession().subscribe({
       next: sess => {
@@ -84,6 +89,16 @@ export class CustomerChatComponent implements OnInit, OnDestroy, AfterViewChecke
             // 5. Lắng nghe message mới realtime
             this.msgSub = this.wsService.onMessage().subscribe(msg => {
               if (msg.sessionId === this.session.id) {
+                // Nếu là tin nhắn từ nhân viên và session chưa có staffId thì cập nhật luôn
+                if (msg.senderId !== this.session.customerId && !this.session.staffId) {
+                  this.session.staffId = msg.senderId;
+                  this.messageService.add({
+                    severity: 'success',
+                    summary: 'Đã kết nối nhân viên',
+                    detail: 'Nhân viên đã tham gia hỗ trợ bạn!',
+                    life: 4000
+                  });
+                }
                 this.messages.push(msg);
                 this.messagesWithDate = this.addDateLabels(this.messages);
                 this.scrollToBottom();
@@ -91,9 +106,22 @@ export class CustomerChatComponent implements OnInit, OnDestroy, AfterViewChecke
             });
 
             // 6. Lắng nghe notification
-            this.notifSub = this.wsService.onNotification().subscribe(text => {
-              this.toast.add({severity:'info', summary:'Thông báo', detail: text, life:5000});
+            this.notifSub = this.wsService.onNotification().subscribe(msg => {
+              if (msg === this.lastNotification) return; // Nếu trùng thì bỏ qua
+              this.lastNotification = msg;
+              if (msg.includes('được hỗ trợ bởi nhân viên')) {
+                this.messageService.add({severity:'success', summary:'Thông báo', detail: msg, life: 4000});
+                this.notification = null;
+                this.isWaitingForStaff = false;
+                this.scrollToBottom();
+              } else if (msg.includes('chưa có nhân viên online')) {
+                this.messageService.add({severity:'info', summary:'Thông báo', detail: msg, life: 4000});
+                this.isWaitingForStaff = true;
+              } else {
+                this.messageService.add({severity:'info', summary:'Thông báo', detail: msg, life: 4000});
+              }
             });
+
           }
         });
 
@@ -119,10 +147,14 @@ export class CustomerChatComponent implements OnInit, OnDestroy, AfterViewChecke
   closeChat(): void {
     this.chatService.closeSession(this.session.id).subscribe({
       next: () => {
-        this.toast.add({severity:'warn', summary:'Đã đóng', detail:'Bạn đã kết thúc trò chuyện.', life:3000});
+        this.messageService.add({severity:'warn', summary:'Đã đóng', detail:'Bạn đã kết thúc trò chuyện.' +
+            ' Vui lòng reload lại trang để bắt đầu cuộc trò chuyện mới', life:3000});
         this.wsService.disconnect();
         this.messages = [];
+        this.messagesWithDate = [];
+        this.session = undefined as any;
         this.showCloseAlert = true;
+        this.scrollToBottom();
       },
       error: err => console.error('Close session error', err)
     });
@@ -147,6 +179,9 @@ export class CustomerChatComponent implements OnInit, OnDestroy, AfterViewChecke
     if (this.msgSub) this.msgSub.unsubscribe();
     if (this.notifSub) this.notifSub.unsubscribe();
     if (this.connectionSub) this.connectionSub.unsubscribe();
+    if (this.notificationSub) {
+      this.notificationSub.unsubscribe();
+    }
     this.wsService.disconnect();
   }
 

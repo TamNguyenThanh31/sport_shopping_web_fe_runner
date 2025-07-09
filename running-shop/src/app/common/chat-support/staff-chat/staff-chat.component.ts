@@ -43,6 +43,8 @@ export class StaffChatComponent implements OnInit, OnDestroy {
   messagesWithDate: any[] = [];
   customerName: string = 'Khách hàng';
   staffId: number | null = null;
+  notification: string | null = null;
+  private notificationSub: Subscription | undefined;
 
   private msgSub!: Subscription;
   private notifSub!: Subscription;
@@ -83,13 +85,42 @@ export class StaffChatComponent implements OnInit, OnDestroy {
         });
 
         // 6. Lắng nghe notification
-        this.notifSub = this.wsService.onNotification().subscribe(text => {
-          this.toast.add({severity:'info', summary:'Thông báo', detail: text, life:5000});
-          this.loadWaitingSessions();
-          this.loadMySessions();
+        this.notifSub = this.wsService.onNotification().subscribe(msg => {
+          this.notification = msg;
         });
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.msgSub) this.msgSub.unsubscribe();
+    if (this.notifSub) this.notifSub.unsubscribe();
+    if (this.connectionSub) this.connectionSub.unsubscribe();
+    if (this.notificationSub) this.notificationSub.unsubscribe();
+    this.wsService.disconnect();
+  }
+
+  scrollToBottom(): void {
+    const el = document.getElementById('messageListStaff');
+    if (el) {
+      setTimeout(() => el.scrollTop = el.scrollHeight, 50);
+    }
+  }
+
+  addDateLabels(messages: Message[]): any[] {
+    if (!messages.length) return [];
+    const result: any[] = [];
+    let lastDate = '';
+    for (let i = 0; i < messages.length; i++) {
+      const msg = messages[i];
+      const msgDate = msg.timestamp ? new Date(msg.timestamp).toLocaleDateString() : '';
+      if (msgDate && msgDate !== lastDate) {
+        result.push({ isDate: true, date: msg.timestamp });
+        lastDate = msgDate;
+      }
+      result.push({ isDate: false, msg });
+    }
+    return result;
   }
 
   /** Tải session chờ */
@@ -195,39 +226,9 @@ export class StaffChatComponent implements OnInit, OnDestroy {
     });
   }
 
-  private scrollToBottom(): void {
-    const el = document.getElementById('messageListStaff');
-    if (el) {
-      setTimeout(() => el.scrollTop = el.scrollHeight, 50);
-    }
-  }
-
   adjustTextareaHeight(event: Event): void {
     const textarea = event.target as HTMLTextAreaElement;
     textarea.style.height = 'auto';
     textarea.style.height = Math.min(textarea.scrollHeight, 120) + 'px';
-  }
-
-  ngOnDestroy(): void {
-    if (this.msgSub) this.msgSub.unsubscribe();
-    if (this.notifSub) this.notifSub.unsubscribe();
-    if (this.connectionSub) this.connectionSub.unsubscribe();
-    this.wsService.disconnect();
-  }
-
-  addDateLabels(messages: Message[]): any[] {
-    if (!messages.length) return [];
-    const result: any[] = [];
-    let lastDate = '';
-    for (let i = 0; i < messages.length; i++) {
-      const msg = messages[i];
-      const msgDate = msg.timestamp ? new Date(msg.timestamp).toLocaleDateString() : '';
-      if (msgDate && msgDate !== lastDate) {
-        result.push({ isDate: true, date: msg.timestamp });
-        lastDate = msgDate;
-      }
-      result.push({ isDate: false, msg });
-    }
-    return result;
   }
 }
