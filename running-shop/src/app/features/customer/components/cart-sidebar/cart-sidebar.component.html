@@ -27,8 +27,8 @@
       <span>Total</span>
       <span>{{ getTotal() | currency: 'VND' }}</span>
     </div>
-    <button pButton label="Checkout" class="p-button-primary checkout-btn" [routerLink]="['/checkout']"></button>
-    <button pButton label="Clear Cart" class="p-button-secondary clear-btn"></button>
+    <button pButton label="Thanh toán" class="p-button-primary checkout-btn" [routerLink]="['/checkout']"></button>
+<!--    <button pButton label="Clear Cart" class="p-button-secondary clear-btn"></button>-->
   </div>
   <ng-template #emptyCart>
     <div class="empty-cart" *ngIf="!loading">

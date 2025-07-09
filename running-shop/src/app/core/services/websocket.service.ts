@@ -25,20 +25,25 @@ export class WebSocketService {
   /** Mở kết nối STOMP/SockJS */
   connect(): void {
     const token = this.authService.getToken();
-    if (!token) { return; }
+    if (!token) { 
+      console.error('Không có token, không thể kết nối WebSocket');
+      return; 
+    }
 
+    // Sử dụng URL đơn giản, không thêm token vào URL
     this.stompClient = Stomp.over(() => new SockJS('http://localhost:8080/ws/support'));
     this.stompClient.debug = () => {};
-    this.stompClient.connectHeaders = { Authorization: `Bearer ${token}` };
+    
+    // Sử dụng connectHeaders để xác thực
+    this.stompClient.connectHeaders = { 
+      Authorization: `Bearer ${token}`,
+      'X-Auth-Token': token,
+      'X-User-Token': token
+    };
 
     this.stompClient.onConnect = frame => {
       console.log('WebSocket đã kết nối:', frame.headers['user-name']);
-      // Bật cờ connected
       this.connected$.next(true);
-
-      // Sau khi thực sự kết nối, bạn mới subscribe:
-      // VD: this.subscribeToNotifications();
-      //    this.subscribeToSession(currentSessionId);
     };
 
     this.stompClient.onStompError = frame => {
@@ -67,7 +72,10 @@ export class WebSocketService {
 
   /** Subscribe nhận tin nhắn mới cho 1 session */
   subscribeToSession(sessionId: number): void {
-    if (!this.stompClient || !this.stompClient.active) return;
+    if (!this.stompClient || !this.stompClient.active) {
+      console.warn('WebSocket chưa kết nối, không thể subscribe session:', sessionId);
+      return;
+    }
     const topic = `/topic/session.${sessionId}`;
     if (this.sessionSubscriptions.has(sessionId)) {
       return; // Đã subscribe rồi
@@ -90,7 +98,10 @@ export class WebSocketService {
 
   /** Subscribe nhận notification cá nhân */
   subscribeToNotifications(): void {
-    if (!this.stompClient || !this.stompClient.active) return;
+    if (!this.stompClient || !this.stompClient.active) {
+      console.warn('WebSocket chưa kết nối, không thể subscribe notifications');
+      return;
+    }
     this.stompClient.subscribe('/user/queue/notifications', (message: IMessage) => {
       const text = message.body;
       this.notificationSubject.next(text);
@@ -100,22 +111,28 @@ export class WebSocketService {
   /** Gửi message mới lên server */
   sendMessage(msg: Message): void {
     if (!this.stompClient || !this.stompClient.active) {
-      console.error('WebsocketService: STOMP chưa kết nối, không gửi được message.');
+      console.error('WebSocket chưa kết nối, không gửi được message:', msg);
       return;
     }
     const payload = JSON.stringify(msg);
+    const token = this.authService.getToken();
     this.stompClient.publish({
       destination: '/app/chat.sendMessage',
-      body: payload
+      body: payload,
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
     });
   }
 
   /** Gửi markRead (nếu cần) */
   sendMarkRead(messageId: number): void {
     if (!this.stompClient || !this.stompClient.active) return;
+    const token = this.authService.getToken();
     this.stompClient.publish({
       destination: '/app/chat.markRead',
-      headers: { messageId: messageId.toString() }
+      headers: { 
+        messageId: messageId.toString(),
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      }
     });
   }
 
@@ -137,4 +154,6 @@ export class WebSocketService {
   isConnected(): Observable<boolean> {
     return this.connected$.asObservable();
   }
+
+
 }

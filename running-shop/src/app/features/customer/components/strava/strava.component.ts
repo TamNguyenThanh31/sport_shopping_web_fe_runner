@@ -84,10 +84,19 @@ export class StravaComponent implements OnInit {
         if (err.status === 400) {
           this.status = undefined;
         }
+        
+        let errorMessage = 'Không lấy được dữ liệu Strava';
+        if (err.status === 403) {
+          errorMessage = 'Không thể lấy được dữ liệu vì bạn chưa kết nối Strava';
+        } else if (err.error?.message) {
+          errorMessage = err.error.message;
+        }
+        
         this.message.add({
           severity: 'error',
           summary: 'Lỗi',
-          detail: err.error?.message || 'Không lấy được dữ liệu Strava'
+          detail: errorMessage
+          // detail: err.error?.message || 'Không lấy được dữ liệu Strava'
         });
       }
     });

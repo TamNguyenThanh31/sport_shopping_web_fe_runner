@@ -95,32 +95,26 @@ export class NavbarComponent implements OnInit {
     this.userMenuItems = this.currentUser
       ? [
         {
-          label: 'My Profile',
+          label: 'Thông tin tài khoản',
           icon: 'pi pi-user',
           routerLink: ['/profile'],
           styleClass: 'user-menu-item'
         },
         {
-          label: 'My Orders',
+          label: 'Đơn hàng',
           icon: 'pi pi-box',
           routerLink: ['/orders'],
           styleClass: 'user-menu-item'
         },
         {
-          label: 'Address',
+          label: 'Địa chỉ của tôi',
           icon: 'pi pi-map-marker',
           routerLink: ['/addresses'],
           styleClass: 'user-menu-item'
         },
-        {
-          label: 'Wishlist',
-          icon: 'pi pi-heart',
-          routerLink: ['/wishlist'],
-          styleClass: 'user-menu-item'
-        },
         {separator: true},
         {
-          label: 'Logout',
+          label: 'Đăng xuất',
           icon: 'pi pi-sign-out',
           command: () => this.logout(),
           styleClass: 'user-menu-item'
@@ -128,13 +122,13 @@ export class NavbarComponent implements OnInit {
       ]
       : [
         {
-          label: 'Login',
+          label: 'Đăng nhập',
           icon: 'pi pi-sign-in',
           routerLink: ['/auth/login'],
           styleClass: 'user-menu-item'
         },
         {
-          label: 'Register',
+          label: 'Dăng ký',
           icon: 'pi pi-user-plus',
           routerLink: ['/auth/register'],
           styleClass: 'user-menu-item'

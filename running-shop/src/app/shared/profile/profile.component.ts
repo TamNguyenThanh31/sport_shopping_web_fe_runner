@@ -133,6 +133,7 @@ export class ProfileComponent implements OnInit {
     return { strength: 'Rất yếu', color: '#dc3545', percentage: score };
   }
 
+  // Lấy dữ liệu chạy bộ trong 30 ngày
   loadStravaData(): void {
     this.loadingStrava = true;
     this.stravaService.getStatus(30).subscribe({

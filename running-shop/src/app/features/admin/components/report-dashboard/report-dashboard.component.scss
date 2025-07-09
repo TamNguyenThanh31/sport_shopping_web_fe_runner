@@ -303,6 +303,15 @@ $status-good: #10b981;
   }
 }
 
+.chart-container {
+  width: 100%;
+}
+
+::ng-deep apx-chart {
+  width: 100% !important;
+  display: block;
+}
+
 // Stock Summary - Hiện đại và dễ đọc
 .stock-summary {
   background: $surface;

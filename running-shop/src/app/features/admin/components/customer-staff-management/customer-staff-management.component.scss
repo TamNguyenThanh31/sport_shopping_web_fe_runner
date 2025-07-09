@@ -107,6 +107,7 @@ $shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // Shadow hiện đại
 
         &.phone {
           font-family: 'Roboto Mono', monospace;
+          color: $text-medium;
         }
       }
     }
@@ -208,6 +209,23 @@ $shadow: 0 4px 12px rgba(0, 0, 0, 0.1); // Shadow hiện đại
           &:focus {
             border-color: $primary-color;
             box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+          }
+        }
+
+        .p-password {
+          width: 100%;
+          
+          .p-password-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid $border-color;
+            border-radius: 8px;
+            transition: all 0.2s;
+
+            &:focus {
+              border-color: $primary-color;
+              box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+            }
           }
         }
 
