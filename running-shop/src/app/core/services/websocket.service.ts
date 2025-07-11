@@ -44,6 +44,7 @@ export class WebSocketService {
     this.stompClient.onConnect = frame => {
       console.log('WebSocket đã kết nối:', frame.headers['user-name']);
       this.connected$.next(true);
+      this.subscribeToNotifications(); // <-- Luôn đăng ký nhận notification khi kết nối thành công
     };
 
     this.stompClient.onStompError = frame => {

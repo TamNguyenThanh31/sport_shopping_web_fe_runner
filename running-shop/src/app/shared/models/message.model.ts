@@ -4,8 +4,7 @@ export interface Message {
   senderId: number;
   receiverId: number;
   content: string;
-  timestamp?: string;    // server gán
-  readStatus?: boolean;  // server gán
+  timestamp?: string;
 }
 
 

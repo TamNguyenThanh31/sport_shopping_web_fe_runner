@@ -53,7 +53,7 @@ export class PromotionManagementComponent implements OnInit {
   promotions: Promotion[] = [];
   totalRecords = 0;
   page = 0;
-  rows = 10;
+  rows = 10; 
   showFilters = false;
   searchParams: {
     code?: string;
@@ -105,6 +105,7 @@ export class PromotionManagementComponent implements OnInit {
 
   onPageChange(event: any): void {
     this.page = event.page;
+    // Nếu không cho phép chọn số bản ghi/trang thì không cần dòng dưới
     this.rows = event.rows;
     this.loadPromotions();
   }

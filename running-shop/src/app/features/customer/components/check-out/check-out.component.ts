@@ -103,7 +103,7 @@ export class CheckOutComponent implements OnInit {
             (!p.startDate || new Date(p.startDate) <= now) &&
             (!p.endDate   || new Date(p.endDate)   >  now) &&
             (!p.maxUsage  || p.maxUsage > 0) &&
-            (p.isActive === undefined || p.isActive)
+            (p.isActive === undefined || p.isActive === true)
           );
         },
         error: () => {

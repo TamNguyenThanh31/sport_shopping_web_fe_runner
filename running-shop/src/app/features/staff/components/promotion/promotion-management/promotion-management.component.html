@@ -79,7 +79,7 @@
 
   <!-- Promotion List -->
   <div class="promotion-list">
-    <p-table [value]="promotions" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords" (onPage)="onPageChange($event)" styleClass="custom-table">
+    <p-table [value]="promotions">
       <ng-template pTemplate="header">
         <tr>
           <th>Mã</th>
@@ -145,5 +145,11 @@
         </tr>
       </ng-template>
     </p-table>
+    <p-paginator
+      [rows]="rows"
+      [totalRecords]="totalRecords"
+      [rowsPerPageOptions]="[10, 20, 50]"
+      (onPageChange)="onPageChange($event)">
+    </p-paginator>
   </div>
 </div>

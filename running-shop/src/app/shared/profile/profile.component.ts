@@ -6,6 +6,7 @@ import { StravaService } from '../../features/customer/services/strava.service';
 import { StravaStatus } from '../models/strava-status.model';
 import { CustomerService } from '../../features/customer/services/customer.service';
 import { UserDTO } from '../models/userDTO.model';
+import { UpdatePassword } from '../models/update-password.model';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 
@@ -45,7 +46,7 @@ export class ProfileComponent implements OnInit {
 
   initChangePasswordForm(): void {
     this.changePasswordForm = this.fb.group({
-      currentPassword: ['', [Validators.required, Validators.minLength(6)]],
+      currentPassword: ['', [Validators.required]],
       newPassword: ['', [Validators.required, Validators.minLength(6), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)]],
       confirmPassword: ['', [Validators.required]]
     }, { validators: this.passwordMatchValidator });
@@ -71,32 +72,46 @@ export class ProfileComponent implements OnInit {
     if (this.changePasswordForm.valid) {
       this.loadingPasswordChange = true;
       
-      this.currentUser$.subscribe(currentUser => {
-        if (currentUser) {
-          const userDTO: UserDTO = {
-            ...currentUser,
-            password: this.changePasswordForm.get('newPassword')?.value
-          };
+      const updatePassword: UpdatePassword = {
+        oldPassword: this.changePasswordForm.get('currentPassword')?.value,
+        newPassword: this.changePasswordForm.get('newPassword')?.value
+      };
 
-          this.customerService.updateProfile(userDTO).subscribe({
-            next: (response: any) => {
-              this.messageService.add({
-                severity: 'success',
-                summary: 'Thành công',
-                detail: 'Mật khẩu đã được thay đổi thành công!'
-              });
-              this.closeChangePasswordDialog();
-              this.loadingPasswordChange = false;
-            },
-            error: (error: any) => {
-              this.messageService.add({
-                severity: 'error',
-                summary: 'Lỗi',
-                detail: error.error?.message || 'Không thể thay đổi mật khẩu. Vui lòng kiểm tra mật khẩu hiện tại và thử lại!'
-              });
-              this.loadingPasswordChange = false;
-            }
+      this.customerService.changePassword(updatePassword).subscribe({
+        next: (response: any) => {
+          console.log('Change password success response:', response);
+          if (response.status === 200) {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Thành công',
+              detail: 'Mật khẩu đã được thay đổi thành công!'
+            });
+            this.closeChangePasswordDialog();
+          } else {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Lỗi',
+              detail: 'Có lỗi xảy ra khi thay đổi mật khẩu!'
+            });
+          }
+          this.loadingPasswordChange = false;
+        },
+        error: (error: any) => {
+          console.log('Change password error:', error);
+          let errorMessage = 'Không thể thay đổi mật khẩu. Vui lòng kiểm tra mật khẩu hiện tại và thử lại!';
+          
+          if (error.error) {
+            errorMessage = error.error;
+          } else if (error.message) {
+            errorMessage = error.message;
+          }
+          
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Lỗi',
+            detail: errorMessage
           });
+          this.loadingPasswordChange = false;
         }
       });
     } else {
