@@ -125,7 +125,7 @@
                     {{ hasStock(product) ? 'Còn hàng' : 'Hết hàng' }}
                   </span>
                   <div class="quick-actions-ui">
-                    <button pButton pRipple icon="pi pi-heart" class="action-btn-ui" pTooltip="Yêu thích"></button>
+<!--                    <button pButton pRipple icon="pi pi-heart" class="action-btn-ui" pTooltip="Yêu thích"></button>-->
                     <button pButton pRipple icon="pi pi-eye" class="action-btn-ui" (click)="openQuickView(product.id!)"
                             pTooltip="Xem nhanh"></button>
                   </div>
@@ -198,6 +198,6 @@
       [(visible)]="quickViewVisible">
     </app-quick-view>
   </div>
-  <app-chatbot-gemini></app-chatbot-gemini>
+<!--  <app-chatbot-gemini></app-chatbot-gemini>-->
   <app-footer></app-footer>
 </div>
