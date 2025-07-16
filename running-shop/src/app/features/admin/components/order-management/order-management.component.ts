@@ -279,4 +279,35 @@ export class OrderManagementComponent implements OnInit {
     this.filterEndDate = null;
     this.loadOrders({ first: 0, rows: this.pageSize });
   }
+
+  // Map trạng thái sang tiếng Việt
+  getOrderStatusVN(status: OrderStatus | null | undefined): string {
+    switch (status) {
+      case OrderStatus.PENDING: return 'Chờ xử lý';
+      case OrderStatus.CONFIRMED: return 'Đã xác nhận';
+      case OrderStatus.SHIPPED: return 'Đang giao';
+      case OrderStatus.DELIVERED: return 'Đã giao';
+      case OrderStatus.CANCELLED: return 'Đã hủy';
+      default: return 'Không rõ';
+    }
+  }
+
+  getPaymentStatusVN(status: string | null | undefined): string {
+    switch ((status || '').toUpperCase()) {
+      case 'PENDING': return 'Chờ thanh toán';
+      case 'COMPLETED': return 'Đã thanh toán';
+      case 'FAILED': return 'Thất bại';
+      case 'CANCELLED': return 'Đã hủy';
+      case 'REFUNDED': return 'Đã hoàn tiền';
+      default: return 'Không rõ';
+    }
+  }
+
+  getPaymentMethodVN(method: string | null | undefined): string {
+    switch ((method || '').toUpperCase()) {
+      case 'VNPAY': return 'VNPay';
+      case 'CASH_ON_DELIVERY': return 'Thanh toán khi nhận hàng';
+      default: return 'Không rõ';
+    }
+  }
 }
