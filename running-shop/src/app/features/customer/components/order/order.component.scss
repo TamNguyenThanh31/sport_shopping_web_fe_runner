@@ -537,3 +537,53 @@ body, .app-root, .main-content {
     }
   }
 }
+
+// Trạng thái đơn hàng
+.status-badge.delivered,
+.payment-badge.completed {
+  background: #e6f9ec;
+  color: #219653;
+  border: 1px solid #219653;
+}
+
+.status-badge.shipped {
+  background: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #1976d2;
+}
+
+.status-badge.pending,
+.payment-badge.pending {
+  background: #fff8e1;
+  color: #f9a825;
+  border: 1px solid #f9a825;
+}
+
+.status-badge.cancelled,
+.payment-badge.cancelled,
+.payment-badge.failed {
+  background: #ffebee;
+  color: #d32f2f;
+  border: 1px solid #d32f2f;
+}
+
+.payment-badge.refunded {
+  background: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #1976d2;
+}
+
+// Để badge bo tròn, padding đẹp hơn
+.status-badge,
+.payment-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.95em;
+  font-weight: 500;
+  margin-left: 4px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  gap: 4px;
+}

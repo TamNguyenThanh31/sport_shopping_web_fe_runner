@@ -46,13 +46,13 @@
           </small>
         </div>
 
-        <div class="remember-forgot">
-          <div class="checkbox-container">
-            <p-checkbox [binary]="true" inputId="rememberMe" formControlName="rememberMe"></p-checkbox>
-            <label for="rememberMe">Ghi nhớ đăng nhập</label>
-          </div>
-          <a class="forgot-password" routerLink="/auth/forgot-password">Quên mật khẩu?</a>
-        </div>
+<!--        <div class="remember-forgot">-->
+<!--          <div class="checkbox-container">-->
+<!--            <p-checkbox [binary]="true" inputId="rememberMe" formControlName="rememberMe"></p-checkbox>-->
+<!--            <label for="rememberMe">Ghi nhớ đăng nhập</label>-->
+<!--          </div>-->
+<!--          <a class="forgot-password" routerLink="/auth/forgot-password">Quên mật khẩu?</a>-->
+<!--        </div>-->
 
         <button pButton type="submit"
                 [label]="isLoading ? 'ĐANG ĐĂNG NHẬP...' : 'ĐĂNG NHẬP'"
@@ -60,15 +60,15 @@
                 [loading]="isLoading"
                 class="submit-button"></button>
 
-        <div class="social-divider">
-          <span>Hoặc đăng nhập bằng</span>
-        </div>
+<!--        <div class="social-divider">-->
+<!--          <span>Hoặc đăng nhập bằng</span>-->
+<!--        </div>-->
 
-        <div class="social-login">
-          <button pButton type="button" icon="pi pi-facebook" class="social-button facebook"></button>
-          <button pButton type="button" icon="pi pi-google" class="social-button google"></button>
-          <button pButton type="button" icon="pi pi-apple" class="social-button apple"></button>
-        </div>
+<!--        <div class="social-login">-->
+<!--          <button pButton type="button" icon="pi pi-facebook" class="social-button facebook"></button>-->
+<!--          <button pButton type="button" icon="pi pi-google" class="social-button google"></button>-->
+<!--          <button pButton type="button" icon="pi pi-apple" class="social-button apple"></button>-->
+<!--        </div>-->
       </form>
     </div>
 

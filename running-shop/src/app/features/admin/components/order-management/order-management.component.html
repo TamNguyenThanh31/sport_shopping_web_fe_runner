@@ -108,10 +108,10 @@
           <th>User ID</th>
           <th>Tổng tiền</th>
           <th>Trạng thái</th>
-          <th>Payment Status</th>
-          <th>Payment Method</th>
+          <th>Trạng thái thanh toán</th>
+          <th>Phương thức thanh toán</th>
           <th>Ngày tạo</th>
-          <th>Actions</th>
+          <th>Hành động</th>
         </tr>
       </ng-template>
 
@@ -127,17 +127,17 @@
           <td>{{ order.totalPrice | currency:'VND':'symbol':'1.0-0' }}</td>
           <td>
             <span class="status-badge" [ngClass]="['status-badge', 'status-' + (order.status?.toLowerCase() || '')]">
-              {{ order.status }}
+              {{ getOrderStatusVN(order.status) }}
             </span>
           </td>
           <td>
             <span class="payment-badge" [ngClass]="['payment-badge', 'payment-' + (order.paymentStatus?.toLowerCase() || '')]">
-              {{ order.paymentStatus }}
+              {{ getPaymentStatusVN(order.paymentStatus) }}
             </span>
           </td>
           <td>
             <span class="payment-badge" [ngClass]="['payment-badge', 'payment-' + (order.PaymentMethod?.toLowerCase() || '')]">
-              {{ order.paymentMethod }}
+              {{ getPaymentMethodVN(order.paymentMethod) }}
             </span>
           </td>
           <td>{{ order.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>

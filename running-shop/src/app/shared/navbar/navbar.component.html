@@ -12,8 +12,8 @@
   </ng-template>
   <ng-template pTemplate="end">
     <div class="user-section">
-      <button pButton type="button" icon="pi pi-search" class="p-button-rounded p-button-text search-btn"
-              (click)="toggleSearch()"></button>
+<!--      <button pButton type="button" icon="pi pi-search" class="p-button-rounded p-button-text search-btn"-->
+<!--              (click)="toggleSearch()"></button>-->
       <button pButton type="button" icon="pi pi-shopping-cart" class="p-button-rounded p-button-text cart-btn"
               (click)="toggleCartSidebar()" *ngIf="currentUser?.role === 'CUSTOMER'">
         <span class="cart-badge">{{ cartItems }}</span>
